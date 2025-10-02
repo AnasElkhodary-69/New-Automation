@@ -1,0 +1,69 @@
+{
+  "system_name": "RAG Email System",
+  "version": "1.0.0",
+  "environment": "development",
+
+  "claude": {
+    "comment": "api_key should be set in .env file as CLAUDE_API_KEY",
+    "model": "claude-3-opus-20240229",
+    "max_tokens": 2000,
+    "temperature": 0.7,
+    "timeout": 60
+  },
+
+  "vector_store": {
+    "comment": "openai_api_key and qdrant credentials should be set in .env file",
+    "type": "faiss",
+    "dimension": 1536,
+    "index_path": "vector_store/index.faiss",
+    "metadata_path": "vector_store/metadata.json",
+    "embeddings_model": "text-embedding-ada-002",
+    "embeddings_provider": "openai",
+    "qdrant": {
+      "collection_name": "odoo_knowledge",
+      "use_qdrant": false
+    }
+  },
+
+  "processing": {
+    "max_concurrent_emails": 5,
+    "retry_attempts": 3,
+    "retry_delay_seconds": 5,
+    "enable_auto_response": true,
+    "require_approval": false,
+    "min_confidence_threshold": 0.7
+  },
+
+  "logging": {
+    "level": "INFO",
+    "log_file": "logs/rag_email_system.log",
+    "max_file_size_mb": 10,
+    "backup_count": 5,
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  },
+
+  "features": {
+    "enable_semantic_search": true,
+    "enable_odoo_integration": true,
+    "enable_intent_classification": true,
+    "enable_entity_extraction": true,
+    "enable_response_validation": true,
+    "save_interactions": true
+  },
+
+  "response_generation": {
+    "max_context_length": 4000,
+    "include_customer_history": true,
+    "include_vector_results": true,
+    "tone": "professional_friendly",
+    "language": "en",
+    "signature": "\n\nBest regards,\nCustomer Service Team"
+  },
+
+  "notifications": {
+    "comment": "notification_email should be set in .env file as ADMIN_EMAIL",
+    "send_error_notifications": true,
+    "alert_on_low_confidence": true,
+    "low_confidence_threshold": 0.5
+  }
+}

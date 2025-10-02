@@ -1,0 +1,48 @@
+# RAG Email System Dependencies
+
+# Email handling
+imaplib2==3.6
+smtplib>=3.9
+
+# Database
+psycopg2-binary==2.9.9
+
+# Vector Store
+faiss-cpu==1.7.4
+# For GPU support, use: faiss-gpu==1.7.4
+
+# Alternative vector store
+# qdrant-client==1.7.0
+
+# Embeddings and AI
+mistralai>=1.0.0
+openai==1.12.0
+
+# NLP and text processing
+sentence-transformers==2.3.1
+nltk==3.8.1
+
+# Data processing
+numpy==1.24.3
+pandas==2.0.3
+
+# Configuration and utilities
+python-dotenv==1.0.0
+pydantic==2.5.3
+
+# Logging and monitoring
+python-json-logger==2.0.7
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-mock==3.12.0
+
+# Code quality
+black==23.12.1
+flake8==7.0.0
+mypy==1.8.0
+
+# Optional: Web interface
+# fastapi==0.108.0
+# uvicorn==0.25.0

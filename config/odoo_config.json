@@ -1,0 +1,15 @@
+{
+  "comment": "Sensitive credentials (host, database, user, password) should be set in .env file",
+  "schema": "public",
+  "connection_timeout": 30,
+  "pool_size": 5,
+  "max_overflow": 10,
+  "tables": {
+    "customers": "res_partner",
+    "orders": "sale_order",
+    "order_lines": "sale_order_line",
+    "invoices": "account_move",
+    "products": "product_product",
+    "product_templates": "product_template"
+  }
+}
