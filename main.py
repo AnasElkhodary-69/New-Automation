@@ -42,13 +42,13 @@ class CleanConsoleFormatter(logging.Formatter):
 
         # Clean up module names
         if record.name.startswith('orchestrator'):
-            record.name = f"🤖 {record.name.split('.')[-1]}"
+            record.name = f" {record.name.split('.')[-1]}"
         elif record.name.startswith('retriever'):
-            record.name = f"🔍 {record.name.split('.')[-1]}"
+            record.name = f" {record.name.split('.')[-1]}"
         elif record.name.startswith('email_module'):
-            record.name = f"📧 {record.name.split('.')[-1]}"
+            record.name = f" {record.name.split('.')[-1]}"
         elif record.name == '__main__':
-            record.name = "🚀 main"
+            record.name = " main"
 
         return super().format(record)
 
@@ -81,6 +81,9 @@ logging.basicConfig(
 logging.getLogger('httpx').setLevel(logging.WARNING)
 logging.getLogger('httpcore').setLevel(logging.WARNING)
 logging.getLogger('asyncio').setLevel(logging.WARNING)
+
+# Suppress pdfminer DEBUG spam (15k+ lines per PDF!)
+logging.getLogger('pdfminer').setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
@@ -157,28 +160,31 @@ class RAGEmailSystem:
             List of processed email results
         """
         print("\n" + "="*80)
-        logger.info("🚀 Starting Email Processing Workflow")
+        logger.info(" Starting Email Processing Workflow")
         print("="*80 + "\n")
 
         try:
             # Step 1: Read unread emails
-            logger.info("📧 [1/5] Fetching unread emails from inbox...")
+            logger.info(" [1/5] Fetching unread emails from inbox...")
             unread_emails = self.email_reader.fetch_unread_emails()
 
             if not unread_emails:
-                logger.info("✅ No unread emails to process\n")
+                logger.info(" No unread emails to process\n")
                 return []
 
-            logger.info(f"✅ Found {len(unread_emails)} unread email(s)\n")
+            logger.info(f" Found {len(unread_emails)} unread email(s)\n")
 
             # Step 2: Process each email
             processed_results = []
             for idx, email in enumerate(unread_emails, 1):
                 print(f"\n{'='*80}")
-                logger.info(f"📨 Processing Email {idx}/{len(unread_emails)}")
+                logger.info(f" Processing Email {idx}/{len(unread_emails)}")
                 logger.info(f"   Subject: {email.get('subject', 'No Subject')}")
                 logger.info(f"   From: {email.get('from', 'Unknown')}")
                 print(f"{'='*80}\n")
+
+                # Reset token counter for this email
+                self.processor.ai_agent.reset_token_stats()
 
                 # Step 3: Extract intent and required information
                 result = self.processor.process_email(email)
@@ -192,9 +198,9 @@ class RAGEmailSystem:
                         'status': 'processed',
                         'result': result
                     })
-                    logger.info(f"✅ Email {idx}/{len(unread_emails)} processed successfully\n")
+                    logger.info(f" Email {idx}/{len(unread_emails)} processed successfully\n")
                 else:
-                    logger.error(f"❌ Failed to process email: {result.get('error')}")
+                    logger.error(f"Failed to process email: {result.get('error')}")
                     processed_results.append({
                         'email_id': email.get('id'),
                         'status': 'failed',
@@ -202,13 +208,13 @@ class RAGEmailSystem:
                     })
 
             print("\n" + "="*80)
-            logger.info(f"✅ Workflow Complete: {len(processed_results)} email(s) processed")
+            logger.info(f" Workflow Complete: {len(processed_results)} email(s) processed")
             print("="*80 + "\n")
 
             return processed_results
 
         except Exception as e:
-            logger.error(f"❌ Error in email processing workflow: {str(e)}", exc_info=True)
+            logger.error(f"Error in email processing workflow: {str(e)}", exc_info=True)
             return []
 
     def _log_response(self, original_email: Dict, processing_result: Dict):
@@ -220,7 +226,7 @@ class RAGEmailSystem:
             processing_result: Result from email processor
         """
         print("\n" + "="*80)
-        logger.info("📊 PROCESSING RESULTS")
+        logger.info(" PROCESSING RESULTS")
         print("="*80 + "\n")
 
         # Log processing results
@@ -229,22 +235,23 @@ class RAGEmailSystem:
         context = processing_result.get('context', {})
 
         # Intent
-        logger.info(f"🎯 Intent: {intent.get('type')} (confidence: {intent.get('confidence', 0):.0%})")
+        logger.info(f" Intent: {intent.get('type')} (confidence: {intent.get('confidence', 0):.0%})")
 
         # Entities Summary
         product_count = len(entities.get('product_names', []))
+        code_count = len(entities.get('product_codes', []))
         amount_count = len(entities.get('amounts', []))
         ref_count = len(entities.get('references', []))
 
-        logger.info(f"📦 Extracted: {product_count} products, {amount_count} amounts, {ref_count} codes")
+        logger.info(f" Extracted: {product_count} products, {code_count} product codes, {amount_count} amounts, {ref_count} refs")
 
         # Customer info
         customer_name = entities.get('customer_name', '')
         company_name = entities.get('company_name', '')
         if company_name:
-            logger.info(f"🏢 Company Extracted: {company_name}")
+            logger.info(f" Company Extracted: {company_name}")
         if customer_name:
-            logger.info(f"👤 Contact Extracted: {customer_name}")
+            logger.info(f" Contact Extracted: {customer_name}")
 
         print()
 
@@ -255,13 +262,13 @@ class RAGEmailSystem:
             country_id = customer_info.get('country_id', False)
             country_name = country_id[1] if isinstance(country_id, list) and len(country_id) > 1 else 'N/A'
 
-            logger.info(f"✅ Customer Found in JSON: {customer_info.get('name')}")
-            logger.info(f"   📍 Location: {customer_info.get('city', 'N/A')}, {country_name}")
-            logger.info(f"   📧 Email: {customer_info.get('email', 'N/A')}")
-            logger.info(f"   📞 Phone: {customer_info.get('phone', 'N/A')}")
-            logger.info(f"   📊 Match Score: {match_score:.0%}")
+            logger.info(f" Customer Found in JSON: {customer_info.get('name')}")
+            logger.info(f"    Location: {customer_info.get('city', 'N/A')}, {country_name}")
+            logger.info(f"    Email: {customer_info.get('email', 'N/A')}")
+            logger.info(f"    Phone: {customer_info.get('phone', 'N/A')}")
+            logger.info(f"    Match Score: {match_score:.0%}")
         else:
-            logger.warning(f"⚠️  Customer NOT found in JSON database")
+            logger.warning(f"  Customer NOT found in JSON database")
 
         print()
 
@@ -269,46 +276,37 @@ class RAGEmailSystem:
         json_data = context.get('json_data', {})
         products = json_data.get('products', [])
         if products:
-            # Keep ALL products - don't deduplicate (each extracted line is unique even if same DB product)
-            # Use extracted_product_name to distinguish between different requests
-            unique_by_extraction = list({p.get('extracted_product_name', p.get('name')): p for p in products}.values())
-            match_rate = len(unique_by_extraction) / product_count * 100 if product_count > 0 else 0
-            logger.info(f"✅ Products Matched in JSON: {len(unique_by_extraction)}/{product_count} ({match_rate:.0f}%)")
+            # Keep ALL products - each line item is separate even if same product
+            match_rate = len(products) / product_count * 100 if product_count > 0 else 0
+            logger.info(f" Products Matched in JSON: {len(products)}/{product_count} ({match_rate:.0f}%)")
 
-            # Show ALL matched products
-            logger.info(f"\n   📦 ALL MATCHED PRODUCTS:")
-            for idx, prod in enumerate(unique_by_extraction, 1):
-                prod_name = prod.get('name', 'Unknown')
-                prod_code = prod.get('default_code', 'N/A')
-                prod_score = prod.get('match_score', 0)
-                prod_price = prod.get('standard_price', 0)
-                extracted_name = prod.get('extracted_product_name', prod_name)
-                logger.info(f"   [{idx:2d}] {prod_name[:70]} | Code: {prod_code:20s} | Score: {prod_score:.0%} | Price: €{prod_price:.2f}")
-                # Show extracted description if different from DB name
-                if extracted_name and extracted_name != prod_name:
-                    logger.info(f"        → Requested as: {extracted_name[:70]}")
+            # Product details available in ORDER SUMMARY section below
 
-            # Show which products were NOT matched
-            if len(unique_by_extraction) < product_count:
-                logger.warning(f"\n   ⚠️  UNMATCHED PRODUCTS: {product_count - len(unique_by_extraction)}")
-                # Build set of all extracted product names that were successfully matched
-                matched_extracted_names = {p.get('extracted_product_name', '') for p in products if p.get('extracted_product_name')}
-                # Get all extracted product names from Mistral
-                extracted_names = entities.get('product_names', [])
-                # Find which extracted names are NOT in the matched set
-                unmatched = []
-                for name in extracted_names:
-                    if name not in matched_extracted_names:
-                        unmatched.append(name)
-                if unmatched:
-                    for idx, name in enumerate(unmatched, 1):
-                        logger.warning(f"      [{idx}] {name[:70]}")
+            # Show count of unmatched products
+            if len(products) < product_count:
+                unmatched_count = product_count - len(products)
+                logger.warning(f"  {unmatched_count} product(s) not matched")
         else:
-            logger.warning(f"⚠️  No products matched in JSON database")
+            logger.warning(f"  No products matched in JSON database")
 
         print("\n" + "="*80)
-        logger.info("✅ PROCESSING COMPLETE - WORKFLOW STOPPED")
+        logger.info(" PROCESSING COMPLETE - WORKFLOW STOPPED")
         print("="*80 + "\n")
+
+        # Log token usage
+        token_usage = processing_result.get('token_usage', {})
+        if token_usage:
+            total_tokens = token_usage.get('total_tokens', 0)
+            input_tokens = token_usage.get('input_tokens', 0)
+            output_tokens = token_usage.get('output_tokens', 0)
+
+            print("="*80)
+            logger.info(" TOKEN USAGE FOR THIS EMAIL")
+            print("="*80)
+            logger.info(f"   Input Tokens:  {input_tokens:,}")
+            logger.info(f"   Output Tokens: {output_tokens:,}")
+            logger.info(f"   Total Tokens:  {total_tokens:,}")
+            print("="*80 + "\n")
 
         # Display organized summary
         self._display_summary(customer_info, entities, products, context)
@@ -393,34 +391,54 @@ class RAGEmailSystem:
         logger.info("ORDER DETAILS:")
         logger.info("-" * 100)
 
-        # Get unique products
-        unique_products = list({p.get('extracted_product_name', p.get('name')): p for p in products}.values()) if products else []
-        total_items = len(unique_products)
+        # Keep ALL products (no deduplication)
+        total_items = len(products) if products else 0
 
         logger.info(f"  Total Items         : {total_items}")
         logger.info(f"  Order Date          : {entities.get('dates', ['N/A'])[0] if entities.get('dates') else 'N/A'}")
 
         print()
 
-        # Products Table
-        if unique_products:
+        # Products Table with AI-extracted quantities and prices
+        if products:
+            # Get AI-extracted quantities and prices (already aligned with product_names by Mistral)
+            product_names = entities.get('product_names', [])
+            product_quantities = entities.get('product_quantities', [])
+            product_prices = entities.get('product_prices', [])
+
+            # Build maps for easy lookup
+            quantity_map = {}
+            price_map = {}
+
+            for idx, prod_name in enumerate(product_names):
+                if idx < len(product_quantities):
+                    quantity_map[prod_name] = product_quantities[idx]
+                if idx < len(product_prices):
+                    price_map[prod_name] = product_prices[idx]
+
             logger.info("PRODUCTS:")
             logger.info("-" * 100)
-            logger.info(f"  {'No.':<5} {'Product Code':<25} {'Product Name':<45} {'Match':<8} {'Price':<12}")
+            logger.info(f"  {'No.':<5} {'Product Code':<25} {'Product Name':<30} {'Qty':<6} {'Match':<8} {'Unit Price':<14} {'Total':<12}")
             logger.info("-" * 100)
 
             total_price = 0
-            for idx, prod in enumerate(unique_products, 1):
+            for idx, prod in enumerate(products, 1):
                 code = prod.get('default_code', 'N/A')[:24]
-                name = prod.get('name', 'Unknown')[:44]
+                name = prod.get('name', 'Unknown')[:29]
                 score = prod.get('match_score', 0)
-                price = prod.get('standard_price', 0)
-                total_price += price
 
-                logger.info(f"  {idx:<5} {code:<25} {name:<45} {score:>6.0%}   EUR {price:>8.2f}")
+                # Get quantity and price from extracted amounts (prioritize extracted prices over database)
+                extracted_name = prod.get('extracted_product_name', '')
+                quantity = quantity_map.get(extracted_name, 1)  # Default to 1 if not found
+                unit_price = price_map.get(extracted_name, prod.get('standard_price', 0))  # Use extracted price if available
+
+                line_total = quantity * unit_price
+                total_price += line_total
+
+                logger.info(f"  {idx:<5} {code:<25} {name:<30} {quantity:<6} {score:>6.0%}   EUR {unit_price:>8.2f}   EUR {line_total:>8.2f}")
 
             logger.info("-" * 100)
-            logger.info(f"  {'ESTIMATED TOTAL (Database Prices)':<76} EUR {total_price:>8.2f}")
+            logger.info(f"  {'ORDER TOTAL (from email)':<76} EUR {total_price:>8.2f}")
             logger.info("-" * 100)
         else:
             logger.info("  No products in order")

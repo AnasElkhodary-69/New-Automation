@@ -40,21 +40,21 @@ class VectorStore:
             if customers_path.exists():
                 with open(customers_path, 'r', encoding='utf-8') as f:
                     self.customers_data = json.load(f)
-                logger.info(f"✅ Loaded {len(self.customers_data)} customers from {self.customers_json}")
+                logger.info(f" Loaded {len(self.customers_data)} customers from {self.customers_json}")
             else:
-                logger.warning(f"⚠️  Customers JSON not found: {self.customers_json}")
+                logger.warning(f"  Customers JSON not found: {self.customers_json}")
 
             # Load products
             products_path = Path(self.products_json)
             if products_path.exists():
                 with open(products_path, 'r', encoding='utf-8') as f:
                     self.products_data = json.load(f)
-                logger.info(f"✅ Loaded {len(self.products_data)} products from {self.products_json}")
+                logger.info(f" Loaded {len(self.products_data)} products from {self.products_json}")
             else:
-                logger.warning(f"⚠️  Products JSON not found: {self.products_json}")
+                logger.warning(f"  Products JSON not found: {self.products_json}")
 
         except Exception as e:
-            logger.error(f"❌ Error loading JSON files: {str(e)}")
+            logger.error(f"Error loading JSON files: {str(e)}")
             self.customers_data = []
             self.products_data = []
 
@@ -152,10 +152,8 @@ class VectorStore:
         Returns:
             Best matching customer dict or None
         """
-        logger.info(f"[CUSTOMER SEARCH] Searching: company='{company_name}', name='{customer_name}', email='{email}'")
-
         if not self.customers_data:
-            logger.warning("⚠️  No customer data loaded")
+            logger.warning("No customer data loaded")
             return None
 
         best_match = None
@@ -164,7 +162,6 @@ class VectorStore:
         # Strategy 1: Search by company name (highest priority for B2B)
         if company_name:
             company_variations = self._normalize_search_term(company_name)
-            logger.info(f"   Company variations: {company_variations[:3]}")
 
             for customer in self.customers_data:
                 customer_company = customer.get('name', '') or customer.get('commercial_company_name', '')
@@ -178,7 +175,6 @@ class VectorStore:
         # Strategy 2: Search by customer name
         if customer_name and best_score < threshold:
             name_variations = self._normalize_search_term(customer_name)
-            logger.info(f"   Customer name variations: {name_variations[:3]}")
 
             for customer in self.customers_data:
                 customer_contact = customer.get('name', '')
@@ -199,14 +195,10 @@ class VectorStore:
                     break
 
         if best_match and best_score >= threshold:
-            logger.info(f"   [MATCH] Customer found: {best_match.get('name')} (Score: {best_score:.0%})")
-            logger.info(f"      Location: {best_match.get('city', 'N/A')}, {best_match.get('country_id', ['', 'N/A'])[1] if isinstance(best_match.get('country_id'), list) else 'N/A'}")
-            logger.info(f"      Email: {best_match.get('email', 'N/A')}")
-            logger.info(f"      Phone: {best_match.get('phone', 'N/A')}")
-            logger.info(f"      Ref: {best_match.get('ref', 'N/A')}")
+            logger.info(f"Customer match: {best_match.get('name')} ({best_score:.0%})")
             return {**best_match, 'match_score': best_score}
         else:
-            logger.warning(f"   [NO MATCH] No customer found (best score: {best_score:.0%}, threshold: {threshold:.0%})")
+            logger.warning(f"No customer match (score: {best_score:.0%})")
             return None
 
     def search_product(self, product_name: str = None, product_code: str = None,
@@ -229,7 +221,7 @@ class VectorStore:
         logger.debug(f"   Searching product: '{search_term}'")
 
         if not self.products_data:
-            logger.warning("⚠️  No product data loaded")
+            logger.warning("  No product data loaded")
             return []
 
         matches = []
@@ -247,6 +239,7 @@ class VectorStore:
             ]
 
             best_field_score = 0.0
+            matched_variation_length = 0
 
             for field_value in product_fields:
                 if not field_value:
@@ -254,17 +247,23 @@ class VectorStore:
 
                 for variation in variations:
                     score = self._similarity_score(variation, str(field_value))
-                    best_field_score = max(best_field_score, score)
+
+                    # Prioritize longer, more specific variations (e.g., "L1020" over "685")
+                    # If scores are equal, prefer the longer variation
+                    if score > best_field_score or (score == best_field_score and len(variation) > matched_variation_length):
+                        best_field_score = score
+                        matched_variation_length = len(variation)
 
             if best_field_score >= threshold:
                 matches.append({
                     **product,
                     'match_score': best_field_score,
+                    'matched_variation_length': matched_variation_length,
                     'search_term': search_term
                 })
 
-        # Sort by score (descending)
-        matches.sort(key=lambda x: x['match_score'], reverse=True)
+        # Sort by score (descending), then by variation length (descending) as tiebreaker
+        matches.sort(key=lambda x: (x['match_score'], x.get('matched_variation_length', 0)), reverse=True)
 
         return matches[:3]  # Return top 3 matches
 
@@ -303,15 +302,12 @@ class VectorStore:
                 best_match['extracted_product_name'] = name
                 all_matches.append(best_match)
                 match_count += 1
-                logger.info(f"   ✓ [{idx+1}/{len(product_names)}] '{name[:50]}' → {best_match.get('name', 'Unknown')[:50]} (Score: {best_match['match_score']:.0%}, Code: {best_match.get('default_code', 'N/A')})")
+                logger.debug(f"Product {idx+1}: {name[:40]} -> {best_match.get('default_code', 'N/A')}")
             else:
-                logger.warning(f"   ✗ [{idx+1}/{len(product_names)}] '{name[:50]}' → NO MATCH FOUND")
+                logger.debug(f"Product {idx+1}: {name[:40]} -> NO MATCH")
 
         match_rate = (match_count / len(product_names) * 100) if product_names else 0
-        logger.info(f"\n   📊 SUMMARY: Matched {match_count}/{len(product_names)} products ({match_rate:.0f}%)")
-
-        if match_count < len(product_names):
-            logger.warning(f"   ⚠️  {len(product_names) - match_count} product(s) NOT matched in JSON database")
+        logger.info(f"Products matched: {match_count}/{len(product_names)} ({match_rate:.0f}%)")
 
         return all_matches
 

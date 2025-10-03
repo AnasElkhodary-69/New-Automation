@@ -34,6 +34,11 @@ class MistralAgent:
         self.prompts = self._load_prompts()
         self.client = None
 
+        # Token usage tracking
+        self.total_tokens = 0
+        self.total_input_tokens = 0
+        self.total_output_tokens = 0
+
         self._initialize_client()
 
     def _load_config(self) -> Dict:
@@ -113,6 +118,48 @@ class MistralAgent:
             logger.error(f"Error initializing Mistral client: {e}")
             self.client = None
 
+    def _log_token_usage(self, response, operation_name: str):
+        """
+        Log token usage from Mistral API response
+
+        Args:
+            response: Mistral API response object
+            operation_name: Name of the operation (e.g., 'Intent Classification')
+        """
+        try:
+            usage = response.usage
+            input_tokens = usage.prompt_tokens
+            output_tokens = usage.completion_tokens
+            total_tokens = usage.total_tokens
+
+            # Update running totals
+            self.total_input_tokens += input_tokens
+            self.total_output_tokens += output_tokens
+            self.total_tokens += total_tokens
+
+            logger.info(f"   🔢 [{operation_name}] Tokens: {input_tokens} input + {output_tokens} output = {total_tokens} total")
+        except Exception as e:
+            logger.warning(f"Could not log token usage: {e}")
+
+    def get_token_stats(self) -> Dict:
+        """
+        Get token usage statistics
+
+        Returns:
+            Dictionary with token usage stats
+        """
+        return {
+            'total_tokens': self.total_tokens,
+            'input_tokens': self.total_input_tokens,
+            'output_tokens': self.total_output_tokens
+        }
+
+    def reset_token_stats(self):
+        """Reset token usage statistics"""
+        self.total_tokens = 0
+        self.total_input_tokens = 0
+        self.total_output_tokens = 0
+
     def classify_intent(self, subject: str, body: str) -> Dict:
         """
         Classify email intent using Mistral
@@ -158,6 +205,9 @@ JSON:"""
                 temperature=0.3,
                 max_tokens=500
             )
+
+            # Log token usage
+            self._log_token_usage(response, "Intent Classification")
 
             # Parse response
             result_text = response.choices[0].message.content
@@ -253,6 +303,9 @@ JSON:"""
                 temperature=0.2,
                 max_tokens=2500  # Increased from 1500 to handle large orders
             )
+
+            # Log token usage
+            self._log_token_usage(response, "Entity Extraction")
 
             # Parse response
             result_text = response.choices[0].message.content
@@ -384,6 +437,9 @@ JSON:"""
                 max_tokens=self.config['max_tokens']
             )
 
+            # Log token usage
+            self._log_token_usage(response, "Response Generation")
+
             # Log raw response for debugging
             response_text = response.choices[0].message.content
             logger.info("="*80)
@@ -500,6 +556,12 @@ Response:
                 cleaned = re.sub(r'^```(?:json)?\s*\n', '', cleaned)
                 cleaned = re.sub(r'\n```\s*$', '', cleaned)
 
+            # FIX: Add missing commas in malformed JSON (common Mistral error)
+            # Pattern: "value"\n    "key" should be "value",\n    "key"
+            cleaned = re.sub(r'(:\s*"[^"]*")\s*\n\s*(")', r'\1,\n    \2', cleaned)
+            cleaned = re.sub(r'(:\s*[\d.]+)\s*\n\s*(")', r'\1,\n    \2', cleaned)
+            cleaned = re.sub(r'(:\s*null)\s*\n\s*(")', r'\1,\n    \2', cleaned)
+
             # Extract just the core fields we need with regex patterns
             # This is more robust than trying to parse potentially malformed JSON
             type_match = re.search(r'"type"\s*:\s*"([^"]+)"', cleaned)
@@ -517,16 +579,22 @@ Response:
                 logger.debug(f"Parsed intent: {result}")
                 return result
 
-            # Fallback: try to parse as JSON
-            json_match = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', cleaned)
-            if json_match:
-                result = json.loads(json_match.group())
+            # Fallback: try to parse as JSON after fixing
+            try:
+                result = json.loads(cleaned)
                 logger.debug(f"Parsed intent via JSON: {result}")
                 return result
+            except json.JSONDecodeError:
+                # Try to extract JSON object even if nested in other text
+                json_match = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', cleaned)
+                if json_match:
+                    result = json.loads(json_match.group())
+                    logger.debug(f"Parsed intent via JSON extraction: {result}")
+                    return result
 
         except Exception as e:
             logger.error(f"Error parsing intent response: {e}")
-            logger.debug(f"Full response text: {response_text}")
+            logger.debug(f"Full response text: {response_text[:500]}")
 
         return {
             'type': 'general_inquiry',

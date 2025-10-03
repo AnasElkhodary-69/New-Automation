@@ -2,6 +2,7 @@
 Email Reader Module
 
 Handles connecting to email server via IMAP and fetching emails
+Supports PDF text extraction and image OCR
 """
 
 import logging
@@ -9,11 +10,28 @@ import imaplib
 from typing import List, Dict, Optional
 import json
 from pathlib import Path
+import io
+import base64
+import tempfile
 
 # Import standard email library with absolute import to avoid conflict
 import email.message
 from email import message_from_bytes
 from email.header import decode_header
+
+# PDF and image processing
+try:
+    import pdfplumber
+    from PIL import Image
+    import pytesseract
+    from pdf2image import convert_from_bytes
+    PDF_SUPPORT = True
+
+    # Configure Tesseract path for Windows
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+except ImportError:
+    PDF_SUPPORT = False
+    logging.warning("PDF/Image extraction libraries not installed. Install: pip install pdfplumber pytesseract pdf2image Pillow")
 
 logger = logging.getLogger(__name__)
 
@@ -142,6 +160,14 @@ class EmailReader:
             # Extract body
             body_data = self._extract_body(msg)
 
+            # Extract attachments with content (PDFs, images)
+            attachments, attachment_text = self._extract_attachments_with_content(msg)
+
+            # Combine email body with extracted attachment text
+            full_body = body_data.get('text', '')
+            if attachment_text:
+                full_body += attachment_text
+
             # Parse email data
             email_dict = {
                 'id': email_id.decode(),
@@ -150,9 +176,9 @@ class EmailReader:
                 'to': self._decode_header(msg.get('To', '')),
                 'subject': self._decode_header(msg.get('Subject', '')),
                 'date': msg.get('Date', ''),
-                'body': body_data.get('text', ''),
+                'body': full_body,  # Now includes PDF/image text
                 'body_html': body_data.get('html', ''),
-                'attachments': self._extract_attachments(msg)
+                'attachments': attachments
             }
 
             return email_dict
@@ -328,6 +354,144 @@ class EmailReader:
                 logger.info(f"Moved email {email_id} to {folder}")
         except Exception as e:
             logger.error(f"Error moving email: {str(e)}")
+
+    def _extract_text_from_pdf(self, pdf_bytes: bytes, filename: str) -> str:
+        """
+        Extract text from PDF file, including text from images within PDF
+
+        Args:
+            pdf_bytes: PDF file content as bytes
+            filename: Name of the PDF file for logging
+
+        Returns:
+            Extracted text content
+        """
+        if not PDF_SUPPORT:
+            logger.warning(f"PDF extraction not available for {filename}")
+            return ""
+
+        extracted_text = ""
+
+        try:
+            # Method 1: Extract text directly from PDF
+            with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+                for page_num, page in enumerate(pdf.pages, 1):
+                    text = page.extract_text()
+                    if text:
+                        extracted_text += f"\n--- Page {page_num} ---\n{text}\n"
+
+            # Method 2: If no text found, try OCR on PDF pages
+            if not extracted_text.strip():
+                try:
+                    # Specify poppler path for Windows
+                    poppler_path = r"C:\Anas's PC\Moaz\New Automation\poppler-24.08.0\Library\bin"
+                    images = convert_from_bytes(pdf_bytes, poppler_path=poppler_path)
+                    for page_num, image in enumerate(images, 1):
+                        try:
+                            ocr_text = pytesseract.image_to_string(image)
+                            if ocr_text:
+                                extracted_text += f"\n--- Page {page_num} (OCR) ---\n{ocr_text}\n"
+                        except pytesseract.TesseractNotFoundError:
+                            logger.debug(f"Tesseract not installed, skipping OCR for {filename}")
+                            break
+                except Exception as ocr_error:
+                    logger.debug(f"OCR failed for {filename}: {ocr_error}")
+
+            if extracted_text.strip():
+                logger.info(f"Extracted {len(extracted_text)} chars from PDF: {filename}")
+            else:
+                logger.warning(f"No text found in PDF: {filename}")
+
+        except Exception as e:
+            logger.error(f"PDF extraction error ({filename}): {str(e)}")
+
+        return extracted_text
+
+    def _extract_text_from_image(self, image_bytes: bytes, filename: str) -> str:
+        """
+        Extract text from image using OCR
+
+        Args:
+            image_bytes: Image file content as bytes
+            filename: Name of the image file for logging
+
+        Returns:
+            Extracted text content
+        """
+        if not PDF_SUPPORT:
+            logger.warning(f"Image OCR not available for {filename}")
+            return ""
+
+        extracted_text = ""
+
+        try:
+            image = Image.open(io.BytesIO(image_bytes))
+
+            try:
+                extracted_text = pytesseract.image_to_string(image)
+            except pytesseract.TesseractNotFoundError:
+                logger.warning(f"Tesseract not installed, skipping OCR for {filename}")
+                return ""
+
+            if extracted_text.strip():
+                logger.info(f"Extracted {len(extracted_text)} chars from image: {filename}")
+            else:
+                logger.debug(f"No text found in {filename}")
+
+        except Exception as e:
+            logger.error(f"Image extraction error ({filename}): {str(e)}")
+
+        return extracted_text
+
+    def _extract_attachments_with_content(self, msg: email.message.Message) -> tuple[List[Dict], str]:
+        """
+        Extract attachment information AND text content from PDFs/images
+
+        Args:
+            msg: Email message object
+
+        Returns:
+            Tuple of (attachments list, combined extracted text)
+        """
+        attachments = []
+        combined_text = ""
+
+        try:
+            for part in msg.walk():
+                content_disposition = str(part.get("Content-Disposition", ""))
+
+                if "attachment" in content_disposition:
+                    filename = part.get_filename()
+                    if filename:
+                        filename = self._decode_header(filename)
+                        content_type = part.get_content_type()
+                        payload = part.get_payload(decode=True)
+
+                        if payload:
+                            size = len(payload)
+
+                            attachments.append({
+                                'filename': filename,
+                                'content_type': content_type,
+                                'size': size
+                            })
+
+                            # Extract text from PDF
+                            if content_type == 'application/pdf' or filename.lower().endswith('.pdf'):
+                                pdf_text = self._extract_text_from_pdf(payload, filename)
+                                if pdf_text:
+                                    combined_text += f"\n\n=== ATTACHMENT: {filename} ===\n{pdf_text}\n"
+
+                            # Extract text from images
+                            elif content_type.startswith('image/') or filename.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp')):
+                                image_text = self._extract_text_from_image(payload, filename)
+                                if image_text:
+                                    combined_text += f"\n\n=== ATTACHMENT: {filename} ===\n{image_text}\n"
+
+        except Exception as e:
+            logger.error(f"Error extracting attachments with content: {e}")
+
+        return attachments, combined_text
 
     def close(self):
         """Close IMAP connection"""

@@ -10,6 +10,7 @@ Orchestrates the email processing workflow:
 
 import logging
 from typing import Dict, List, Optional, Any
+from utils.step_logger import StepLogger
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ class EmailProcessor:
         self.odoo = odoo_connector
         self.vector_store = vector_store
         self.ai_agent = ai_agent
+        self.step_logger = StepLogger()
 
         logger.info("Email Processor initialized")
 
@@ -43,13 +45,21 @@ class EmailProcessor:
             Processing result dictionary
         """
         try:
-            # Step 1: Classify intent
-            logger.info("🤖 [2/4] Classifying intent...")
+            # Initialize step logging for this email
+            email_id = email.get('message_id', email.get('id', 'unknown'))
+            self.step_logger.start_email_log(email_id)
+
+            # LOG STEP 1: Email Parsing
+            logger.info("📝 [1/5] Logging email parsing...")
+            self.step_logger.log_step_1_email_parsing(email)
+
+            # Step 2: Classify intent
+            logger.info("🤖 [2/5] Classifying intent...")
             intent = self._classify_intent(email)
             logger.info(f"   ✓ Intent: {intent.get('type')} ({intent.get('confidence', 0):.0%} confidence)")
 
-            # Step 2: Extract entities and key information
-            logger.info("🤖 [3/4] Extracting entities...")
+            # Step 3: Extract entities and key information
+            logger.info("🤖 [3/5] Extracting entities...")
             entities = self._extract_entities(email)
             entity_count = sum(1 for k, v in entities.items() if v and k not in ['urgency_level', 'sentiment'])
             logger.info(f"   ✓ Extracted {entity_count} entity types")
@@ -60,19 +70,31 @@ class EmailProcessor:
             amount_count = len(entities.get('amounts', []))
             logger.info(f"   📦 Products: {product_count}, Codes: {code_count}, Amounts: {amount_count}")
 
-            # Step 3: Retrieve relevant context from JSON files
-            context = self._retrieve_context(intent, entities, email)
+            # LOG STEP 2: Entity Extraction
+            logger.info("📝 [4/5] Logging entity extraction...")
+            self.step_logger.log_step_2_entity_extraction(intent, entities)
+
+            # Step 4: Retrieve relevant context from JSON files
+            logger.info("🔍 [5/5] Retrieving context from JSON database...")
+            context, search_criteria, match_stats = self._retrieve_context_with_logging(intent, entities, email)
             logger.info(f"   ✓ Context retrieved from JSON")
 
-            # Step 4: STOP HERE - No response generation
-            logger.info("🛑 [4/4] Stopping workflow (no response generation)")
+            # Get token usage stats
+            token_stats = self.ai_agent.get_token_stats()
+
+            # Log the directory where step logs were saved
+            log_dir = self.step_logger.get_current_log_dir()
+            if log_dir:
+                logger.info(f"📁 Step logs saved to: {log_dir}")
 
             return {
                 'success': True,
                 'intent': intent,
                 'entities': entities,
                 'context': context,
-                'response': ''  # No response generated
+                'response': '',  # No response generated
+                'token_usage': token_stats,
+                'step_log_dir': log_dir
             }
 
         except Exception as e:
@@ -138,6 +160,51 @@ class EmailProcessor:
                 'references': []
             }
 
+    def _retrieve_context_with_logging(self, intent: Dict, entities: Dict, email: Dict) -> tuple:
+        """
+        Retrieve context and log RAG input/output steps
+
+        Args:
+            intent: Classified intent
+            entities: Extracted entities
+            email: Original email
+
+        Returns:
+            Tuple of (context, search_criteria, match_statistics)
+        """
+        # Prepare search criteria for logging
+        search_criteria = {
+            'customer_search': {
+                'company_name': entities.get('company_name', ''),
+                'customer_name': entities.get('customer_name', ''),
+                'email': entities.get('customer_email', '')
+            },
+            'product_search': {
+                'product_names': entities.get('product_names', []),
+                'product_codes': entities.get('product_codes', [])
+            },
+            'intent_type': intent.get('type')
+        }
+
+        # LOG STEP 3: RAG Input
+        self.step_logger.log_step_3_rag_input(intent, entities, search_criteria)
+
+        # Perform actual context retrieval
+        context = self._retrieve_context(intent, entities, email)
+
+        # Gather match statistics
+        match_stats = {
+            'customer_matched': context.get('customer_info') is not None,
+            'products_found': len(context.get('json_data', {}).get('products', [])),
+            'invoices_found': len(context.get('json_data', {}).get('invoices', [])),
+            'payment_status_found': len(context.get('json_data', {}).get('payment_status', []))
+        }
+
+        # LOG STEP 4: RAG Output
+        self.step_logger.log_step_4_rag_output(context, match_stats)
+
+        return context, search_criteria, match_stats
+
     def _retrieve_context(self, intent: Dict, entities: Dict, email: Dict) -> Dict:
         """
         Retrieve relevant context from JSON files (new RAG workflow)
@@ -150,7 +217,6 @@ class EmailProcessor:
         Returns:
             Retrieved context dictionary
         """
-        logger.info("🔍 [4/5] Retrieving context from JSON database...")
 
         context = {
             'json_data': {},
@@ -216,6 +282,19 @@ class EmailProcessor:
             elif intent_type == 'product_inquiry':
                 context['json_data'] = self._retrieve_product_context_json(entities)
 
+            elif intent_type == 'general_inquiry':
+                # Fallback: If general_inquiry but products were extracted, search them
+                logger.info("   ⚠️  Intent: general_inquiry - checking if products can be searched")
+                context['json_data'] = self._retrieve_order_context_json(entities)
+
+            else:
+                # Default case: If products/codes were extracted, always try to search
+                product_names = entities.get('product_names', [])
+                product_codes = entities.get('product_codes', [])
+                if product_names or product_codes:
+                    logger.info(f"   ⚠️  Unknown intent '{intent_type}' but {len(product_names)} products extracted - searching anyway")
+                    context['json_data'] = self._retrieve_order_context_json(entities)
+
         except Exception as e:
             logger.error(f"❌ Error retrieving context: {str(e)}")
 
@@ -240,7 +319,7 @@ class EmailProcessor:
         try:
             # Search for products mentioned in order
             product_names = entities.get('product_names', [])
-            product_codes = entities.get('references', [])
+            product_codes = entities.get('product_codes', [])
 
             if product_names:
                 logger.info(f"   🔍 Searching {len(product_names)} products in JSON database...")
@@ -300,7 +379,7 @@ class EmailProcessor:
 
         try:
             product_names = entities.get('product_names', [])
-            product_codes = entities.get('references', [])
+            product_codes = entities.get('product_codes', [])
 
             if product_names:
                 matched_products = self.vector_store.search_products_batch(

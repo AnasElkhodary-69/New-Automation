@@ -9,19 +9,25 @@ CRITICAL INSTRUCTIONS:
 - Extract customer contact information from: email body, email signature, attached PDFs, embedded images, or any other attachments
 - Look for company logos, letterheads, business cards in images/PDFs for additional contact info
 
+IMPORTANT - CUSTOMER IDENTIFICATION:
+- If the document is a PURCHASE ORDER or ORDER, extract the BUYER/CUSTOMER information (the company placing the order)
+- IGNORE the recipient/seller/supplier company (the company in the "Lieferant" or supplier field)
+- Look for fields like: "Lieferanschrift" (delivery address), "Rechnungsanschrift" (billing address), "Kunde" (customer), "Besteller" (orderer)
+- The customer is the one PLACING the order, NOT the one RECEIVING the order
+
 EMAIL TEXT (may include content from attachments, PDFs, and images):
 {text}
 
 ENTITY TYPES TO EXTRACT:
 
-1. **customer_name**: Full name of the person sending the email
-   - Look in email signature, footer, or body
-   - Examples: "John Smith", "Maria García", "Ahmed Hassan"
+1. **customer_name**: Full name of the contact person FROM THE BUYER/CUSTOMER company
+   - Look for contact person in delivery address or buyer information
+   - Do NOT extract names from the seller/recipient/supplier company
    - If not found, return empty string ""
 
-2. **company_name**: Company or organization name
-   - Look in email signature, header, footer, letterhead, PDFs, or images
-   - Examples: "SDS Print GmbH", "Acme Industries Ltd", "Fischer Druck AG"
+2. **company_name**: Name of the BUYER/CUSTOMER company (the one placing the order)
+   - Look in "Lieferanschrift" (delivery address), "Rechnungsanschrift" (billing address), or "Kunde" (customer) fields
+   - IGNORE seller/supplier company names
    - If not found, return empty string ""
 
 3. **customer_emails**: List of ALL email addresses found in signature, body, PDFs, or images
@@ -43,19 +49,37 @@ ENTITY TYPES TO EXTRACT:
    - DO NOT extract product categories or general terms as order numbers
    - If the email is placing a NEW order, this should be EMPTY
 
-7. **product_names**: COMPLETE list of ALL products mentioned
+7. **product_names**: COMPLETE list of ALL UNIQUE products mentioned
    - Include full product names with specifications
    - Examples: "Doctor Blade Gold 25x0,20x0,125x1,7 mm", "3M 9353 R Easy Splice Tape"
    - Extract from tables, lists, or paragraphs
    - DO NOT skip any products
+   - CRITICAL: If the same product appears multiple times with different descriptions, extract it ONLY ONCE using the most complete description
+   - Merge duplicate products into a single entry
 
-8. **dates**: Any dates mentioned (e.g., "September 29", "2024-03-15")
+8. **product_quantities**: List of quantities for each product (same order as product_names)
+   - Extract the quantity/count for each product
+   - Examples: [12, 6, 5]
+   - Must match the order of product_names array
+   - If quantity not specified, use 1
 
-9. **amounts**: Quantities, prices, and monetary values
-   - Format: "5 units (Product Name, 1,20 EUR)" or "15 × 1,44 EUR (Product)"
-   - Include both quantity AND unit price when available
+9. **product_prices**: List of unit prices for each product (same order as product_names)
+   - Extract unit price per item in EUR
+   - Examples: [356.00, 405.37, 307.66]
+   - Must match the order of product_names array
+   - If price not found, use 0
 
-10. **references**: Invoice numbers, tracking numbers, article numbers (Art.-No.)
+10. **dates**: Any dates mentioned (e.g., "September 29", "2024-03-15")
+
+11. **product_codes**: ONLY product article numbers/codes from fields like "Ihre Art.Nr", "Art.-No.", "Article No."
+   - Extract ONLY the actual product codes (e.g., "3M L1520", "AB-1234")
+   - DO NOT include order numbers, supplier numbers, or other reference numbers
+   - If no product codes found, return empty array []
+
+12. **references**: Order numbers, supplier numbers, invoice numbers (NOT product codes)
+   - Include: "Bestell-Nr." (order number), "Lieferant-Nr." (supplier number)
+   - DO NOT include product article numbers (those go in product_codes)
+   - If not found, return empty array []
 
 Additional required fields:
 - "urgency_level": "low", "medium", or "high"
@@ -63,19 +87,21 @@ Additional required fields:
 
 IMPORTANT: Return valid JSON with ALL fields present. Use empty arrays [] if nothing found.
 
-Example for a product order email:
+Example JSON structure:
 {{
-  "customer_name": "Contact Person Name",
-  "company_name": "Company Name Ltd",
-  "customer_emails": ["contact@company.com", "orders@company.com"],
-  "phone_numbers": ["+1 555 123 4567"],
-  "addresses": ["123 Main Street, City, Country"],
+  "customer_name": "",
+  "company_name": "",
+  "customer_emails": [],
+  "phone_numbers": [],
+  "addresses": [],
   "order_numbers": [],
-  "product_names": ["Product 1 with specifications", "Product 2 with specifications", "Product 3"],
-  "dates": ["Date mentioned in email"],
-  "amounts": ["Quantity and price info"],
-  "references": ["Product codes or reference numbers"],
-  "urgency_level": "medium",
+  "product_names": [],
+  "product_quantities": [],
+  "product_prices": [],
+  "dates": [],
+  "product_codes": [],
+  "references": [],
+  "urgency_level": "low",
   "sentiment": "neutral"
 }}
 
