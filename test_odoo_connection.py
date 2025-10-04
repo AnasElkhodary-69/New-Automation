@@ -3,53 +3,37 @@ Quick script to test Odoo connection and find database name
 """
 
 import xmlrpc.client
+from dotenv import load_dotenv
+import os
 
-# Odoo credentials
-url = 'https://whlvm14063.wawihost.de'
-username = 'k.el@sds-print.com'
-password = 'Test123'
+# Load environment variables
+load_dotenv()
+
+# Odoo credentials from .env
+url = os.getenv('ODOO_URL')
+username = os.getenv('ODOO_USERNAME')
+password = os.getenv('ODOO_PASSWORD')
+db_name = os.getenv('ODOO_DB_NAME')
 
 print("Testing Odoo Connection...")
 print(f"URL: {url}")
 print(f"Username: {username}")
+print(f"Database: {db_name}")
 print("=" * 60)
 
-# Common database names to try
-possible_db_names = [
-    'SDS',
-    'sds',
-    'SDS-Print',
-    'sds-print',
-    'sdsprint',
-    'sds_print',
-    'whlvm14063',
-    'odoo18',
-    'odoo_18',
-    'odoo',
-    'main',
-    'production',
-]
-
-print("\nTrying to discover database name...\n")
-
-for db_name in possible_db_names:
+# If database name is configured in .env, use it directly
+if db_name and db_name != 'odoo_db_placeholder':
+    print(f"\nTesting configured database: '{db_name}'...\n")
     try:
-        print(f"Trying database: '{db_name}'... ", end='')
-
-        # Try to authenticate
         common = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/common')
         uid = common.authenticate(db_name, username, password, {})
 
         if uid:
-            print(f"[OK] SUCCESS!")
-            print(f"\n{'=' * 60}")
-            print(f"[SUCCESS] FOUND IT!")
-            print(f"{'=' * 60}")
-            print(f"Database Name: {db_name}")
+            print(f"[SUCCESS] Connected to database '{db_name}'!")
             print(f"User ID: {uid}")
-            print(f"\nTesting a simple query...")
 
             # Test a simple query
+            print(f"\nTesting a simple query...")
             models = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/object')
             partner_count = models.execute_kw(
                 db_name, uid, password,
@@ -61,9 +45,63 @@ for db_name in possible_db_names:
             print(f"\n{'=' * 60}")
             print("CONNECTION SUCCESSFUL!")
             print(f"{'=' * 60}")
+            exit(0)
+        else:
+            print("[FAIL] Authentication failed")
+    except Exception as e:
+        print(f"[ERROR] {str(e)}")
+        print("\nTrying to discover database name...\n")
+
+# Common database names to try
+possible_db_names = [
+    'odoo',
+    'SDS',
+    'sds',
+    'SDS-Print',
+    'sds-print',
+    'sdsprint',
+    'sds_print',
+    'whlvm14063',
+    'odoo18',
+    'odoo_18',
+    'main',
+    'production',
+]
+
+print("\nTrying to discover database name...\n")
+
+for db_name_test in possible_db_names:
+    try:
+        print(f"Trying database: '{db_name_test}'... ", end='')
+
+        # Try to authenticate
+        common = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/common')
+        uid = common.authenticate(db_name_test, username, password, {})
+
+        if uid:
+            print(f"[OK] SUCCESS!")
+            print(f"\n{'=' * 60}")
+            print(f"[SUCCESS] FOUND IT!")
+            print(f"{'=' * 60}")
+            print(f"Database Name: {db_name_test}")
+            print(f"User ID: {uid}")
+            print(f"\nTesting a simple query...")
+
+            # Test a simple query
+            models = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/object')
+            partner_count = models.execute_kw(
+                db_name_test, uid, password,
+                'res.partner', 'search_count',
+                [[]]
+            )
+            print(f"[OK] Found {partner_count} contacts in database")
+
+            print(f"\n{'=' * 60}")
+            print("CONNECTION SUCCESSFUL!")
+            print(f"{'=' * 60}")
             print("\nUse these credentials in your .env file:")
             print(f"ODOO_URL={url}")
-            print(f"ODOO_DB_NAME={db_name}")
+            print(f"ODOO_DB_NAME={db_name_test}")
             print(f"ODOO_USERNAME={username}")
             print(f"ODOO_PASSWORD={password}")
 

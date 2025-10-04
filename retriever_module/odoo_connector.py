@@ -331,10 +331,10 @@ class OdooConnector:
                 domain = [['id', '=', product_id]]
                 products = self.models.execute_kw(
                     self.db, self.uid, self.password,
-                    'product.product', 'search_read',
+                    'product.template', 'search_read',
                     [domain],
                     {
-                        'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'qty_available'],
+                        'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price'],
                         'limit': 20
                     }
                 )
@@ -348,10 +348,10 @@ class OdooConnector:
                     domain = [['default_code', 'ilike', variation]]
                     products = self.models.execute_kw(
                         self.db, self.uid, self.password,
-                        'product.product', 'search_read',
+                        'product.template', 'search_read',
                         [domain],
                         {
-                            'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'qty_available'],
+                            'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price'],
                             'limit': 20
                         }
                     )
@@ -375,10 +375,10 @@ class OdooConnector:
 
                     products = self.models.execute_kw(
                         self.db, self.uid, self.password,
-                        'product.product', 'search_read',
+                        'product.template', 'search_read',
                         [domain],
                         {
-                            'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'qty_available'],
+                            'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price'],
                             'limit': 20
                         }
                     )

@@ -222,6 +222,77 @@ class StepLogger:
         self._write_json(log_file, rag_output_summary)
         logger.info(f"   Logged Step 4: RAG Output -> {log_file.name}")
 
+    def log_step_5_odoo_matching(self, odoo_matches: Dict):
+        """
+        Log Step 5: Odoo Database Matching
+
+        Args:
+            odoo_matches: Odoo matching results
+        """
+        if not self.current_email_dir:
+            logger.warning("No email log directory initialized")
+            return
+
+        log_file = self.current_email_dir / "5_odoo_matching.json"
+
+        # Extract customer match
+        odoo_customer = odoo_matches.get('customer')
+        customer_summary = None
+        if odoo_customer:
+            customer_summary = {
+                'odoo_id': odoo_customer.get('id'),
+                'name': odoo_customer.get('name'),
+                'email': odoo_customer.get('email'),
+                'phone': odoo_customer.get('phone') or odoo_customer.get('mobile'),
+                'city': odoo_customer.get('city'),
+                'country_id': odoo_customer.get('country_id')
+            }
+
+        # Extract product matches
+        products_summary = []
+        for match in odoo_matches.get('products', []):
+            odoo_product = match.get('odoo_product')
+            if odoo_product:
+                products_summary.append({
+                    'odoo_id': odoo_product.get('id'),
+                    'product_code': odoo_product.get('default_code'),
+                    'product_name': odoo_product.get('name'),
+                    'extracted_as': match.get('extracted_name'),
+                    'match_method': match.get('match_method'),
+                    'list_price': odoo_product.get('list_price'),
+                    'standard_price': odoo_product.get('standard_price')
+                })
+            else:
+                # Product not found in Odoo
+                json_product = match.get('json_product', {})
+                products_summary.append({
+                    'odoo_id': None,
+                    'product_code': json_product.get('default_code'),
+                    'product_name': json_product.get('name'),
+                    'extracted_as': match.get('extracted_name'),
+                    'match_method': None,
+                    'status': 'NOT_FOUND_IN_ODOO'
+                })
+
+        # Create summary
+        odoo_summary = {
+            'step': 'Odoo Database Matching',
+            'customer_match': {
+                'found': customer_summary is not None,
+                'odoo_data': customer_summary
+            },
+            'product_matches': {
+                'total_searched': odoo_matches.get('match_summary', {}).get('products_total', 0),
+                'matched': odoo_matches.get('match_summary', {}).get('products_matched', 0),
+                'failed': odoo_matches.get('match_summary', {}).get('products_failed', 0),
+                'products': products_summary
+            },
+            'summary': odoo_matches.get('match_summary', {})
+        }
+
+        self._write_json(log_file, odoo_summary)
+        logger.info(f"   Logged Step 5: Odoo Matching -> {log_file.name}")
+
     def _write_json(self, file_path: Path, data: Dict):
         """
         Write data to JSON file with pretty formatting

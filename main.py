@@ -289,8 +289,37 @@ class RAGEmailSystem:
         else:
             logger.warning(f"  No products matched in JSON database")
 
+        print()
+
+        # Odoo matches
+        odoo_matches = processing_result.get('odoo_matches', {})
+        if odoo_matches:
+            odoo_customer = odoo_matches.get('customer')
+            odoo_summary = odoo_matches.get('match_summary', {})
+
+            if odoo_customer:
+                logger.info(f" Customer Found in ODOO: {odoo_customer.get('name')}")
+                logger.info(f"    Odoo ID: {odoo_customer.get('id')}")
+                logger.info(f"    Email: {odoo_customer.get('email', 'N/A')}")
+                logger.info(f"    Phone: {odoo_customer.get('phone') or odoo_customer.get('mobile', 'N/A')}")
+            else:
+                logger.warning(f"  Customer NOT found in Odoo database")
+
+            print()
+
+            # Odoo product matches
+            products_matched = odoo_summary.get('products_matched', 0)
+            products_total = odoo_summary.get('products_total', 0)
+            if products_total > 0:
+                match_rate = (products_matched / products_total * 100) if products_total > 0 else 0
+                logger.info(f" Products Matched in ODOO: {products_matched}/{products_total} ({match_rate:.0f}%)")
+
+                if products_matched < products_total:
+                    failed_count = products_total - products_matched
+                    logger.warning(f"  {failed_count} product(s) not found in Odoo")
+
         print("\n" + "="*80)
-        logger.info(" PROCESSING COMPLETE - WORKFLOW STOPPED")
+        logger.info(" PROCESSING COMPLETE")
         print("="*80 + "\n")
 
         # Log token usage
@@ -309,11 +338,11 @@ class RAGEmailSystem:
             print("="*80 + "\n")
 
         # Display organized summary
-        self._display_summary(customer_info, entities, products, context)
+        self._display_summary(customer_info, entities, products, context, processing_result.get('odoo_matches'))
 
         logger.info("Full details saved to logs/rag_email_system.log")
 
-    def _display_summary(self, customer_info: Optional[Dict], entities: Dict, products: List[Dict], context: Dict):
+    def _display_summary(self, customer_info: Optional[Dict], entities: Dict, products: List[Dict], context: Dict, odoo_matches: Optional[Dict] = None):
         """
         Display organized summary table with customer details, order details, and shipping address
 
@@ -343,6 +372,11 @@ class RAGEmailSystem:
             logger.info(f"  Email               : {email}")
             logger.info(f"  Phone               : {phone}")
             logger.info(f"  Customer Reference  : {ref}")
+
+            # Add Odoo ID if matched
+            if odoo_matches and odoo_matches.get('customer'):
+                odoo_id = odoo_matches['customer'].get('id')
+                logger.info(f"  Odoo Customer ID    : {odoo_id}")
         else:
             logger.info("  No customer information available")
 
@@ -416,16 +450,31 @@ class RAGEmailSystem:
                 if idx < len(product_prices):
                     price_map[prod_name] = product_prices[idx]
 
+            # Build Odoo ID map
+            odoo_product_map = {}
+            if odoo_matches and odoo_matches.get('products'):
+                for match in odoo_matches['products']:
+                    json_prod = match.get('json_product', {})
+                    odoo_prod = match.get('odoo_product')
+                    if odoo_prod:
+                        # Use product code as key
+                        key = json_prod.get('default_code')
+                        if key:
+                            odoo_product_map[key] = odoo_prod.get('id')
+
             logger.info("PRODUCTS:")
             logger.info("-" * 100)
-            logger.info(f"  {'No.':<5} {'Product Code':<25} {'Product Name':<30} {'Qty':<6} {'Match':<8} {'Unit Price':<14} {'Total':<12}")
+            logger.info(f"  {'No.':<5} {'Code':<20} {'Product Name':<28} {'Qty':<6} {'Match':<8} {'Odoo ID':<10} {'Unit Price':<14} {'Total':<12}")
             logger.info("-" * 100)
 
             total_price = 0
             for idx, prod in enumerate(products, 1):
-                code = prod.get('default_code', 'N/A')[:24]
-                name = prod.get('name', 'Unknown')[:29]
+                code = prod.get('default_code', 'N/A')[:19]
+                name = prod.get('name', 'Unknown')[:27]
                 score = prod.get('match_score', 0)
+
+                # Get Odoo ID if available
+                odoo_id = odoo_product_map.get(prod.get('default_code'), 'N/A')
 
                 # Get quantity and price from extracted amounts (prioritize extracted prices over database)
                 extracted_name = prod.get('extracted_product_name', '')
@@ -435,7 +484,7 @@ class RAGEmailSystem:
                 line_total = quantity * unit_price
                 total_price += line_total
 
-                logger.info(f"  {idx:<5} {code:<25} {name:<30} {quantity:<6} {score:>6.0%}   EUR {unit_price:>8.2f}   EUR {line_total:>8.2f}")
+                logger.info(f"  {idx:<5} {code:<20} {name:<28} {quantity:<6} {score:>6.0%}   {str(odoo_id):<10} EUR {unit_price:>8.2f}   EUR {line_total:>8.2f}")
 
             logger.info("-" * 100)
             logger.info(f"  {'ORDER TOTAL (from email)':<76} EUR {total_price:>8.2f}")

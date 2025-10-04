@@ -50,16 +50,16 @@ class EmailProcessor:
             self.step_logger.start_email_log(email_id)
 
             # LOG STEP 1: Email Parsing
-            logger.info("📝 [1/5] Logging email parsing...")
+            logger.info("📝 [1/7] Logging email parsing...")
             self.step_logger.log_step_1_email_parsing(email)
 
             # Step 2: Classify intent
-            logger.info("🤖 [2/5] Classifying intent...")
+            logger.info("🤖 [2/7] Classifying intent...")
             intent = self._classify_intent(email)
             logger.info(f"   ✓ Intent: {intent.get('type')} ({intent.get('confidence', 0):.0%} confidence)")
 
             # Step 3: Extract entities and key information
-            logger.info("🤖 [3/5] Extracting entities...")
+            logger.info("🤖 [3/7] Extracting entities...")
             entities = self._extract_entities(email)
             entity_count = sum(1 for k, v in entities.items() if v and k not in ['urgency_level', 'sentiment'])
             logger.info(f"   ✓ Extracted {entity_count} entity types")
@@ -71,13 +71,22 @@ class EmailProcessor:
             logger.info(f"   📦 Products: {product_count}, Codes: {code_count}, Amounts: {amount_count}")
 
             # LOG STEP 2: Entity Extraction
-            logger.info("📝 [4/5] Logging entity extraction...")
+            logger.info("📝 [4/7] Logging entity extraction...")
             self.step_logger.log_step_2_entity_extraction(intent, entities)
 
             # Step 4: Retrieve relevant context from JSON files
-            logger.info("🔍 [5/5] Retrieving context from JSON database...")
+            logger.info("🔍 [5/7] Retrieving context from JSON database...")
             context, search_criteria, match_stats = self._retrieve_context_with_logging(intent, entities, email)
             logger.info(f"   ✓ Context retrieved from JSON")
+
+            # Step 5: NEW - Match JSON results in Odoo database
+            logger.info("🔗 [6/7] Matching results in Odoo database...")
+            odoo_matches = self._match_in_odoo(context, entities)
+            logger.info(f"   ✓ Odoo matching complete")
+
+            # Step 6: Log Odoo matching results
+            logger.info("📝 [7/7] Logging Odoo matching results...")
+            self.step_logger.log_step_5_odoo_matching(odoo_matches)
 
             # Get token usage stats
             token_stats = self.ai_agent.get_token_stats()
@@ -92,6 +101,7 @@ class EmailProcessor:
                 'intent': intent,
                 'entities': entities,
                 'context': context,
+                'odoo_matches': odoo_matches,  # NEW: Odoo database matches
                 'response': '',  # No response generated
                 'token_usage': token_stats,
                 'step_log_dir': log_dir
@@ -540,6 +550,142 @@ class EmailProcessor:
             logger.error(f"Error retrieving product context: {e}")
 
         return product_context
+
+    def _match_in_odoo(self, context: Dict, entities: Dict) -> Dict:
+        """
+        Match JSON results in Odoo database to get real Odoo IDs
+
+        Args:
+            context: Context from JSON matching (contains customer_info and products)
+            entities: Extracted entities
+
+        Returns:
+            Dictionary with Odoo matches
+        """
+        logger.info("   Matching JSON results in Odoo database...")
+
+        odoo_matches = {
+            'customer': None,
+            'products': [],
+            'match_summary': {
+                'customer_matched': False,
+                'products_total': 0,
+                'products_matched': 0,
+                'products_failed': 0
+            }
+        }
+
+        try:
+            # Match Customer in Odoo
+            customer_info = context.get('customer_info')
+            if customer_info:
+                logger.info(f"   [CUSTOMER] Searching Odoo for: {customer_info.get('name')}")
+
+                # Strategy 1: Try by customer reference (most reliable)
+                customer_ref = customer_info.get('ref')
+                if customer_ref:
+                    logger.info(f"      Trying ref: '{customer_ref}'")
+                    # Search by reference in Odoo
+                    odoo_customer = self.odoo.query_customer_info(
+                        customer_name=customer_ref  # Try ref as name search
+                    )
+                    if odoo_customer:
+                        odoo_matches['customer'] = odoo_customer
+                        odoo_matches['match_summary']['customer_matched'] = True
+                        logger.info(f"      ✓ Found by ref: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
+
+                # Strategy 2: Try by company name
+                if not odoo_matches['customer']:
+                    company_name = customer_info.get('name')
+                    if company_name:
+                        logger.info(f"      Trying company name: '{company_name}'")
+                        odoo_customer = self.odoo.query_customer_info(
+                            company_name=company_name
+                        )
+                        if odoo_customer:
+                            odoo_matches['customer'] = odoo_customer
+                            odoo_matches['match_summary']['customer_matched'] = True
+                            logger.info(f"      ✓ Found by name: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
+
+                # Strategy 3: Try by email (fallback)
+                if not odoo_matches['customer']:
+                    email = customer_info.get('email') or entities.get('customer_email')
+                    if email:
+                        logger.info(f"      Trying email: '{email}'")
+                        odoo_customer = self.odoo.query_customer_info(email=email)
+                        if odoo_customer:
+                            odoo_matches['customer'] = odoo_customer
+                            odoo_matches['match_summary']['customer_matched'] = True
+                            logger.info(f"      ✓ Found by email: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
+
+                if not odoo_matches['customer']:
+                    logger.warning(f"      ✗ Customer not found in Odoo")
+            else:
+                logger.warning(f"   [CUSTOMER] No customer from JSON to search in Odoo")
+
+            # Match Products in Odoo
+            json_products = context.get('json_data', {}).get('products', [])
+            odoo_matches['match_summary']['products_total'] = len(json_products)
+
+            if json_products:
+                logger.info(f"   [PRODUCTS] Searching Odoo for {len(json_products)} products...")
+
+                for idx, json_product in enumerate(json_products, 1):
+                    product_code = json_product.get('default_code')
+                    product_name = json_product.get('name')
+                    extracted_name = json_product.get('extracted_product_name', product_name)
+
+                    logger.info(f"      [{idx}] Searching: {extracted_name[:50]}...")
+
+                    odoo_product = None
+
+                    # Strategy 1: Search by product code (most reliable)
+                    if product_code:
+                        logger.info(f"          Trying code: '{product_code}'")
+                        products = self.odoo.query_products(product_code=product_code)
+                        if products:
+                            odoo_product = products[0]  # Take first match
+                            logger.info(f"          ✓ Found by code: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
+
+                    # Strategy 2: Search by product name
+                    if not odoo_product and product_name:
+                        logger.info(f"          Trying name: '{product_name[:40]}'")
+                        products = self.odoo.query_products(product_name=product_name)
+                        if products:
+                            odoo_product = products[0]  # Take first match
+                            logger.info(f"          ✓ Found by name: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
+
+                    if odoo_product:
+                        # Store matched product with JSON context
+                        odoo_matches['products'].append({
+                            'json_product': json_product,
+                            'odoo_product': odoo_product,
+                            'extracted_name': extracted_name,
+                            'match_method': 'code' if product_code and products else 'name'
+                        })
+                        odoo_matches['match_summary']['products_matched'] += 1
+                    else:
+                        logger.warning(f"          ✗ Product not found in Odoo")
+                        odoo_matches['match_summary']['products_failed'] += 1
+                        # Still store the failed match for reference
+                        odoo_matches['products'].append({
+                            'json_product': json_product,
+                            'odoo_product': None,
+                            'extracted_name': extracted_name,
+                            'match_method': None
+                        })
+            else:
+                logger.info(f"   [PRODUCTS] No products from JSON to search in Odoo")
+
+            # Summary
+            logger.info(f"   ✓ Odoo Matching Summary:")
+            logger.info(f"      Customer: {'✓ Matched' if odoo_matches['match_summary']['customer_matched'] else '✗ Not found'}")
+            logger.info(f"      Products: {odoo_matches['match_summary']['products_matched']}/{odoo_matches['match_summary']['products_total']} matched")
+
+        except Exception as e:
+            logger.error(f"   ✗ Error matching in Odoo: {str(e)}", exc_info=True)
+
+        return odoo_matches
 
     def _generate_response(
         self,
