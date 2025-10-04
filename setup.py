@@ -19,7 +19,7 @@ def print_header(text):
 
 def print_status(item, status, message=""):
     """Print status with color"""
-    status_symbol = "✓" if status else "✗"
+    status_symbol = "[OK]" if status else "[X]"
     status_text = "OK" if status else "MISSING"
     print(f"  {status_symbol} {item:30} [{status_text}] {message}")
 
@@ -36,7 +36,7 @@ def check_env_file():
         return True
     else:
         print_status(".env file", False, "NOT FOUND!")
-        print("\n  ⚠️  Please create .env file from .env.example:")
+        print("\n  [WARNING]  Please create .env file from .env.example:")
         print(f"     cp {env_example_path} {env_path}")
         print(f"     Then edit {env_path} with your credentials")
         return False
@@ -74,7 +74,7 @@ def check_required_env_vars():
     for var, description in optional_vars.items():
         value = os.getenv(var)
         is_set = bool(value and value.strip() and not value.startswith('your_'))
-        symbol = "✓" if is_set else "○"
+        symbol = "[OK]" if is_set else "○"
         status_text = "SET" if is_set else "NOT SET"
         print(f"  {symbol} {var:30} [{status_text}] {description}")
 
@@ -162,23 +162,23 @@ def validate_configuration():
         issues = validate_config()
 
         if issues['errors']:
-            print("\n  ❌ ERRORS (must fix):")
+            print("\n  [ERROR] ERRORS (must fix):")
             for error in issues['errors']:
                 print(f"     • {error}")
         else:
-            print("  ✓ No critical errors")
+            print("  [OK] No critical errors")
 
         if issues['warnings']:
-            print("\n  ⚠️  WARNINGS (optional):")
+            print("\n  [WARNING]  WARNINGS (optional):")
             for warning in issues['warnings']:
                 print(f"     • {warning}")
         else:
-            print("  ✓ No warnings")
+            print("  [OK] No warnings")
 
         return len(issues['errors']) == 0
 
     except Exception as e:
-        print(f"  ✗ Validation failed: {e}")
+        print(f"  [X] Validation failed: {e}")
         return False
 
 
@@ -214,7 +214,7 @@ def check_dependencies():
     for package, description in optional_packages:
         try:
             __import__(package.replace('-', '_'))
-            symbol = "✓"
+            symbol = "[OK]"
             status_text = "INSTALLED"
         except ImportError:
             symbol = "○"
@@ -247,7 +247,7 @@ def main():
         try:
             results[check_name] = check_func()
         except Exception as e:
-            print(f"\n  ✗ {check_name} failed with error: {e}")
+            print(f"\n  [X] {check_name} failed with error: {e}")
             results[check_name] = False
 
     # Summary
@@ -257,18 +257,18 @@ def main():
     total = len(results)
 
     for check_name, result in results.items():
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = "[OK] PASS" if result else "[X] FAIL"
         print(f"  {status:8} {check_name}")
 
     print(f"\n  Total: {passed}/{total} checks passed")
 
     if passed == total:
-        print("\n  ✅ Configuration is valid! You can run the system.")
+        print("\n  [OK] Configuration is valid! You can run the system.")
         print("\n  Start the system with:")
         print("     python main.py")
         return 0
     else:
-        print("\n  ❌ Please fix the issues above before running the system.")
+        print("\n  [ERROR] Please fix the issues above before running the system.")
         print("\n  Quick start guide:")
         print("     1. Copy .env.example to .env")
         print("     2. Edit .env with your credentials")

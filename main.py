@@ -324,7 +324,7 @@ class RAGEmailSystem:
         order_created = processing_result.get('order_created', {})
         if order_created:
             if order_created.get('created'):
-                logger.info(f" ✅ ORDER CREATED IN ODOO!")
+                logger.info(f" [OK] ORDER CREATED IN ODOO!")
                 logger.info(f"    Order Number: {order_created.get('order_name')}")
                 logger.info(f"    Order ID: {order_created.get('order_id')}")
                 logger.info(f"    Amount Total: €{order_created.get('amount_total', 0):.2f}")

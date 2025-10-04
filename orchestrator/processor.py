@@ -50,52 +50,52 @@ class EmailProcessor:
             self.step_logger.start_email_log(email_id)
 
             # LOG STEP 1: Email Parsing
-            logger.info("📝 [1/9] Logging email parsing...")
+            logger.info("[LOG] [1/9] Logging email parsing...")
             self.step_logger.log_step_1_email_parsing(email)
 
             # Step 2: Classify intent
-            logger.info("🤖 [2/9] Classifying intent...")
+            logger.info("[AI] [2/9] Classifying intent...")
             intent = self._classify_intent(email)
-            logger.info(f"   ✓ Intent: {intent.get('type')} ({intent.get('confidence', 0):.0%} confidence)")
+            logger.info(f"   [OK] Intent: {intent.get('type')} ({intent.get('confidence', 0):.0%} confidence)")
 
             # Step 3: Extract entities and key information
-            logger.info("🤖 [3/9] Extracting entities...")
+            logger.info("[AI] [3/9] Extracting entities...")
             entities = self._extract_entities(email)
             entity_count = sum(1 for k, v in entities.items() if v and k not in ['urgency_level', 'sentiment'])
-            logger.info(f"   ✓ Extracted {entity_count} entity types")
+            logger.info(f"   [OK] Extracted {entity_count} entity types")
 
             # Log detailed extraction counts
             product_count = len(entities.get('product_names', []))
             code_count = len(entities.get('references', []))
             amount_count = len(entities.get('amounts', []))
-            logger.info(f"   📦 Products: {product_count}, Codes: {code_count}, Amounts: {amount_count}")
+            logger.info(f"   [ITEMS] Products: {product_count}, Codes: {code_count}, Amounts: {amount_count}")
 
             # LOG STEP 2: Entity Extraction
-            logger.info("📝 [4/9] Logging entity extraction...")
+            logger.info("[LOG] [4/9] Logging entity extraction...")
             self.step_logger.log_step_2_entity_extraction(intent, entities)
 
             # Step 4: Retrieve relevant context from JSON files
-            logger.info("🔍 [5/9] Retrieving context from JSON database...")
+            logger.info("[SEARCH] [5/9] Retrieving context from JSON database...")
             context, search_criteria, match_stats = self._retrieve_context_with_logging(intent, entities, email)
-            logger.info(f"   ✓ Context retrieved from JSON")
+            logger.info(f"   [OK] Context retrieved from JSON")
 
             # Step 5: Match JSON results in Odoo database
-            logger.info("🔗 [6/9] Matching results in Odoo database...")
+            logger.info("[MATCH] [6/9] Matching results in Odoo database...")
             odoo_matches = self._match_in_odoo(context, entities)
-            logger.info(f"   ✓ Odoo matching complete")
+            logger.info(f"   [OK] Odoo matching complete")
 
             # Step 6: Log Odoo matching results
-            logger.info("📝 [7/9] Logging Odoo matching results...")
+            logger.info("[LOG] [7/9] Logging Odoo matching results...")
             self.step_logger.log_step_5_odoo_matching(odoo_matches)
 
             # Step 7: NEW - Create sales order in Odoo
-            logger.info("🛒 [8/9] Creating sales order in Odoo...")
+            logger.info("[ORDER] [8/9] Creating sales order in Odoo...")
             order_result = self._create_order_in_odoo(odoo_matches, entities, email)
-            logger.info(f"   ✓ Order creation {'complete' if order_result else 'skipped'}")
+            logger.info(f"   [OK] Order creation {'complete' if order_result else 'skipped'}")
 
             # Step 8: Log order creation results
             if order_result:
-                logger.info("📝 [9/9] Logging order creation results...")
+                logger.info("[LOG] [9/9] Logging order creation results...")
                 self.step_logger.log_step_6_order_creation(order_result)
 
             # Get token usage stats
@@ -104,7 +104,7 @@ class EmailProcessor:
             # Log the directory where step logs were saved
             log_dir = self.step_logger.get_current_log_dir()
             if log_dir:
-                logger.info(f"📁 Step logs saved to: {log_dir}")
+                logger.info(f"[SAVE] Step logs saved to: {log_dir}")
 
             return {
                 'success': True,
@@ -119,7 +119,7 @@ class EmailProcessor:
             }
 
         except Exception as e:
-            logger.error(f"❌ Error processing email: {str(e)}", exc_info=True)
+            logger.error(f"[ERROR] Error processing email: {str(e)}", exc_info=True)
             return {
                 'success': False,
                 'error': str(e)
@@ -305,7 +305,7 @@ class EmailProcessor:
 
             elif intent_type == 'general_inquiry':
                 # Fallback: If general_inquiry but products were extracted, search them
-                logger.info("   ⚠️  Intent: general_inquiry - checking if products can be searched")
+                logger.info("   [WARNING]  Intent: general_inquiry - checking if products can be searched")
                 context['json_data'] = self._retrieve_order_context_json(entities)
 
             else:
@@ -313,11 +313,11 @@ class EmailProcessor:
                 product_names = entities.get('product_names', [])
                 product_codes = entities.get('product_codes', [])
                 if product_names or product_codes:
-                    logger.info(f"   ⚠️  Unknown intent '{intent_type}' but {len(product_names)} products extracted - searching anyway")
+                    logger.info(f"   [WARNING]  Unknown intent '{intent_type}' but {len(product_names)} products extracted - searching anyway")
                     context['json_data'] = self._retrieve_order_context_json(entities)
 
         except Exception as e:
-            logger.error(f"❌ Error retrieving context: {str(e)}")
+            logger.error(f"[ERROR] Error retrieving context: {str(e)}")
 
         return context
 
@@ -343,17 +343,17 @@ class EmailProcessor:
             product_codes = entities.get('product_codes', [])
 
             if product_names:
-                logger.info(f"   🔍 Searching {len(product_names)} products in JSON database...")
+                logger.info(f"   [SEARCH] Searching {len(product_names)} products in JSON database...")
                 matched_products = self.vector_store.search_products_batch(
                     product_names=product_names,
                     product_codes=product_codes,
                     threshold=0.6
                 )
                 order_context['products'] = matched_products
-                logger.info(f"   ✅ Product search complete: {len(matched_products)} matches found")
+                logger.info(f"   [OK] Product search complete: {len(matched_products)} matches found")
 
         except Exception as e:
-            logger.error(f"   ❌ Error retrieving order context: {e}")
+            logger.error(f"   [ERROR] Error retrieving order context: {e}")
 
         return order_context
 
@@ -376,7 +376,7 @@ class EmailProcessor:
 
         # Note: JSON files don't contain invoice data
         # This is placeholder for future expansion
-        logger.info("   ⚠️  Invoice data not available in JSON files")
+        logger.info("   [WARNING]  Invoice data not available in JSON files")
 
         return invoice_context
 
@@ -411,7 +411,7 @@ class EmailProcessor:
                 product_context['products'] = matched_products
 
         except Exception as e:
-            logger.error(f"   ❌ Error retrieving product context: {e}")
+            logger.error(f"   [ERROR] Error retrieving product context: {e}")
 
         return product_context
 
@@ -603,7 +603,7 @@ class EmailProcessor:
                     if odoo_customer:
                         odoo_matches['customer'] = odoo_customer
                         odoo_matches['match_summary']['customer_matched'] = True
-                        logger.info(f"      ✓ Found by ref: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
+                        logger.info(f"      [OK] Found by ref: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
 
                 # Strategy 2: Try by company name
                 if not odoo_matches['customer']:
@@ -616,7 +616,7 @@ class EmailProcessor:
                         if odoo_customer:
                             odoo_matches['customer'] = odoo_customer
                             odoo_matches['match_summary']['customer_matched'] = True
-                            logger.info(f"      ✓ Found by name: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
+                            logger.info(f"      [OK] Found by name: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
 
                 # Strategy 3: Try by email (fallback)
                 if not odoo_matches['customer']:
@@ -627,10 +627,10 @@ class EmailProcessor:
                         if odoo_customer:
                             odoo_matches['customer'] = odoo_customer
                             odoo_matches['match_summary']['customer_matched'] = True
-                            logger.info(f"      ✓ Found by email: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
+                            logger.info(f"      [OK] Found by email: {odoo_customer.get('name')} (ID: {odoo_customer.get('id')})")
 
                 if not odoo_matches['customer']:
-                    logger.warning(f"      ✗ Customer not found in Odoo")
+                    logger.warning(f"      [X] Customer not found in Odoo")
             else:
                 logger.warning(f"   [CUSTOMER] No customer from JSON to search in Odoo")
 
@@ -656,7 +656,7 @@ class EmailProcessor:
                         products = self.odoo.query_products(product_code=product_code)
                         if products:
                             odoo_product = products[0]  # Take first match
-                            logger.info(f"          ✓ Found by code: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
+                            logger.info(f"          [OK] Found by code: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
 
                     # Strategy 2: Search by product name
                     if not odoo_product and product_name:
@@ -664,7 +664,7 @@ class EmailProcessor:
                         products = self.odoo.query_products(product_name=product_name)
                         if products:
                             odoo_product = products[0]  # Take first match
-                            logger.info(f"          ✓ Found by name: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
+                            logger.info(f"          [OK] Found by name: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
 
                     if odoo_product:
                         # Store matched product with JSON context
@@ -676,7 +676,7 @@ class EmailProcessor:
                         })
                         odoo_matches['match_summary']['products_matched'] += 1
                     else:
-                        logger.warning(f"          ✗ Product not found in Odoo")
+                        logger.warning(f"          [X] Product not found in Odoo")
                         odoo_matches['match_summary']['products_failed'] += 1
                         # Still store the failed match for reference
                         odoo_matches['products'].append({
@@ -689,12 +689,12 @@ class EmailProcessor:
                 logger.info(f"   [PRODUCTS] No products from JSON to search in Odoo")
 
             # Summary
-            logger.info(f"   ✓ Odoo Matching Summary:")
-            logger.info(f"      Customer: {'✓ Matched' if odoo_matches['match_summary']['customer_matched'] else '✗ Not found'}")
+            logger.info(f"   [OK] Odoo Matching Summary:")
+            logger.info(f"      Customer: {'[OK] Matched' if odoo_matches['match_summary']['customer_matched'] else '[X] Not found'}")
             logger.info(f"      Products: {odoo_matches['match_summary']['products_matched']}/{odoo_matches['match_summary']['products_total']} matched")
 
         except Exception as e:
-            logger.error(f"   ✗ Error matching in Odoo: {str(e)}", exc_info=True)
+            logger.error(f"   [X] Error matching in Odoo: {str(e)}", exc_info=True)
 
         return odoo_matches
 
@@ -716,7 +716,7 @@ class EmailProcessor:
             # Check if customer matched
             odoo_customer = odoo_matches.get('customer')
             if not odoo_customer:
-                logger.warning("   ✗ Cannot create order: Customer not found in Odoo")
+                logger.warning("   [X] Cannot create order: Customer not found in Odoo")
                 return {
                     'created': False,
                     'reason': 'customer_not_found',
@@ -791,7 +791,7 @@ class EmailProcessor:
                 logger.info(f"      + Product {display_id}: Qty {quantity} @ €{price:.2f}")
 
             if not order_lines:
-                logger.warning("   ✗ Cannot create order: No products matched")
+                logger.warning("   [X] Cannot create order: No products matched")
                 return {
                     'created': False,
                     'reason': 'no_products',
@@ -843,7 +843,7 @@ class EmailProcessor:
                 }
 
         except Exception as e:
-            logger.error(f"   ✗ Error creating order in Odoo: {str(e)}", exc_info=True)
+            logger.error(f"   [X] Error creating order in Odoo: {str(e)}", exc_info=True)
             return {
                 'created': False,
                 'reason': 'exception',

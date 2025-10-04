@@ -601,7 +601,7 @@ class OdooConnector:
             )
 
             if order_id:
-                logger.info(f"✓ Sale order created successfully! Order ID: {order_id}")
+                logger.info(f"[OK] Sale order created successfully! Order ID: {order_id}")
 
                 # Fetch created order details
                 order = self.models.execute_kw(

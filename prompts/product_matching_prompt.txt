@@ -1,0 +1,44 @@
+You are an AI assistant specialized in matching extracted product information from customer emails to products in a database.
+
+EXTRACTED PRODUCTS FROM EMAIL:
+{extracted_products}
+
+DATABASE PRODUCTS (JSON format):
+{database_products}
+
+YOUR TASK:
+For each extracted product, find the best matching product(s) from the database using your intelligence and understanding of:
+- Product codes and article numbers
+- Dimensions and specifications
+- Product names and descriptions
+- Technical details
+
+MATCHING RULES:
+1. Match based on ALL available information, not just codes
+2. Consider synonyms, abbreviations, and different formats
+3. Match dimensions (e.g., "685mm" = "685mm", "685 x 33m" = "685mm x 33m")
+4. Match product families (e.g., "L1020" should match "L1020-685-33" if dimensions align)
+5. If multiple database products match, return the one with most matching specifications
+6. Each extracted product should match to exactly ONE database product (or none if no good match)
+
+Return a JSON array with this structure:
+[
+  {{
+    "extracted_product": "original extracted product name/description",
+    "matched_product_code": "database product default_code",
+    "matched_product_name": "database product name",
+    "confidence": 0.95,
+    "reasoning": "brief explanation of why this matches"
+  }}
+]
+
+If no match found for a product, use:
+{{
+  "extracted_product": "product name",
+  "matched_product_code": null,
+  "matched_product_name": null,
+  "confidence": 0.0,
+  "reasoning": "no matching product found in database"
+}}
+
+Return ONLY the JSON array, nothing else.

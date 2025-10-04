@@ -137,7 +137,7 @@ class MistralAgent:
             self.total_output_tokens += output_tokens
             self.total_tokens += total_tokens
 
-            logger.info(f"   🔢 [{operation_name}] Tokens: {input_tokens} input + {output_tokens} output = {total_tokens} total")
+            logger.info(f"   [TOKENS] [{operation_name}] Tokens: {input_tokens} input + {output_tokens} output = {total_tokens} total")
         except Exception as e:
             logger.warning(f"Could not log token usage: {e}")
 
