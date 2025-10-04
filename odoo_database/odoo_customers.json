@@ -12919,5 +12919,41 @@
     "commercial_company_name": "voestalpine Precision Strip AB",
     "property_payment_term_id": false,
     "vat": "SE556033628001"
+  },
+  {
+    "name": "Anas Test Company",
+    "ref": "99999",
+    "email": "anaselkhodary69@gmail.com",
+    "phone": "+5511961609607",
+    "website": false,
+    "street": "R.Jose Bento 275 - Cambuci",
+    "zip": "SP",
+    "city": "Sao Paulo",
+    "country_id": [
+      30,
+      "Brazil"
+    ],
+    "lang": "en_US",
+    "commercial_company_name": "Anas Test Company",
+    "property_payment_term_id": false,
+    "vat": false
+  },
+  {
+    "name": "Anas Test Company",
+    "ref": "99999",
+    "email": "anaselkhodary69@gmail.com",
+    "phone": "+5511961609607",
+    "website": false,
+    "street": "R.Jose Bento 275 - Cambuci",
+    "zip": "SP",
+    "city": "Sao Paulo",
+    "country_id": [
+      30,
+      "Brazil"
+    ],
+    "lang": "en_US",
+    "commercial_company_name": "Anas Test Company",
+    "property_payment_term_id": false,
+    "vat": false
   }
 ]
