@@ -243,7 +243,7 @@ class StepLogger:
                 'odoo_id': odoo_customer.get('id'),
                 'name': odoo_customer.get('name'),
                 'email': odoo_customer.get('email'),
-                'phone': odoo_customer.get('phone') or odoo_customer.get('mobile'),
+                'phone': odoo_customer.get('phone'),
                 'city': odoo_customer.get('city'),
                 'country_id': odoo_customer.get('country_id')
             }
@@ -292,6 +292,43 @@ class StepLogger:
 
         self._write_json(log_file, odoo_summary)
         logger.info(f"   Logged Step 5: Odoo Matching -> {log_file.name}")
+
+    def log_step_6_order_creation(self, order_result: Dict):
+        """
+        Log Step 6: Order Creation in Odoo
+
+        Args:
+            order_result: Order creation results
+        """
+        if not self.current_email_dir:
+            logger.warning("No email log directory initialized")
+            return
+
+        log_file = self.current_email_dir / "6_order_creation.json"
+
+        # Create summary
+        order_summary = {
+            'step': 'Order Creation in Odoo',
+            'created': order_result.get('created', False),
+            'timestamp': datetime.now().isoformat()
+        }
+
+        if order_result.get('created'):
+            order_summary['order_details'] = {
+                'order_id': order_result.get('order_id'),
+                'order_name': order_result.get('order_name'),
+                'amount_total': order_result.get('amount_total'),
+                'state': order_result.get('state'),
+                'line_count': order_result.get('line_count'),
+                'customer_id': order_result.get('customer_id'),
+                'customer_name': order_result.get('customer_name')
+            }
+        else:
+            order_summary['failure_reason'] = order_result.get('reason', 'unknown')
+            order_summary['message'] = order_result.get('message', 'Order creation failed')
+
+        self._write_json(log_file, order_summary)
+        logger.info(f"   Logged Step 6: Order Creation -> {log_file.name}")
 
     def _write_json(self, file_path: Path, data: Dict):
         """

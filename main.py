@@ -318,6 +318,21 @@ class RAGEmailSystem:
                     failed_count = products_total - products_matched
                     logger.warning(f"  {failed_count} product(s) not found in Odoo")
 
+        print()
+
+        # Order creation results
+        order_created = processing_result.get('order_created', {})
+        if order_created:
+            if order_created.get('created'):
+                logger.info(f" ✅ ORDER CREATED IN ODOO!")
+                logger.info(f"    Order Number: {order_created.get('order_name')}")
+                logger.info(f"    Order ID: {order_created.get('order_id')}")
+                logger.info(f"    Amount Total: €{order_created.get('amount_total', 0):.2f}")
+                logger.info(f"    State: {order_created.get('state')}")
+                logger.info(f"    Products: {order_created.get('line_count')} line(s)")
+            else:
+                logger.warning(f"  Order NOT created: {order_created.get('message')}")
+
         print("\n" + "="*80)
         logger.info(" PROCESSING COMPLETE")
         print("="*80 + "\n")

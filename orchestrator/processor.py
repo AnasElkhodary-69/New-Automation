@@ -50,16 +50,16 @@ class EmailProcessor:
             self.step_logger.start_email_log(email_id)
 
             # LOG STEP 1: Email Parsing
-            logger.info("📝 [1/7] Logging email parsing...")
+            logger.info("📝 [1/9] Logging email parsing...")
             self.step_logger.log_step_1_email_parsing(email)
 
             # Step 2: Classify intent
-            logger.info("🤖 [2/7] Classifying intent...")
+            logger.info("🤖 [2/9] Classifying intent...")
             intent = self._classify_intent(email)
             logger.info(f"   ✓ Intent: {intent.get('type')} ({intent.get('confidence', 0):.0%} confidence)")
 
             # Step 3: Extract entities and key information
-            logger.info("🤖 [3/7] Extracting entities...")
+            logger.info("🤖 [3/9] Extracting entities...")
             entities = self._extract_entities(email)
             entity_count = sum(1 for k, v in entities.items() if v and k not in ['urgency_level', 'sentiment'])
             logger.info(f"   ✓ Extracted {entity_count} entity types")
@@ -71,22 +71,32 @@ class EmailProcessor:
             logger.info(f"   📦 Products: {product_count}, Codes: {code_count}, Amounts: {amount_count}")
 
             # LOG STEP 2: Entity Extraction
-            logger.info("📝 [4/7] Logging entity extraction...")
+            logger.info("📝 [4/9] Logging entity extraction...")
             self.step_logger.log_step_2_entity_extraction(intent, entities)
 
             # Step 4: Retrieve relevant context from JSON files
-            logger.info("🔍 [5/7] Retrieving context from JSON database...")
+            logger.info("🔍 [5/9] Retrieving context from JSON database...")
             context, search_criteria, match_stats = self._retrieve_context_with_logging(intent, entities, email)
             logger.info(f"   ✓ Context retrieved from JSON")
 
-            # Step 5: NEW - Match JSON results in Odoo database
-            logger.info("🔗 [6/7] Matching results in Odoo database...")
+            # Step 5: Match JSON results in Odoo database
+            logger.info("🔗 [6/9] Matching results in Odoo database...")
             odoo_matches = self._match_in_odoo(context, entities)
             logger.info(f"   ✓ Odoo matching complete")
 
             # Step 6: Log Odoo matching results
-            logger.info("📝 [7/7] Logging Odoo matching results...")
+            logger.info("📝 [7/9] Logging Odoo matching results...")
             self.step_logger.log_step_5_odoo_matching(odoo_matches)
+
+            # Step 7: NEW - Create sales order in Odoo
+            logger.info("🛒 [8/9] Creating sales order in Odoo...")
+            order_result = self._create_order_in_odoo(odoo_matches, entities, email)
+            logger.info(f"   ✓ Order creation {'complete' if order_result else 'skipped'}")
+
+            # Step 8: Log order creation results
+            if order_result:
+                logger.info("📝 [9/9] Logging order creation results...")
+                self.step_logger.log_step_6_order_creation(order_result)
 
             # Get token usage stats
             token_stats = self.ai_agent.get_token_stats()
@@ -101,7 +111,8 @@ class EmailProcessor:
                 'intent': intent,
                 'entities': entities,
                 'context': context,
-                'odoo_matches': odoo_matches,  # NEW: Odoo database matches
+                'odoo_matches': odoo_matches,
+                'order_created': order_result,  # NEW: Created order info
                 'response': '',  # No response generated
                 'token_usage': token_stats,
                 'step_log_dir': log_dir
@@ -686,6 +697,158 @@ class EmailProcessor:
             logger.error(f"   ✗ Error matching in Odoo: {str(e)}", exc_info=True)
 
         return odoo_matches
+
+    def _create_order_in_odoo(self, odoo_matches: Dict, entities: Dict, email: Dict) -> Optional[Dict]:
+        """
+        Create sales order in Odoo using matched products and customer
+
+        Args:
+            odoo_matches: Odoo matching results (customer + products with IDs)
+            entities: Extracted entities from email
+            email: Original email data
+
+        Returns:
+            Dictionary with created order info or None if not created
+        """
+        logger.info("   Preparing sales order for Odoo...")
+
+        try:
+            # Check if customer matched
+            odoo_customer = odoo_matches.get('customer')
+            if not odoo_customer:
+                logger.warning("   ✗ Cannot create order: Customer not found in Odoo")
+                return {
+                    'created': False,
+                    'reason': 'customer_not_found',
+                    'message': 'Customer not found in Odoo database'
+                }
+
+            customer_id = odoo_customer.get('id')
+            logger.info(f"   Customer ID: {customer_id} ({odoo_customer.get('name')})")
+
+            # Prepare order lines from matched products
+            order_lines = []
+            product_matches = odoo_matches.get('products', [])
+
+            # Get quantities and prices from entities
+            product_quantities = entities.get('product_quantities', [])
+            product_prices = entities.get('product_prices', [])
+            product_names_extracted = entities.get('product_names', [])
+
+            # Build a map from extracted name to quantity/price
+            qty_map = {}
+            price_map = {}
+            for idx, name in enumerate(product_names_extracted):
+                if idx < len(product_quantities):
+                    qty_map[name] = product_quantities[idx]
+                if idx < len(product_prices):
+                    price_map[name] = product_prices[idx]
+
+            for match in product_matches:
+                odoo_product = match.get('odoo_product')
+                if not odoo_product:
+                    logger.warning(f"   Skipping product: Not found in Odoo")
+                    continue
+
+                # Get the template ID (from product.template query)
+                product_template_id = odoo_product.get('id')
+
+                # Extract product.product ID from product_variant_id field if available
+                # In Odoo, product_variant_id is typically [id, name] or just an int
+                product_id = None
+                product_variant_id = odoo_product.get('product_variant_id')
+                if isinstance(product_variant_id, list) and len(product_variant_id) > 0:
+                    product_id = product_variant_id[0]  # Extract ID from [id, name]
+                elif isinstance(product_variant_id, int) and product_variant_id:
+                    product_id = product_variant_id
+
+                extracted_name = match.get('extracted_name', '')
+
+                # Get quantity and price
+                quantity = qty_map.get(extracted_name, 1)
+                price = price_map.get(extracted_name)
+
+                # Use extracted price if available, otherwise use Odoo price
+                if price is None or price == 0:
+                    price = odoo_product.get('list_price') or odoo_product.get('standard_price', 0)
+
+                # Build order line with either product_id or product_template_id
+                line_data = {
+                    'quantity': quantity,
+                    'price_unit': price,
+                    'name': odoo_product.get('name')
+                }
+
+                # Prefer product_id if available, otherwise use product_template_id
+                if product_id:
+                    line_data['product_id'] = product_id
+                else:
+                    line_data['product_template_id'] = product_template_id
+
+                order_lines.append(line_data)
+
+                display_id = product_id if product_id else f"T{product_template_id}"
+                logger.info(f"      + Product {display_id}: Qty {quantity} @ €{price:.2f}")
+
+            if not order_lines:
+                logger.warning("   ✗ Cannot create order: No products matched")
+                return {
+                    'created': False,
+                    'reason': 'no_products',
+                    'message': 'No products found in Odoo to create order'
+                }
+
+            # Prepare additional order data
+            order_data = {}
+
+            # Add date if available
+            dates = entities.get('dates', [])
+            if dates:
+                # Note: Odoo expects date in YYYY-MM-DD format
+                # For now, we'll skip date parsing to avoid format issues
+                pass
+
+            # Add customer reference if available
+            references = entities.get('references', [])
+            if references:
+                order_data['client_order_ref'] = references[0]
+
+            # Add note with email subject
+            order_data['note'] = f"Created from email: {email.get('subject', 'No subject')}"
+
+            # Create the order
+            logger.info(f"   Creating order with {len(order_lines)} line(s)...")
+            order_info = self.odoo.create_sale_order(
+                customer_id=customer_id,
+                order_lines=order_lines,
+                order_data=order_data
+            )
+
+            if order_info:
+                return {
+                    'created': True,
+                    'order_id': order_info.get('id'),
+                    'order_name': order_info.get('name'),
+                    'amount_total': order_info.get('amount_total'),
+                    'state': order_info.get('state'),
+                    'line_count': order_info.get('line_count'),
+                    'customer_id': customer_id,
+                    'customer_name': odoo_customer.get('name')
+                }
+            else:
+                return {
+                    'created': False,
+                    'reason': 'creation_failed',
+                    'message': 'Failed to create order in Odoo'
+                }
+
+        except Exception as e:
+            logger.error(f"   ✗ Error creating order in Odoo: {str(e)}", exc_info=True)
+            return {
+                'created': False,
+                'reason': 'exception',
+                'message': str(e)
+            }
 
     def _generate_response(
         self,
