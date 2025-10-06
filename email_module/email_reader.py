@@ -25,10 +25,33 @@ try:
     from PIL import Image
     import pytesseract
     from pdf2image import convert_from_bytes
+    import os
+    import platform
     PDF_SUPPORT = True
 
-    # Configure Tesseract path for Windows
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    # Configure Tesseract path - try common locations or use PATH
+    tesseract_cmd = os.getenv('TESSERACT_CMD')
+    if not tesseract_cmd:
+        # Auto-detect based on platform
+        system = platform.system()
+        if system == 'Windows':
+            # Common Windows installation paths
+            common_paths = [
+                r'C:\Program Files\Tesseract-OCR\tesseract.exe',
+                r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe',
+            ]
+            for path in common_paths:
+                if os.path.exists(path):
+                    tesseract_cmd = path
+                    break
+        elif system == 'Linux':
+            # On Linux, usually in PATH
+            tesseract_cmd = 'tesseract'
+        elif system == 'Darwin':  # macOS
+            tesseract_cmd = 'tesseract'
+
+    if tesseract_cmd:
+        pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
 except ImportError:
     PDF_SUPPORT = False
     logging.warning("PDF/Image extraction libraries not installed. Install: pip install pdfplumber pytesseract pdf2image Pillow")
@@ -383,9 +406,15 @@ class EmailReader:
             # Method 2: If no text found, try OCR on PDF pages
             if not extracted_text.strip():
                 try:
-                    # Specify poppler path for Windows
-                    poppler_path = r"C:\Anas's PC\Moaz\New Automation\poppler-24.08.0\Library\bin"
-                    images = convert_from_bytes(pdf_bytes, poppler_path=poppler_path)
+                    # Get poppler path from environment or let pdf2image auto-detect
+                    poppler_path = os.getenv('POPPLER_PATH')
+
+                    # Convert PDF to images (poppler_path is None if not set, which is fine)
+                    if poppler_path:
+                        images = convert_from_bytes(pdf_bytes, poppler_path=poppler_path)
+                    else:
+                        # Let pdf2image find poppler in PATH
+                        images = convert_from_bytes(pdf_bytes)
                     for page_num, image in enumerate(images, 1):
                         try:
                             ocr_text = pytesseract.image_to_string(image)

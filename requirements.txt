@@ -1,8 +1,7 @@
 # RAG Email System Dependencies
 
-# Email handling
-imaplib2==3.6
-smtplib>=3.9
+# Email handling (imaplib and smtplib are built-in to Python)
+# imaplib2==3.6  # Optional enhanced IMAP library
 
 # Database
 psycopg2-binary==2.9.9
@@ -16,7 +15,7 @@ faiss-cpu==1.7.4
 
 # Embeddings and AI
 mistralai>=1.0.0
-openai==1.12.0
+openai>=1.0.0
 
 # NLP and text processing
 sentence-transformers==2.3.1
@@ -35,7 +34,7 @@ pytesseract==0.3.10
 
 # Configuration and utilities
 python-dotenv==1.0.0
-pydantic==2.5.3
+pydantic>=2.0.0
 
 # Logging and monitoring
 python-json-logger==2.0.7
