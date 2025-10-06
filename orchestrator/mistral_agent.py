@@ -30,14 +30,30 @@ class MistralAgent:
         self.config_path = config_path
         self.config = self._load_config()
         self.api_key = self.config.get('mistral_api_key', '')
+
+        # Hybrid model strategy
+        self.use_hybrid = self.config.get('use_hybrid_models', True)
+        self.small_model = self.config.get('mistral_small_model', 'mistral-small-latest')
+        self.medium_model = self.config.get('mistral_medium_model', 'mistral-medium-latest')
+        self.large_model = self.config.get('mistral_large_model', 'mistral-large-latest')
+
+        # Default model (for backward compatibility)
         self.model = self.config.get('mistral_model', 'mistral-large-latest')
+
         self.prompts = self._load_prompts()
         self.client = None
 
-        # Token usage tracking
+        # Token usage tracking (per model)
         self.total_tokens = 0
         self.total_input_tokens = 0
         self.total_output_tokens = 0
+
+        # Model usage stats
+        self.model_usage_stats = {
+            'small': {'calls': 0, 'input_tokens': 0, 'output_tokens': 0},
+            'medium': {'calls': 0, 'input_tokens': 0, 'output_tokens': 0},
+            'large': {'calls': 0, 'input_tokens': 0, 'output_tokens': 0}
+        }
 
         self._initialize_client()
 
@@ -57,6 +73,10 @@ class MistralAgent:
             return {
                 "mistral_api_key": os.getenv('MISTRAL_API_KEY', ''),
                 "mistral_model": os.getenv('MISTRAL_MODEL', 'mistral-large-latest'),
+                "use_hybrid_models": os.getenv('MISTRAL_USE_HYBRID', 'true').lower() == 'true',
+                "mistral_small_model": os.getenv('MISTRAL_SMALL_MODEL', 'mistral-small-latest'),
+                "mistral_medium_model": os.getenv('MISTRAL_MEDIUM_MODEL', 'mistral-medium-latest'),
+                "mistral_large_model": os.getenv('MISTRAL_LARGE_MODEL', 'mistral-large-latest'),
                 "max_tokens": 2000,
                 "temperature": 0.7
             }
@@ -118,13 +138,14 @@ class MistralAgent:
             logger.error(f"Error initializing Mistral client: {e}")
             self.client = None
 
-    def _log_token_usage(self, response, operation_name: str):
+    def _log_token_usage(self, response, operation_name: str, model_used: str = None):
         """
         Log token usage from Mistral API response
 
         Args:
             response: Mistral API response object
             operation_name: Name of the operation (e.g., 'Intent Classification')
+            model_used: Model name used (for tracking)
         """
         try:
             usage = response.usage
@@ -137,7 +158,15 @@ class MistralAgent:
             self.total_output_tokens += output_tokens
             self.total_tokens += total_tokens
 
-            logger.info(f"   [TOKENS] [{operation_name}] Tokens: {input_tokens} input + {output_tokens} output = {total_tokens} total")
+            # Track per-model usage
+            if model_used:
+                model_type = 'small' if 'small' in model_used.lower() else ('medium' if 'medium' in model_used.lower() else 'large')
+                self.model_usage_stats[model_type]['calls'] += 1
+                self.model_usage_stats[model_type]['input_tokens'] += input_tokens
+                self.model_usage_stats[model_type]['output_tokens'] += output_tokens
+
+            model_info = f" [{model_used}]" if model_used else ""
+            logger.info(f"   [TOKENS] [{operation_name}]{model_info} Tokens: {input_tokens} input + {output_tokens} output = {total_tokens} total")
         except Exception as e:
             logger.warning(f"Could not log token usage: {e}")
 
@@ -196,9 +225,12 @@ JSON:"""
 
             prompt = prompt.format(subject=subject, body=body)
 
+            # Use Small model for intent classification (simple task)
+            model_to_use = self.small_model if self.use_hybrid else self.model
+
             # Call Mistral API
             response = self.client.chat.complete(
-                model=self.model,
+                model=model_to_use,
                 messages=[
                     {"role": "user", "content": prompt}
                 ],
@@ -207,7 +239,7 @@ JSON:"""
             )
 
             # Log token usage
-            self._log_token_usage(response, "Intent Classification")
+            self._log_token_usage(response, "Intent Classification", model_to_use)
 
             # Parse response
             result_text = response.choices[0].message.content
@@ -294,9 +326,23 @@ JSON:"""
 
             prompt = prompt.format(text=text)
 
+            # Hybrid model strategy: Small first, Medium on retry
+            if self.use_hybrid:
+                if retry_count == 0:
+                    # First try: Use Small model (cheap)
+                    model_to_use = self.small_model
+                    logger.info(f"   Using Small model for entity extraction (attempt {retry_count + 1})")
+                else:
+                    # Retry: Use Medium model (better quality)
+                    model_to_use = self.medium_model
+                    logger.info(f"   Using Medium model for entity extraction (attempt {retry_count + 1})")
+            else:
+                # Non-hybrid mode: use configured model
+                model_to_use = self.model
+
             # Call Mistral API
             response = self.client.chat.complete(
-                model=self.model,
+                model=model_to_use,
                 messages=[
                     {"role": "user", "content": prompt}
                 ],
@@ -305,16 +351,25 @@ JSON:"""
             )
 
             # Log token usage
-            self._log_token_usage(response, "Entity Extraction")
+            self._log_token_usage(response, f"Entity Extraction (attempt {retry_count + 1})", model_to_use)
 
             # Parse response
             result_text = response.choices[0].message.content
+
+            # DEBUG: Save raw response to file for inspection
+            try:
+                with open('mistral_raw_response_debug.txt', 'w', encoding='utf-8') as f:
+                    f.write(result_text)
+                logger.info("Saved raw Mistral response to mistral_raw_response_debug.txt")
+            except Exception as e:
+                logger.warning(f"Could not save debug file: {e}")
 
             # Log raw response for debugging
             logger.info("="*80)
             logger.info("RAW MISTRAL ENTITY EXTRACTION RESPONSE:")
             if result_text:
                 logger.info(f"Length: {len(result_text)} chars")
+                logger.info(f"First 1000 chars:\n{result_text[:1000]}")
             else:
                 logger.warning("RESPONSE IS EMPTY OR NONE!")
                 logger.debug(f"Response object type: {type(result_text)}")
@@ -357,6 +412,9 @@ JSON:"""
 
         except Exception as e:
             logger.error(f"Error extracting entities: {str(e)}")
+            logger.error(f"Exception type: {type(e).__name__}")
+            import traceback
+            logger.error(f"Traceback:\n{traceback.format_exc()}")
             return self._demo_extract_entities(text)
 
     def _demo_extract_entities(self, text: str) -> Dict:
@@ -604,7 +662,7 @@ Response:
         }
 
     def _parse_entity_response(self, response_text: str) -> Dict:
-        """Parse Mistral's entity extraction response"""
+        """Parse Mistral's entity extraction response (with product_attributes support)"""
         try:
             import re
 
@@ -623,13 +681,20 @@ Response:
                     result = json.loads(json_match.group())
                     logger.debug(f"Parsed entities: {result}")
                     return result
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as e:
+                # Log the specific JSON error for debugging
+                logger.warning(f"JSON parsing failed: {str(e)}")
+                logger.debug(f"Problematic JSON snippet: {cleaned[:500]}...")
+
                 # Second attempt: extract arrays for each field individually
-                logger.warning("JSON parsing failed, trying field-by-field extraction")
+                logger.warning("Trying field-by-field extraction")
 
                 result = {
                     'order_numbers': [],
                     'product_names': [],
+                    'product_codes': [],
+                    'product_quantities': [],
+                    'product_prices': [],
                     'dates': [],
                     'amounts': [],
                     'references': [],
@@ -637,8 +702,9 @@ Response:
                     'sentiment': 'neutral'
                 }
 
-                # Extract arrays
-                for field in ['order_numbers', 'product_names', 'dates', 'amounts', 'references']:
+                # Extract arrays (PHASE 1: now includes product_codes, quantities, prices)
+                for field in ['order_numbers', 'product_names', 'product_codes', 'product_quantities',
+                              'product_prices', 'dates', 'amounts', 'references']:
                     array_match = re.search(rf'"{field}"\s*:\s*\[(.*?)\]', cleaned, re.DOTALL)
                     if array_match:
                         items = re.findall(r'"([^"]+)"', array_match.group(1))
@@ -658,11 +724,14 @@ Response:
 
         except Exception as e:
             logger.error(f"Error parsing entity response: {e}")
-            logger.debug(f"Full response text: {response_text}")
+            logger.debug(f"Full response text: {response_text[:500]}...")
 
         return {
             'order_numbers': [],
             'product_names': [],
+            'product_codes': [],
+            'product_quantities': [],
+            'product_prices': [],
             'dates': [],
             'amounts': [],
             'references': []
@@ -691,6 +760,8 @@ Response:
         ])
 
         product_names = entities.get('product_names', [])
+        product_codes = entities.get('product_codes', [])
+        product_prices = entities.get('product_prices', [])
         amounts = entities.get('amounts', [])
 
         # If text seems to contain products but none extracted, retry
@@ -698,11 +769,237 @@ Response:
             logger.warning(f"Text contains product indicators but no products extracted. Text length: {len(original_text)}")
             return False
 
-        # If text contains price/amount indicators but no amounts extracted
+        # FIX: Check product_prices (new format) OR amounts (old format)
+        # If text contains price/amount indicators but no prices extracted
         has_price_indicators = any(indicator in text_lower for indicator in ['eur', 'price', 'cost', '$', '€'])
-        if has_price_indicators and len(amounts) == 0 and len(product_names) > 0:
-            logger.warning("Text contains pricing information but no amounts extracted")
+        prices_extracted = len(product_prices) > 0 or len(amounts) > 0
+
+        if has_price_indicators and not prices_extracted and len(product_names) > 0:
+            logger.warning("Text contains pricing information but no product_prices extracted")
             return False
 
         # Extraction seems reasonable
+        logger.info(f"Validation passed: {len(product_names)} products, {len(product_codes)} codes, {len(product_prices)} prices")
         return True
+
+    def extract_product_attributes(self, product_name: str) -> Dict:
+        """
+        Extract structured attributes from product name for matching without codes
+
+        Args:
+            product_name: Full product name/description
+
+        Returns:
+            Dictionary of extracted attributes
+        """
+        import re
+
+        attributes = {
+            'brand': None,
+            'product_line': None,
+            'machine_type': None,
+            'dimensions': {
+                'width': None,
+                'height': None,
+                'thickness': None
+            },
+            'color': None,
+            'length': None
+        }
+
+        text_upper = product_name.upper()
+
+        # Brand detection
+        brands = ['3M', 'DUROSEAL', 'HEAT SEAL', 'BOBST', 'W&H']
+        for brand in brands:
+            if brand in text_upper:
+                attributes['brand'] = brand
+                break
+
+        # Product line
+        if 'CUSHION MOUNT' in text_upper:
+            attributes['product_line'] = 'Cushion Mount'
+        elif 'DUROSEAL' in text_upper or 'DURO SEAL' in text_upper:
+            attributes['product_line'] = 'DuroSeal'
+        elif 'HEAT SEAL' in text_upper:
+            attributes['product_line'] = 'Heat Seal'
+
+        # Machine type (16S, 26S, 20SIX)
+        machine_match = re.search(r'\b(16S|26S|20SIX)\b', text_upper)
+        if machine_match:
+            attributes['machine_type'] = machine_match.group(1)
+
+        # Dimensions - Width (only with explicit context to avoid confusion with product codes)
+        # FIXED: Removed standalone number pattern that was matching product codes like "928" or "234"
+        width_patterns = [
+            r'(\d{2,4})\s*mm\s*x',          # "12mm x" or "685 mm x"
+            r'(\d{2,4})\s*x\s*[\d\.,]',     # "685 x 0.55" or "12 x 44"
+            r'[Bb]reite:?\s*(\d{2,4})',     # "Breite: 50" or "breite 685" (German: width)
+            r'[Ww]idth:?\s*(\d{2,4})',      # "Width: 50" or "width 685"
+            r',\s*(\d{2,4})\s*mm',          # ", 685 mm" (in specification lists)
+        ]
+
+        for pattern in width_patterns:
+            width_match = re.search(pattern, product_name)
+            if width_match:
+                try:
+                    width = int(width_match.group(1))
+                    # Reasonable width range (10-3000mm)
+                    if 10 <= width <= 3000:
+                        attributes['dimensions']['width'] = width
+                        break
+                except ValueError:
+                    pass
+
+        # Height (look for H suffix or second dimension)
+        height_match = re.search(r'(\d{2,4})\s*H\b', text_upper)
+        if height_match:
+            try:
+                attributes['dimensions']['height'] = int(height_match.group(1))
+            except ValueError:
+                pass
+
+        # Thickness (look for small decimal numbers)
+        thickness_match = re.search(r'(\d+[,\.]\d+)\s*mm', product_name)
+        if thickness_match:
+            try:
+                thickness_str = thickness_match.group(1).replace(',', '.')
+                thickness = float(thickness_str)
+                if 0.1 <= thickness <= 10:  # Reasonable thickness range
+                    attributes['dimensions']['thickness'] = thickness
+            except ValueError:
+                pass
+
+        # Length (23m, 33m) - look for "Rolle à 33m" or similar patterns
+        # Need to find the LAST occurrence since "mm" will match first
+        length_patterns = [
+            r'[^\d](\d{2,3})\s*m\b',  # Preceded by non-digit, 2-3 digit number + m
+            r'x\s*(\d+)\s*m',         # x 33m
+        ]
+
+        for pattern in length_patterns:
+            matches = list(re.finditer(pattern, product_name.lower()))
+            if matches:
+                # Take last match (to avoid catching "mm" which appears earlier)
+                last_match = matches[-1]
+                length_val = int(last_match.group(1))
+                # Reasonable roll length (10m - 200m)
+                if 10 <= length_val <= 200:
+                    attributes['length'] = f"{length_val}m"
+                    break
+
+        # Color
+        colors = {
+            'GREY': 'Grey', 'GRAY': 'Grey',
+            'BLUE': 'Blue', 'BLAU': 'Blue',
+            'BLACK': 'Black', 'SCHWARZ': 'Black',
+            'ORANGE': 'Orange',
+            'RED': 'Red', 'ROT': 'Red',
+            'GREEN': 'Green', 'GRÜN': 'Green'
+        }
+
+        for color_key, color_value in colors.items():
+            if color_key in text_upper:
+                attributes['color'] = color_value
+                break
+
+        return attributes
+
+    def normalize_product_codes(self, extracted_data: Dict) -> Dict:
+        """
+        Normalize and prioritize product codes from extracted data
+
+        Args:
+            extracted_data: Dictionary with 'product_codes' and 'product_names'
+
+        Returns:
+            Dictionary with normalized codes per product
+        """
+        import re
+
+        product_codes = extracted_data.get('product_codes', [])
+        product_names = extracted_data.get('product_names', [])
+
+        normalized_products = []
+
+        # Process each product
+        for idx, product_name in enumerate(product_names):
+            # Get code for this product (if available)
+            product_code = product_codes[idx] if idx < len(product_codes) else ''
+
+            code_candidates = []
+
+            # 1. Clean the explicit product_code field
+            if product_code and product_code not in ['', 'NO_CODE_FOUND', 'unknown']:
+                # Remove common prefixes
+                clean_code = product_code.replace("3M ", "").replace("Supplier: ", "").strip()
+
+                # Extract base code (before dash/space)
+                base_code = re.split(r'[-\s]', clean_code)[0]
+
+                # Check if it looks like a customer code (5-7 digits, no letters)
+                # If so, give it lower priority
+                is_customer_code = bool(re.match(r'^\d{5,7}$', clean_code))
+
+                code_candidates.append({
+                    'code': clean_code,
+                    'base_code': base_code,
+                    'source': 'explicit_field',
+                    'priority': 3 if is_customer_code else 1,  # Customer codes get lower priority
+                    'is_customer_code': is_customer_code
+                })
+
+            # 2. Extract codes from product name
+            # Patterns: SDS###, L####, E####, etc.
+            name_patterns = [
+                (r'\b(SDS\d+[A-Z]?)\b', 'SDS'),                # SDS025, SDS025A
+                (r'\b(L\d{4})\b', 'L'),                        # L1520, L1320
+                (r'\b(E\d{4})\b', 'E'),                        # E1015, E1820
+                (r'\b(HEAT\s*SEAL\s*\d+)\b', 'HEAT_SEAL'),     # HEAT SEAL 1282
+                (r'\b(\d{3,4}-\d{3})\b', 'MANUFACTURER')       # 178-177 format
+            ]
+
+            for pattern, code_type in name_patterns:
+                matches = re.finditer(pattern, product_name, re.IGNORECASE)
+                for match in matches:
+                    extracted_code = match.group(1)
+                    # Clean up HEAT SEAL spacing
+                    if code_type == 'HEAT_SEAL':
+                        extracted_code = re.sub(r'\s+', ' ', extracted_code)
+
+                    code_candidates.append({
+                        'code': extracted_code,
+                        'base_code': extracted_code.split('-')[0],
+                        'source': 'product_name',
+                        'code_type': code_type,
+                        'priority': 2
+                    })
+
+            # 3. Determine final code
+            if code_candidates:
+                # Sort by priority and return best
+                code_candidates.sort(key=lambda x: x['priority'])
+                best_code = code_candidates[0]
+
+                normalized_products.append({
+                    'product_name': product_name,
+                    'primary_code': best_code['code'],
+                    'base_code': best_code['base_code'],
+                    'all_codes': code_candidates,
+                    'use_name_matching': False
+                })
+            else:
+                # No codes found - must use name matching
+                normalized_products.append({
+                    'product_name': product_name,
+                    'primary_code': 'NO_CODE_FOUND',
+                    'base_code': None,
+                    'all_codes': [],
+                    'use_name_matching': True
+                })
+
+        return {
+            'products': normalized_products,
+            'total_with_codes': sum(1 for p in normalized_products if not p['use_name_matching']),
+            'total_without_codes': sum(1 for p in normalized_products if p['use_name_matching'])
+        }
