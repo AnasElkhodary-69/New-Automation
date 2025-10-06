@@ -73,23 +73,133 @@ class VectorStore:
         """
         Normalize product code for matching
 
-        Handles: spaces, dashes, underscores, case differences
+        Handles: spaces, dashes, underscores, case differences, brand prefixes
         Example: "SDS 025" → "SDS025", "SDS-025" → "SDS025"
+                 "3M L1020 685" → "L1020685"
 
         Args:
             code: Product code to normalize
 
         Returns:
-            Normalized code (uppercase, no spaces/dashes)
+            Normalized code (uppercase, no spaces/dashes, no brand prefixes)
         """
         if not code:
             return ""
 
+        # Convert to uppercase and trim
+        normalized = code.upper().strip()
+
+        # Remove common brand prefixes
+        brand_prefixes = ['3M ', 'TESA ', 'DUPONT ', 'NITTO ', 'LOHMANN ']
+        for brand in brand_prefixes:
+            if normalized.startswith(brand):
+                normalized = normalized[len(brand):]
+                break
+
         # Remove spaces, dashes, underscores
-        # Convert to uppercase
-        # Trim whitespace
-        normalized = re.sub(r'[\s\-_]', '', code.upper().strip())
+        normalized = re.sub(r'[\s\-_]', '', normalized)
+
         return normalized
+
+    def normalize_code_variants(self, code: str) -> List[str]:
+        """
+        Generate multiple normalized variants of a code for better matching
+
+        Args:
+            code: Product code to normalize
+
+        Returns:
+            List of normalized variants
+        """
+        if not code:
+            return []
+
+        variants = []
+
+        # Variant 1: Full normalization (no brand, no separators)
+        variants.append(self.normalize_code(code))
+
+        # Variant 2: Normalized without brand removal (keep brand but remove separators)
+        normalized_with_brand = re.sub(r'[\s\-_]', '', code.upper().strip())
+        if normalized_with_brand != variants[0]:
+            variants.append(normalized_with_brand)
+
+        # Variant 3: Original uppercase (preserve separators)
+        original_upper = code.upper().strip()
+        if original_upper not in variants:
+            variants.append(original_upper)
+
+        return list(set(variants))  # Remove duplicates
+
+    def extract_dimension_from_name(self, product_name: str) -> Optional[str]:
+        """
+        Extract primary dimension (width) from product name
+
+        Examples:
+            "3M L1020 CushionMount plus 685mm" → "685"
+            "Doctor Blade 25x0.20mm" → "25"
+            "Tape 1372mm x 23m" → "1372"
+
+        Args:
+            product_name: Product name to extract dimension from
+
+        Returns:
+            Dimension string (without 'mm') or None if not found
+        """
+        if not product_name:
+            return None
+
+        # Pattern 1: Dimension followed by 'mm' (most common)
+        # Examples: 685mm, 1372mm, 780mm
+        match = re.search(r'(\d+)mm', product_name, re.IGNORECASE)
+        if match:
+            return match.group(1)
+
+        # Pattern 2: Dimension with 'x' separator (width x length)
+        # Examples: 1372mm x 23m, 25x0.20
+        match = re.search(r'(\d+)\s*[xX×]\s*\d+', product_name)
+        if match:
+            return match.group(1)
+
+        return None
+
+    def build_code_with_dimension(self, base_code: str, product_name: str) -> List[str]:
+        """
+        Build possible product codes by combining base code with dimension from name
+
+        Args:
+            base_code: Base product code (e.g., "3M L1020 685", "L1020")
+            product_name: Product name (e.g., "3M L1020 CushionMount plus 685mm")
+
+        Returns:
+            List of possible codes to try
+        """
+        codes = []
+
+        # Add original code
+        if base_code:
+            codes.append(base_code)
+
+        # Extract dimension from product name
+        dimension = self.extract_dimension_from_name(product_name)
+
+        if dimension and base_code:
+            # Normalize base code
+            normalized_base = self.normalize_code(base_code)
+
+            # Remove any trailing digits from base code (they might be old dimension)
+            base_without_digits = re.sub(r'\d+$', '', normalized_base)
+
+            # Build code with dimension
+            # Format: BASE-DIMENSION (e.g., L1020-685)
+            code_with_dimension = f"{base_without_digits}-{dimension}"
+            codes.append(code_with_dimension)
+
+            # Also try without dash
+            code_with_dimension_nodash = f"{base_without_digits}{dimension}"
+            codes.append(code_with_dimension_nodash)
+
+        return codes
 
     def extract_attributes(self, text: str) -> Dict[str, Any]:
         """
@@ -257,20 +367,68 @@ class VectorStore:
             logger.warning("⚠ No product data loaded")
             return result
 
-        # LEVEL 1: Exact Product Code Match
+        # LEVEL 1: Exact Product Code Match (with attribute refinement for variants)
         if product_code:
             normalized_search_code = self.normalize_code(product_code)
             logger.debug(f"   [L1] Exact code search: '{normalized_search_code}'")
 
+            code_matches = []
             for product in self.products_data:
                 db_code = self.normalize_code(product.get('default_code', ''))
                 if db_code and db_code == normalized_search_code:
-                    result['match'] = product
-                    result['confidence'] = 1.0
-                    result['method'] = 'exact_code'
-                    result['requires_review'] = False
-                    logger.info(f"   [L1] ✓ Exact code match: {product.get('default_code')} ({result['confidence']:.0%})")
-                    return result
+                    code_matches.append(product)
+
+            # If single match, return it
+            if len(code_matches) == 1:
+                result['match'] = code_matches[0]
+                result['confidence'] = 1.0
+                result['method'] = 'exact_code'
+                result['requires_review'] = False
+                logger.info(f"   [L1] ✓ Exact code match: {code_matches[0].get('default_code')} ({result['confidence']:.0%})")
+                return result
+
+            # If multiple matches (variants), use attributes to select best one
+            elif len(code_matches) > 1 and product_name:
+                logger.debug(f"   [L1] Found {len(code_matches)} variants, using attributes to refine...")
+                search_attrs = self.extract_attributes(product_name)
+
+                if search_attrs:
+                    best_variant = None
+                    best_attr_score = 0.0
+
+                    for product in code_matches:
+                        product_text = f"{product.get('name', '')} {product.get('display_name', '')}"
+                        product_attrs = self.extract_attributes(product_text)
+                        attr_score = self._calculate_attribute_similarity(search_attrs, product_attrs)
+
+                        if attr_score > best_attr_score:
+                            best_attr_score = attr_score
+                            best_variant = product
+
+                    # Use the variant with best attribute match
+                    if best_variant and best_attr_score >= 0.5:  # At least 50% attribute match
+                        result['match'] = best_variant
+                        result['confidence'] = 1.0
+                        result['method'] = 'exact_code_with_attributes'
+                        result['requires_review'] = False
+                        logger.info(f"   [L1] ✓ Exact code match (variant refined by attributes): {best_variant.get('default_code')} (attr: {best_attr_score:.0%})")
+                        return result
+                    elif best_variant:
+                        # Use best variant even with low attribute match
+                        result['match'] = best_variant
+                        result['confidence'] = 0.95
+                        result['method'] = 'exact_code_low_attr'
+                        result['requires_review'] = True
+                        logger.info(f"   [L1] ⚠ Exact code match (low attr confidence): {best_variant.get('default_code')} (attr: {best_attr_score:.0%})")
+                        return result
+
+                # No attributes or no good match - return first variant
+                result['match'] = code_matches[0]
+                result['confidence'] = 0.90
+                result['method'] = 'exact_code_first_variant'
+                result['requires_review'] = True
+                logger.info(f"   [L1] ⚠ Exact code match (first variant, no attribute match): {code_matches[0].get('default_code')}")
+                return result
 
         # LEVEL 2: Fuzzy Product Code Match (handle typos)
         if product_code:
@@ -385,20 +543,16 @@ class VectorStore:
         """
         Search for multiple products at once with multi-level matching
 
+        NEW: Tries ALL extracted codes for each product (handles multiple codes per product)
+
         Args:
             product_names: List of product names
-            product_codes: List of product codes (optional)
+            product_codes: List of ALL product codes extracted (may be more than product_names)
             threshold: Deprecated (uses multi-level thresholds now)
 
         Returns:
             List of match results with confidence scores
         """
-        # Ensure product_codes list is same length as product_names
-        if not product_codes:
-            product_codes = [None] * len(product_names)
-        elif len(product_codes) < len(product_names):
-            product_codes = product_codes + [None] * (len(product_names) - len(product_codes))
-
         all_matches = []
         stats = {
             'exact_code': 0,
@@ -411,13 +565,59 @@ class VectorStore:
         }
 
         logger.info(f"🔍 Searching {len(product_names)} products with multi-level matching...")
+        if product_codes:
+            logger.info(f"   Found {len(product_codes)} codes to try for {len(product_names)} products")
 
-        for idx, (name, code) in enumerate(zip(product_names, product_codes), 1):
+        for idx, name in enumerate(product_names, 1):
             logger.debug(f"\n--- Product {idx}/{len(product_names)} ---")
+            logger.debug(f"   Name: {name[:80]}...")
 
-            match_result = self.search_product_multilevel(product_name=name, product_code=code)
+            match_result = None
+            best_match = None
 
-            if match_result['match']:
+            # Strategy 1: Build dimension-based codes from product name
+            codes_to_try = []
+
+            if product_codes:
+                # For each extracted code, build variants with dimension from product name
+                for code in product_codes:
+                    dimension_codes = self.build_code_with_dimension(code, name)
+                    codes_to_try.extend(dimension_codes)
+
+                # Remove duplicates while preserving order
+                seen = set()
+                codes_to_try = [c for c in codes_to_try if not (c in seen or seen.add(c))]
+
+                logger.debug(f"   Built {len(codes_to_try)} code variants from dimension extraction")
+
+                for code in codes_to_try:
+                    if not code:
+                        continue
+
+                    logger.debug(f"     Testing code: '{code}'")
+                    temp_result = self.search_product_multilevel(product_name=name, product_code=code)
+
+                    if temp_result['match']:
+                        # Found a match! Use it if it's better than previous
+                        if not best_match or temp_result['confidence'] > best_match['confidence']:
+                            best_match = temp_result
+                            logger.debug(f"       ✓ Match found! (confidence: {temp_result['confidence']:.0%})")
+
+                            # If exact match with high confidence, stop searching
+                            if temp_result['method'] in ['exact_code', 'exact_code_with_attributes'] and temp_result['confidence'] >= 0.95:
+                                logger.debug(f"       → High-confidence match found, stopping search")
+                                break
+
+                if best_match:
+                    match_result = best_match
+
+            # Strategy 2: If no code match, try name-only matching
+            if not match_result:
+                logger.debug(f"   No code match, trying name-only matching...")
+                match_result = self.search_product_multilevel(product_name=name, product_code=None)
+
+            # Process result
+            if match_result and match_result['match']:
                 # Add extracted product name for tracking
                 match_result['match']['extracted_product_name'] = name
                 match_result['match']['match_score'] = match_result['confidence']
@@ -434,11 +634,11 @@ class VectorStore:
                     stats['auto_approved'] += 1
 
                 code_str = match_result['match'].get('default_code', 'N/A')
-                logger.debug(f"   ✓ Matched: {code_str} (method: {match_result['method']}, confidence: {match_result['confidence']:.0%})")
+                logger.info(f"   ✓ Product {idx}: Matched {code_str} (method: {match_result['method']}, confidence: {match_result['confidence']:.0%})")
             else:
                 stats['no_match'] += 1
                 stats['review_required'] += 1
-                logger.debug(f"   ✗ No match")
+                logger.warning(f"   ✗ Product {idx}: No match found")
 
         # Log summary
         total = len(product_names)
