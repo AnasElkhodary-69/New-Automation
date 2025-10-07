@@ -79,41 +79,41 @@ class SmartProductMatcher:
         if code and code != 'NO_CODE_FOUND':
             result = self._exact_code_match(code, name, attrs)
             if result and self._validate_not_duplicate(result['match']):
-                logger.info(f"   [L1] ✓ Exact match: {result['match'].get('default_code')}")
+                logger.info(f"   [L1] [OK] Exact match: {result['match'].get('default_code')}")
                 return result
 
         # Level 2: Fuzzy Code Match + Validation
         if code and code != 'NO_CODE_FOUND':
             result = self._fuzzy_code_match(code, name, attrs)
             if result and self._validate_not_duplicate(result['match']):
-                logger.info(f"   [L2] ✓ Fuzzy match: {result['match'].get('default_code')}")
+                logger.info(f"   [L2] [OK] Fuzzy match: {result['match'].get('default_code')}")
                 return result
 
         # Level 3: Attribute-Based Matching (for NO_CODE scenarios)
         if attrs and self._has_useful_attributes(attrs):
             result = self._attribute_match(attrs, name)
             if result and self._validate_not_duplicate(result['match']):
-                logger.info(f"   [L3] ✓ Attribute match: {result['match'].get('default_code')}")
+                logger.info(f"   [L3] [OK] Attribute match: {result['match'].get('default_code')}")
                 return result
 
         # Level 4: RAG Semantic Search
         if self.enable_rag and self.rag and name:
             result = self._rag_semantic_search(name, attrs)
             if result and self._validate_not_duplicate(result['match']):
-                logger.info(f"   [L4] ✓ RAG match: {result['match'].get('default_code')}")
+                logger.info(f"   [L4] [OK] RAG match: {result['match'].get('default_code')}")
                 return result
 
         # Level 5: Keyword Name Matching
         if name:
             result = self._keyword_name_match(name, attrs)
             if result and self._validate_not_duplicate(result['match']):
-                logger.info(f"   [L5] ✓ Keyword match: {result['match'].get('default_code')}")
+                logger.info(f"   [L5] [OK] Keyword match: {result['match'].get('default_code')}")
                 return result
 
         # Level 6: Partial Match (human review)
         candidates = self._get_partial_matches(code, name, attrs)
         if candidates:
-            logger.warning(f"   [L6] ⚠ Multiple candidates, review needed")
+            logger.warning(f"   [L6] [!] Multiple candidates, review needed")
             return {
                 'match': candidates[0],
                 'candidates': candidates[1:3],
@@ -123,7 +123,7 @@ class SmartProductMatcher:
             }
 
         # Level 7: No Match
-        logger.error(f"   [L7] ✗ No match found for: {name[:60]}")
+        logger.error(f"   [L7] [X] No match found for: {name[:60]}")
         return {
             'match': None,
             'confidence': 0.0,
@@ -621,7 +621,7 @@ class SmartProductMatcher:
             product_id = product_id[0] if product_id else None
 
         if product_id in self.matched_products:
-            logger.error(f"      ✗ DUPLICATE: {product.get('default_code')} already matched!")
+            logger.error(f"      [X] DUPLICATE: {product.get('default_code')} already matched!")
             return False
 
         self.matched_products.append(product_id)

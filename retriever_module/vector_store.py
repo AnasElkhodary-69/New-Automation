@@ -51,23 +51,72 @@ class VectorStore:
             if customers_path.exists():
                 with open(customers_path, 'r', encoding='utf-8') as f:
                     self.customers_data = json.load(f)
-                logger.info(f"✓ Loaded {len(self.customers_data)} customers from {self.customers_json}")
+                logger.info(f"[OK] Loaded {len(self.customers_data)} customers from {self.customers_json}")
             else:
-                logger.warning(f"⚠ Customers JSON not found: {self.customers_json}")
+                logger.warning(f"[!] Customers JSON not found: {self.customers_json}")
 
             # Load products
             products_path = Path(self.products_json)
             if products_path.exists():
                 with open(products_path, 'r', encoding='utf-8') as f:
                     self.products_data = json.load(f)
-                logger.info(f"✓ Loaded {len(self.products_data)} products from {self.products_json}")
+                logger.info(f"[OK] Loaded {len(self.products_data)} products from {self.products_json}")
             else:
-                logger.warning(f"⚠ Products JSON not found: {self.products_json}")
+                logger.warning(f"[!] Products JSON not found: {self.products_json}")
 
         except Exception as e:
-            logger.error(f"❌ Error loading JSON files: {str(e)}")
+            logger.error(f"[ERROR] Error loading JSON files: {str(e)}")
             self.customers_data = []
             self.products_data = []
+
+    def is_supplier_code(self, code: str) -> bool:
+        """
+        Check if a code matches supplier code patterns (vs customer internal codes)
+
+        Supplier codes: SDS###, L####, E####, 3M L###, etc.
+        Customer codes: KB-WK-MW-*, MW-*, etc. (should be ignored)
+
+        Args:
+            code: Product code to validate
+
+        Returns:
+            True if this looks like a supplier code, False if customer code
+        """
+        if not code:
+            return False
+
+        code_upper = code.upper().strip()
+
+        # Customer code patterns (REJECT these)
+        customer_patterns = [
+            r'^KB[-_]',      # KB-WK-MW-B3
+            r'^MW[-_]',      # MW-*
+            r'^WK[-_]',      # WK-*
+            r'^ART[-_]',     # ART-*
+            r'^CUST[-_]',    # CUST-*
+        ]
+
+        for pattern in customer_patterns:
+            if re.match(pattern, code_upper):
+                return False
+
+        # Supplier code patterns (ACCEPT these)
+        supplier_patterns = [
+            r'^SDS\s*\d',           # SDS 06, SDS006, SDS1235
+            r'^[3]M\s*[EL]\d',      # 3M L1020, 3M E1020
+            r'^[EL]\d{3,4}',        # L1020, E1320
+            r'^\d{3,6}[-_]\d',      # 444-444-159, 105092-377
+        ]
+
+        for pattern in supplier_patterns:
+            if re.match(pattern, code_upper):
+                return True
+
+        # If code has letters + numbers and no dashes (normalized), accept it
+        if re.match(r'^[A-Z]+\d+[A-Z]?$', code_upper.replace('-', '').replace('_', '').replace(' ', '')):
+            return True
+
+        return False
 
     def normalize_code(self, code: str) -> str:
         """
@@ -333,6 +382,191 @@ class VectorStore:
         # Use SequenceMatcher for fuzzy matching
         return SequenceMatcher(None, s1, s2).ratio()
 
+    def _extract_components(self, product_name: str) -> Dict:
+        """
+        Extract key components from product name for matching
+
+        Components:
+        - Brand: 3M, SDS, TESA, etc.
+        - Model/Code: L1020, E1320, SDS006, etc.
+        - Dimensions: 685mm, 780mm, 25x020, etc.
+        - Type: CushionMount, Doctor Blade, Seal, etc.
+        - Colors: GRY, BLK, RED, etc.
+        """
+        components = {
+            'brand': None,
+            'model': None,
+            'dimensions': [],
+            'type': None,
+            'colors': []
+        }
+
+        text = product_name.upper()
+
+        # Extract Brand
+        brands = ['3M', 'SDS', 'TESA', 'DUPONT', 'NITTO', 'LOHMANN']
+        for brand in brands:
+            if brand in text:
+                components['brand'] = brand
+                break
+
+        # Extract Model/Code (alphanumeric codes)
+        model_patterns = [
+            r'\b(\d{3}-\d{2}-[A-Z])\b',     # 904-12-G, 928-12-K (3M tape codes)
+            r'\b([EL]\d{3,4})\b',           # E1020, L1020
+            r'\bSDS\s*(\d{2,4}[A-Z]?)\b',   # SDS006, SDS 06, SDS1235A
+            r'\b([A-Z]-\d{2,4}-\d{2,4})\b', # C-40-20-RPE
+        ]
+        for pattern in model_patterns:
+            match = re.search(pattern, text)
+            if match:
+                components['model'] = match.group(1) if len(match.groups()) > 0 else match.group(0)
+                break
+
+        # Extract Dimensions (numbers with mm, x separator, or standalone)
+        dimension_patterns = [
+            r'(\d+)\s*MM',              # 685mm
+            r'(\d+)\s*X\s*(\d+)',       # 25x020
+            r'\b(\d{3,4})\b',           # 685, 780 (standalone numbers)
+        ]
+        for pattern in dimension_patterns:
+            matches = re.findall(pattern, text)
+            if matches:
+                for match in matches:
+                    if isinstance(match, tuple):
+                        components['dimensions'].extend([d for d in match if d])
+                    else:
+                        components['dimensions'].append(match)
+
+        # Extract Type keywords
+        type_keywords = ['CUSHION', 'MOUNT', 'DOCTOR', 'BLADE', 'SEAL', 'TAPE', 'FOAM']
+        found_types = [kw for kw in type_keywords if kw in text]
+        if found_types:
+            components['type'] = ' '.join(found_types)
+
+        # Extract Colors
+        colors = ['GRY', 'GREY', 'BLK', 'BLACK', 'RED', 'BLUE', 'BLU', 'WHT', 'WHITE', 'YLL', 'YELLOW', 'GRAU']
+        for color in colors:
+            if color in text:
+                components['colors'].append(color)
+
+        return components
+
+    def _match_by_full_name(self, product_name: str) -> Dict:
+        """
+        Match product by comparing KEY COMPONENTS (brand, model, dimensions)
+
+        Example:
+        Input:  "3M L1020 CushionMount plus 685mm PLATTENKLEBEBAND"
+        Components: Brand=3M, Model=L1020, Dim=685, Type=CUSHION MOUNT
+
+        Match:  "3MCushion Mount plus L1020 685mm x 23m"
+        Components: Brand=3M, Model=L1020, Dim=685, Type=CUSHION MOUNT
+
+        Score: 100% (all key components match!)
+
+        Args:
+            product_name: Full product name from extraction
+
+        Returns:
+            Match result dict if good match found, None otherwise
+        """
+        if not product_name or not self.products_data:
+            return None
+
+        # Extract components from search string
+        search_components = self._extract_components(product_name)
+
+        best_match = None
+        best_score = 0.0
+        best_details = ""
+
+        for product in self.products_data:
+            db_name = product.get('name', '')
+            if not db_name:
+                continue
+
+            # Extract components from database name
+            db_components = self._extract_components(db_name)
+
+            # Calculate component-based score
+            score = 0.0
+            max_score = 0.0
+            details = []
+
+            # Brand matching (30 points)
+            max_score += 30
+            if search_components['brand'] and db_components['brand']:
+                if search_components['brand'] == db_components['brand']:
+                    score += 30
+                    details.append(f"Brand[OK]")
+                else:
+                    details.append(f"Brand[X]")
+
+            # Model matching (40 points - MOST IMPORTANT)
+            max_score += 40
+            if search_components['model'] and db_components['model']:
+                # Normalize models for comparison
+                search_model = search_components['model'].replace(' ', '').replace('-', '')
+                db_model = db_components['model'].replace(' ', '').replace('-', '')
+                if search_model == db_model or search_model in db_model or db_model in search_model:
+                    score += 40
+                    details.append(f"Model[OK]")
+                else:
+                    details.append(f"Model[X]")
+
+            # Dimension matching (25 points)
+            max_score += 25
+            if search_components['dimensions'] and db_components['dimensions']:
+                # Check if any dimension matches
+                matched_dims = set(search_components['dimensions']) & set(db_components['dimensions'])
+                if matched_dims:
+                    score += 25
+                    details.append(f"Dim[OK]({','.join(matched_dims)})")
+                else:
+                    details.append(f"Dim[X]")
+
+            # Type matching (5 points - bonus)
+            max_score += 5
+            if search_components['type'] and db_components['type']:
+                # Check if types overlap
+                if any(word in db_components['type'] for word in search_components['type'].split()):
+                    score += 5
+                    details.append(f"Type[OK]")
+
+            # Calculate final percentage
+            if max_score > 0:
+                final_score = score / max_score
+            else:
+                final_score = 0.0
+
+            if final_score > best_score:
+                best_score = final_score
+                best_match = product
+                best_details = ' '.join(details)
+
+        # Log best match found
+        if best_match:
+            logger.info(f"   [NAME_MATCH] Best: {best_match.get('default_code')} - '{best_match.get('name')}' (score: {best_score:.0%}, {best_details})")
+
+        # Return match if confidence is high enough
+        if best_match and best_score >= 0.80:  # 80% threshold - need strong component match
+            logger.info(f"   [NAME_MATCH] [OK] MATCHED!")
+            return {
+                'match': best_match,
+                'confidence': best_score,
+                'method': 'full_name_match',
+                'requires_review': best_score < 0.90,
+                'candidates': [],
+                'search_input': {
+                    'product_name': product_name,
+                    'product_code': None
+                }
+            }
+
+        logger.info(f"   [NAME_MATCH] Score below threshold (80%), continuing...")
+        return None
+
     def search_product_multilevel(self, product_name: str = None, product_code: str = None) -> Dict:
         """
         Multi-level product search with confidence scoring
@@ -364,26 +598,57 @@ class VectorStore:
         }
 
         if not self.products_data:
-            logger.warning("⚠ No product data loaded")
+            logger.warning("[!] No product data loaded")
             return result
 
-        # LEVEL 0: Extract code from product name if no code provided
-        if not product_code and product_name:
-            # Try to extract product code from name
+        # NEW APPROACH: Use full name matching FIRST
+        # Extract: "3M L1020 CushionMount plus 685mm PLATTENKLEBEBAND"
+        # Database: "3MCushion Mount plus L1020 685mm x 23m"
+        # These should match directly!
+
+        # PRIORITY 1: Direct name-based matching
+        if product_name:
+            logger.info(f"   [P1] Searching by full product name...")
+            name_match = self._match_by_full_name(product_name)
+            if name_match:
+                return name_match
+
+        # PRIORITY 2: Use supplier code if provided
+        code_to_use = product_code
+        if product_code and self.is_supplier_code(product_code):
+            logger.info(f"   [P2] Using supplier code: '{product_code}'")
+            code_to_use = product_code
+        elif product_code:
+            logger.info(f"   [P3] Customer code detected ('{product_code}'), extracting from name instead...")
+            code_to_use = None
+
+        # PRIORITY 3: Extract code from product name as fallback
+        if not code_to_use and product_name:
             code_patterns = [
-                r'\b([A-Z]-\d{2,4}-\d{2,4}-[A-Z]+)\b',   # C-40-20-RPE, G-25-20-125-RPE (FULL variant codes)
-                r'\b([A-Z]+\d{3,4}[A-Z]?)\b',            # SDS025, SDS025A, L1520, etc.
-                r'\b(3M\s+[A-Z]?\d{3,4})\b',             # 3M L1520, 3M 9353
-                r'\b([A-Z]-\d{2,4}-\d{2,4})\b',          # G-25-20-125 (base codes)
+                r'\b(\d{3}-\d{2}-[A-Z])\b',              # 904-12-G, 928-12-K (3M tape codes)
+                r'\b([A-Z]-\d{2,4}-\d{2,4}-[A-Z]+)\b',   # C-40-20-RPE
+                r'\b(3M\s+[A-Z]?\d{3,4})\b',             # 3M L1520
+                r'\b([A-Z]+\d{3,4}[A-Z]?)\b',            # SDS025
+                r'\b([A-Z]-\d{2,4}-\d{2,4})\b',          # G-25-20-125
             ]
 
             for pattern in code_patterns:
                 match = re.search(pattern, product_name.upper())
                 if match:
                     extracted_code = match.group(1).replace(' ', '')
-                    logger.info(f"   [L0] Code extracted from name: '{extracted_code}'")
-                    product_code = extracted_code
+
+                    # Special handling: If we extracted a 3-digit code like "904-12-G" from a 3M product,
+                    # prepend "3M" to make it "3M904-12-G" to match database codes like "3M904-12-44"
+                    if re.match(r'^\d{3}-\d{2}-[A-Z]$', extracted_code) and '3M' in product_name.upper():
+                        extracted_code = '3M' + extracted_code
+                        logger.info(f"   [L0] Code extracted from 3M product: '{extracted_code}'")
+                    else:
+                        logger.info(f"   [L0] Code extracted from name: '{extracted_code}'")
+
+                    code_to_use = extracted_code
                     break
+
+        product_code = code_to_use
 
         # LEVEL 1: Exact Product Code Match (with attribute refinement for variants)
         if product_code:
@@ -402,7 +667,7 @@ class VectorStore:
                 result['confidence'] = 1.0
                 result['method'] = 'exact_code'
                 result['requires_review'] = False
-                logger.info(f"   [L1] ✓ Exact code match: {code_matches[0].get('default_code')} ({result['confidence']:.0%})")
+                logger.info(f"   [L1] [OK] Exact code match: {code_matches[0].get('default_code')} ({result['confidence']:.0%})")
                 return result
 
             # If multiple matches (variants), use attributes to select best one
@@ -429,7 +694,7 @@ class VectorStore:
                         result['confidence'] = 1.0
                         result['method'] = 'exact_code_with_attributes'
                         result['requires_review'] = False
-                        logger.info(f"   [L1] ✓ Exact code match (variant refined by attributes): {best_variant.get('default_code')} (attr: {best_attr_score:.0%})")
+                        logger.info(f"   [L1] [OK] Exact code match (variant refined by attributes): {best_variant.get('default_code')} (attr: {best_attr_score:.0%})")
                         return result
                     elif best_variant:
                         # Use best variant even with low attribute match
@@ -437,7 +702,7 @@ class VectorStore:
                         result['confidence'] = 0.95
                         result['method'] = 'exact_code_low_attr'
                         result['requires_review'] = True
-                        logger.info(f"   [L1] ⚠ Exact code match (low attr confidence): {best_variant.get('default_code')} (attr: {best_attr_score:.0%})")
+                        logger.info(f"   [L1] [!] Exact code match (low attr confidence): {best_variant.get('default_code')} (attr: {best_attr_score:.0%})")
                         return result
 
                 # No attributes or no good match - return first variant
@@ -445,29 +710,98 @@ class VectorStore:
                 result['confidence'] = 0.90
                 result['method'] = 'exact_code_first_variant'
                 result['requires_review'] = True
-                logger.info(f"   [L1] ⚠ Exact code match (first variant, no attribute match): {code_matches[0].get('default_code')}")
+                logger.info(f"   [L1] [!] Exact code match (first variant, no attribute match): {code_matches[0].get('default_code')}")
                 return result
 
         # LEVEL 1.5: Base Code Match (for product variants)
         # If exact code didn't match, try matching as base code
         if product_code:
-            normalized_search_code = self.normalize_code(product_code)
-
-            # Extract base code (e.g., SDS025 from SDS025A)
-            base_code_match = re.match(r'^([A-Z]+\d{3,4})', normalized_search_code)
-            if base_code_match:
-                base_code = base_code_match.group(1)
-                logger.debug(f"   [L1.5] Base code variant search: '{base_code}'")
+            # Special case: 3M tape codes like "3M904-12-G" → base "3M904-12"
+            # Check BEFORE normalization because normalization removes "3M" prefix and dashes
+            three_m_tape_match = re.match(r'^(3M\d{3}-\d{2})', product_code.upper())
+            if three_m_tape_match:
+                base_code = three_m_tape_match.group(1)
+                base_codes_to_try = [base_code]
+                logger.info(f"   [L1.5] 3M tape base code search: {base_codes_to_try}")
 
                 # Find all products that start with this base code
                 variant_matches = []
                 for product in self.products_data:
-                    db_code = self.normalize_code(product.get('default_code', ''))
-                    if db_code and db_code.startswith(base_code):
+                    db_code = product.get('default_code', '')
+                    if isinstance(db_code, str) and db_code.upper().startswith(base_code):
                         variant_matches.append(product)
 
                 if len(variant_matches) > 0:
-                    logger.info(f"   [L1.5] Found {len(variant_matches)} variants for base code {base_code}")
+                    logger.info(f"   [L1.5] Found {len(variant_matches)} 3M tape variants for base code {base_code}")
+
+                    # Use attributes to select best variant if multiple matches
+                    if product_name and len(variant_matches) > 1:
+                        search_attrs = self.extract_attributes(product_name)
+                        best_variant = None
+                        best_score = 0.0
+
+                        for product in variant_matches:
+                            product_text = f"{product.get('name', '')} {product.get('display_name', '')}"
+                            product_attrs = self.extract_attributes(product_text)
+                            attr_score = self._calculate_attribute_similarity(search_attrs, product_attrs)
+
+                            if attr_score > best_score:
+                                best_score = attr_score
+                                best_variant = product
+
+                        if best_variant:
+                            result['match'] = best_variant
+                            result['confidence'] = 0.85 + (best_score * 0.15)  # 85-100%
+                            result['method'] = '3m_base_code_variant'
+                            result['requires_review'] = best_score < 0.7
+                            logger.info(f"   [L1.5] [OK] 3M base code variant: {best_variant.get('default_code')} (attr: {best_score:.0%})")
+                            return result
+
+                    # Single variant or no attribute matching
+                    if len(variant_matches) == 1:
+                        result['match'] = variant_matches[0]
+                        result['confidence'] = 0.95
+                        result['method'] = '3m_base_code_single'
+                        result['requires_review'] = False
+                        logger.info(f"   [L1.5] [OK] 3M base code single variant: {variant_matches[0].get('default_code')}")
+                        return result
+                    elif len(variant_matches) > 1:
+                        # Return first variant if no good attribute match
+                        result['match'] = variant_matches[0]
+                        result['confidence'] = 0.80
+                        result['method'] = '3m_base_code_first'
+                        result['requires_review'] = True
+                        logger.info(f"   [L1.5] [!] 3M base code first variant: {variant_matches[0].get('default_code')}")
+                        return result
+
+            # Continue with standard normalization for other code types (non-3M tape codes)
+            normalized_search_code = self.normalize_code(product_code)
+
+            # Extract base code for standard format (e.g., SDS025 from SDS025A, SDS06 from SDS006A)
+            base_code_match = re.match(r'^([A-Z]+)(\d{2,})', normalized_search_code)
+            if base_code_match:
+                letters = base_code_match.group(1)
+                digits = base_code_match.group(2)
+
+                # Try with and without leading zero (SDS06 → try both SDS06 and SDS006)
+                base_codes_to_try = [letters + digits]
+                if len(digits) == 2:
+                    base_codes_to_try.append(letters + '0' + digits)  # Add leading zero
+
+                logger.debug(f"   [L1.5] Base code variant search: {base_codes_to_try}")
+
+                # Find all products that start with any of these base codes
+                variant_matches = []
+                for product in self.products_data:
+                    db_code = self.normalize_code(product.get('default_code', ''))
+                    if db_code:
+                        for base_code in base_codes_to_try:
+                            if db_code.startswith(base_code):
+                                variant_matches.append(product)
+                                break  # Don't add same product twice
+
+                if len(variant_matches) > 0:
+                    logger.info(f"   [L1.5] Found {len(variant_matches)} variants for base codes {base_codes_to_try}")
 
                     # Use attributes to select best variant
                     if product_name and len(variant_matches) > 1:
@@ -490,7 +824,7 @@ class VectorStore:
                             result['confidence'] = 0.85 + (best_score * 0.15)  # 85-100%
                             result['method'] = 'base_code_variant'
                             result['requires_review'] = best_score < 0.7
-                            logger.info(f"   [L1.5] ✓ Base code variant match: {best_variant.get('default_code')} (attr: {best_score:.0%})")
+                            logger.info(f"   [L1.5] [OK] Base code variant match: {best_variant.get('default_code')} (attr: {best_score:.0%})")
                             return result
 
                     # If only one variant or no good attribute match, return first variant
@@ -499,7 +833,7 @@ class VectorStore:
                         result['confidence'] = 0.95
                         result['method'] = 'base_code_single'
                         result['requires_review'] = False
-                        logger.info(f"   [L1.5] ✓ Base code match (single variant): {variant_matches[0].get('default_code')}")
+                        logger.info(f"   [L1.5] [OK] Base code match (single variant): {variant_matches[0].get('default_code')}")
                         return result
                     elif len(variant_matches) > 1:
                         # Multiple variants but no good attribute match - needs review
@@ -507,7 +841,7 @@ class VectorStore:
                         result['confidence'] = 0.70
                         result['method'] = 'base_code_ambiguous'
                         result['requires_review'] = True
-                        logger.warning(f"   [L1.5] ⚠ Base code match (ambiguous - {len(variant_matches)} variants): {variant_matches[0].get('default_code')}")
+                        logger.warning(f"   [L1.5] [!] Base code match (ambiguous - {len(variant_matches)} variants): {variant_matches[0].get('default_code')}")
                         return result
 
         # LEVEL 2: Fuzzy Product Code Match (handle typos)
@@ -538,7 +872,7 @@ class VectorStore:
                     result['confidence'] = best['score']
                     result['method'] = 'fuzzy_code'
                     result['requires_review'] = best['score'] < self.auto_approve_threshold
-                    logger.info(f"   [L2] ✓ Fuzzy code match: {best['db_code']} ({result['confidence']:.0%})")
+                    logger.info(f"   [L2] [OK] Fuzzy code match: {best['db_code']} ({result['confidence']:.0%})")
                     return result
 
         # LEVEL 3: Attribute-Based Matching
@@ -570,13 +904,13 @@ class VectorStore:
                         result['confidence'] = best['score']
                         result['method'] = 'attribute_match'
                         result['requires_review'] = True  # Always review attribute matches
-                        logger.info(f"   [L3] ✓ Attribute match: {best['product'].get('default_code')} ({result['confidence']:.0%})")
+                        logger.info(f"   [L3] [OK] Attribute match: {best['product'].get('default_code')} ({result['confidence']:.0%})")
                         return result
                     else:
                         # Multiple similar matches - return candidates
                         result['candidates'] = [m['product'] for m in attribute_matches[:3]]
                         result['method'] = 'multiple_attribute_matches'
-                        logger.info(f"   [L3] ⚠ Multiple attribute matches found ({len(attribute_matches)})")
+                        logger.info(f"   [L3] [!] Multiple attribute matches found ({len(attribute_matches)})")
 
         # LEVEL 4: Name Similarity Matching (high threshold only)
         if product_name:
@@ -602,14 +936,14 @@ class VectorStore:
                     result['confidence'] = best['score']
                     result['method'] = 'name_similarity'
                     result['requires_review'] = True
-                    logger.info(f"   [L4] ✓ Name similarity match: {best['product'].get('default_code')} ({result['confidence']:.0%})")
+                    logger.info(f"   [L4] [OK] Name similarity match: {best['product'].get('default_code')} ({result['confidence']:.0%})")
                     return result
                 else:
                     # Lower confidence - return candidates
                     result['candidates'] = [m['product'] for m in name_matches[:3]]
                     result['confidence'] = best['score']
                     result['method'] = 'low_confidence_name'
-                    logger.info(f"   [L4] ⚠ Low confidence name match ({result['confidence']:.0%})")
+                    logger.info(f"   [L4] [!] Low confidence name match ({result['confidence']:.0%})")
 
         # LEVEL 5: AI Semantic Matching (fallback for difficult cases)
         logger.debug(f"   [L5] Attempting AI semantic matching...")
@@ -642,13 +976,13 @@ class VectorStore:
                     result['method'] = 'ai_semantic_match'
                     result['reasoning'] = ai_result.get('reasoning', '')
                     result['requires_review'] = ai_result.get('requires_review', True)
-                    logger.info(f"   [L5] ✓ AI semantic match: {ai_result['product'].get('default_code')} ({result['confidence']:.0%})")
+                    logger.info(f"   [L5] [OK] AI semantic match: {ai_result['product'].get('default_code')} ({result['confidence']:.0%})")
                     return result
         except Exception as e:
             logger.debug(f"   [L5] AI matching unavailable or failed: {e}")
 
         # LEVEL 6: No reliable match found
-        logger.warning(f"   [L6] ✗ No reliable match found for: {product_name or product_code}")
+        logger.warning(f"   [L6] [X] No reliable match found for: {product_name or product_code}")
         result['method'] = 'no_match'
         result['requires_review'] = True
 
@@ -680,7 +1014,7 @@ class VectorStore:
             'review_required': 0
         }
 
-        logger.info(f"🔍 Searching {len(product_names)} products with multi-level matching...")
+        logger.info(f"[SEARCH] Searching {len(product_names)} products with multi-level matching...")
         if product_codes:
             logger.info(f"   Found {len(product_codes)} codes to try for {len(product_names)} products")
 
@@ -691,19 +1025,22 @@ class VectorStore:
             match_result = None
             best_match = None
 
-            # Strategy 1: Build dimension-based codes from product name
+            # Strategy 1: Use the corresponding code for this product (1-to-1 pairing)
             codes_to_try = []
 
-            if product_codes:
-                # For each extracted code, build variants with dimension from product name
-                for code in product_codes:
-                    dimension_codes = self.build_code_with_dimension(code, name)
-                    codes_to_try.extend(dimension_codes)
+            if product_codes and len(product_codes) >= idx:
+                # Get the code for THIS product (index-based pairing)
+                code_for_this_product = product_codes[idx - 1]  # idx is 1-based
+
+                # Build variants with dimension from product name
+                dimension_codes = self.build_code_with_dimension(code_for_this_product, name)
+                codes_to_try.extend(dimension_codes)
 
                 # Remove duplicates while preserving order
                 seen = set()
                 codes_to_try = [c for c in codes_to_try if not (c in seen or seen.add(c))]
 
+                logger.debug(f"   Code for this product: '{code_for_this_product}'")
                 logger.debug(f"   Built {len(codes_to_try)} code variants from dimension extraction")
 
                 for code in codes_to_try:
@@ -717,7 +1054,7 @@ class VectorStore:
                         # Found a match! Use it if it's better than previous
                         if not best_match or temp_result['confidence'] > best_match['confidence']:
                             best_match = temp_result
-                            logger.debug(f"       ✓ Match found! (confidence: {temp_result['confidence']:.0%})")
+                            logger.debug(f"       [OK] Match found! (confidence: {temp_result['confidence']:.0%})")
 
                             # If exact match with high confidence, stop searching
                             if temp_result['method'] in ['exact_code', 'exact_code_with_attributes'] and temp_result['confidence'] >= 0.95:
@@ -734,13 +1071,17 @@ class VectorStore:
 
             # Process result
             if match_result and match_result['match']:
-                # Add extracted product name for tracking
-                match_result['match']['extracted_product_name'] = name
-                match_result['match']['match_score'] = match_result['confidence']
-                match_result['match']['match_method'] = match_result['method']
-                match_result['match']['requires_review'] = match_result['requires_review']
+                # Make a COPY of the matched product to avoid modifying the original
+                import copy
+                product_copy = copy.deepcopy(match_result['match'])
 
-                all_matches.append(match_result['match'])
+                # Add extracted product name for tracking
+                product_copy['extracted_product_name'] = name
+                product_copy['match_score'] = match_result['confidence']
+                product_copy['match_method'] = match_result['method']
+                product_copy['requires_review'] = match_result['requires_review']
+
+                all_matches.append(product_copy)
 
                 # Update stats
                 stats[match_result['method']] = stats.get(match_result['method'], 0) + 1
@@ -750,16 +1091,16 @@ class VectorStore:
                     stats['auto_approved'] += 1
 
                 code_str = match_result['match'].get('default_code', 'N/A')
-                logger.info(f"   ✓ Product {idx}: Matched {code_str} (method: {match_result['method']}, confidence: {match_result['confidence']:.0%})")
+                logger.info(f"   [OK] Product {idx}: Matched {code_str} (method: {match_result['method']}, confidence: {match_result['confidence']:.0%})")
             else:
                 stats['no_match'] += 1
                 stats['review_required'] += 1
-                logger.warning(f"   ✗ Product {idx}: No match found")
+                logger.warning(f"   [X] Product {idx}: No match found")
 
         # Log summary
         total = len(product_names)
         matched = len(all_matches)
-        logger.info(f"\n📊 Matching Summary:")
+        logger.info(f"\n[STATS] Matching Summary:")
         logger.info(f"   Total: {total} products")
         logger.info(f"   Matched: {matched}/{total} ({matched/total*100:.0f}%)")
         logger.info(f"   Auto-approved: {stats['auto_approved']} ({stats['auto_approved']/total*100:.0f}%)")
