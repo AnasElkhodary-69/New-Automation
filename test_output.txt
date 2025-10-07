@@ -1,0 +1,53 @@
+Error extracting entities: '\n         "brand"'
+================================================================================
+TEST: Entity Extraction with product_attributes
+================================================================================
+
+Test Email:
+
+    Dear SDS Print,
+
+    Please send me a quote for:
+    - 3M Cushion Mount L1520, 685mm width, 0.55mm thick, 33m roll
+
+    Quantity: 5 pieces
+    Price: 150 EUR each
+
+    Best regards,
+    John Smith
+    ABC Company GmbH
+    Email: john@abc-company.de
+    Phone: +49 89 1234567
+    
+
+Calling Mistral API for entity extraction...
+
+================================================================================
+EXTRACTED ENTITIES:
+================================================================================
+{
+  "order_numbers": [],
+  "product_names": [],
+  "dates": [],
+  "amounts": [],
+  "references": [],
+  "locations": [],
+  "contact_info": [],
+  "time_expressions": [],
+  "customer_name": null,
+  "urgency_level": "medium",
+  "sentiment": "neutral"
+}
+
+================================================================================
+VALIDATION:
+================================================================================
+X FAIL: No product names extracted
+X FAIL: No product codes extracted
+X WARNING: product_attributes field missing (will extract later)
+X FAIL: No company name extracted
+X FAIL: No email extracted
+
+================================================================================
+TEST FAILED: Some fields missing
+================================================================================

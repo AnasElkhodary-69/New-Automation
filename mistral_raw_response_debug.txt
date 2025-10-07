@@ -1,0 +1,33 @@
+```json
+{
+  "customer_info": {
+    "name": "Andreas Knecht",
+    "company": "Etimark AG",
+    "email": "info@etimark.ch",
+    "phone": "+41 81 750 3434",
+    "address": "Oberer Wässertenweg 3, CH-9472 Grabs, Switzerland"
+  },
+  "products": [
+    {
+      "name": "3M Transfer-Klebeband 904-12-G",
+      "code": "904-12-G",
+      "quantity": 144,
+      "unit_price": 6.16,
+      "specifications": "12mm x 44"
+    },
+    {
+      "name": "3M Transfer-Klebeband 928-12-K",
+      "code": "928-12-K",
+      "quantity": 288,
+      "unit_price": 9.90,
+      "specifications": "12mm x 16.5"
+    }
+  ],
+  "order_info": {
+    "order_number": "2500548",
+    "date": "2025-10-02",
+    "urgency": "medium",
+    "notes": "Bitte um Angabe unserer Bestell- & Artikelnummer auf allen Papieren und eine Bestätigung innerhalb 2 Arbeitstagen. Warenannahme: Mo bis Do 08.00-11.00 u. 14.00-16.30 Uhr, Fr 08.00-11.00 und 14.00 – 15.30 Uhr. Anlieferung: frei Haus auf EUR-Paletten (80x120cm), max. Höhe 180cm."
+  }
+}
+```

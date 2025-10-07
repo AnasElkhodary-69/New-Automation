@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "collected_at": "2025-09-29T23:48:09.691399",
+    "email_id": "9117",
+    "mailbox": "INBOX",
+    "index": 28
+  },
+  "content": {
+    "subject": "SAMPLE ORDER N°87",
+    "sender": "<info@mimii-lab.it>",
+    "recipients": [
+      "<m.kaddouri@sds-print.com>"
+    ],
+    "date": "Wed, 24 Sep 2025 16:09:42 +0200",
+    "body_text": "Good afternoon,\r\n\r\nplease find attached our sample order n87.\r\n\r\n \r\n\r\nPlease note:\r\n\r\nART. 05533  27 SHORE\r\n\r\nART. 05534  30 SHORE\r\n\r\n \r\n\r\nWe look forward to your reply.\r\n\r\n \r\n\r\nBest regards,\r\n\r\nLaura\r\n\r\n",
+    "body_html": "<html xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" xmlns:m=\"http://schemas.microsoft.com/office/2004/12/omml\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><meta http-equiv=Content-Type content=\"text/html; charset=iso-8859-1\"><meta name=Generator content=\"Microsoft Word 15 (filtered medium)\"><style><!--\r\n/* Font Definitions */\r\n@font-face\r\n\t{font-family:\"Cambria Math\";\r\n\tpanose-1:2 4 5 3 5 4 6 3 2 4;}\r\n@font-face\r\n\t{font-family:Aptos;}\r\n/* Style Definitions */\r\np.MsoNormal, li.MsoNormal, div.MsoNormal\r\n\t{margin:0cm;\r\n\tfont-size:11.0pt;\r\n\tfont-family:\"Aptos\",sans-serif;\r\n\tmso-ligatures:standardcontextual;\r\n\tmso-fareast-language:EN-US;}\r\nspan.StileMessaggioDiPostaElettronica17\r\n\t{mso-style-type:personal-compose;\r\n\tfont-family:\"Aptos\",sans-serif;\r\n\tcolor:windowtext;}\r\n.MsoChpDefault\r\n\t{mso-style-type:export-only;\r\n\tfont-size:11.0pt;\r\n\tmso-fareast-language:EN-US;}\r\n@page WordSection1\r\n\t{size:612.0pt 792.0pt;\r\n\tmargin:70.85pt 2.0cm 2.0cm 2.0cm;}\r\ndiv.WordSection1\r\n\t{page:WordSection1;}\r\n--></style><!--[if gte mso 9]><xml>\r\n<o:shapedefaults v:ext=\"edit\" spidmax=\"1026\" />\r\n</xml><![endif]--><!--[if gte mso 9]><xml>\r\n<o:shapelayout v:ext=\"edit\">\r\n<o:idmap v:ext=\"edit\" data=\"1\" />\r\n</o:shapelayout></xml><![endif]--></head><body lang=IT link=\"#467886\" vlink=\"#96607D\" style='word-wrap:break-word'><div class=WordSection1><p class=MsoNormal>Good afternoon,<o:p></o:p></p><p class=MsoNormal><span lang=EN-GB>please find attached our sample order n87.<o:p></o:p></span></p><p class=MsoNormal><span lang=EN-GB><o:p>&nbsp;</o:p></span></p><p class=MsoNormal><span lang=EN-GB>Please note:<o:p></o:p></span></p><p class=MsoNormal><span lang=EN-GB>ART. 05533 &#8211; 27 SHORE<o:p></o:p></span></p><p class=MsoNormal><span lang=EN-GB>ART. 05534 &#8211; 30 SHORE<o:p></o:p></span></p><p class=MsoNormal><span lang=EN-GB><o:p>&nbsp;</o:p></span></p><p class=MsoNormal><span lang=EN-GB>We look forward to your reply.<o:p></o:p></span></p><p class=MsoNormal><span lang=EN-GB><o:p>&nbsp;</o:p></span></p><p class=MsoNormal><span lang=EN-GB>Best regards,<o:p></o:p></span></p><p class=MsoNormal><span lang=EN-GB>Laura<o:p></o:p></span></p></div></body></html>",
+    "attachments": [
+      {
+        "filename": "05533 OMSA 80,5 x 22 x 13,5 MM CON INSERTO BLACK.pdf",
+        "filepath": "order-emails\\attachments\\20250929_234809_8413\\05533 OMSA 805 x 22 x 135 MM CON INSERTO BLACK.pdf",
+        "content_type": "application/pdf"
+      },
+      {
+        "filename": "05534 OMSA 80,5 x 22 x 13,5 MM   30 SHORE.pdf",
+        "filepath": "order-emails\\attachments\\20250929_234809_8413\\05534 OMSA 805 x 22 x 135 MM   30 SHORE.pdf",
+        "content_type": "application/pdf"
+      },
+      {
+        "filename": "05534 OMSA 80,5 x 22 x 13,5 MM  30 SHORE.jpg",
+        "filepath": "order-emails\\attachments\\20250929_234809_8413\\05534 OMSA 805 x 22 x 135 MM  30 SHORE.jpg",
+        "content_type": "image/jpeg"
+      },
+      {
+        "filename": "05533 OMSA 80,5 x 22 x 13,5 MM CON INSERTO BLACK.dxf",
+        "filepath": "order-emails\\attachments\\20250929_234809_8413\\05533 OMSA 805 x 22 x 135 MM CON INSERTO BLACK.dxf",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "filename": "05533 OMSA 80,5 x 22 x 13,5 MM CON INSERTO BLACK.jpg",
+        "filepath": "order-emails\\attachments\\20250929_234809_8413\\05533 OMSA 805 x 22 x 135 MM CON INSERTO BLACK.jpg",
+        "content_type": "image/jpeg"
+      },
+      {
+        "filename": "=?iso-8859-1?Q?ORDER_N=B087_SDS.pdf?=",
+        "filepath": "order-emails\\attachments\\20250929_234809_8413\\iso-8859-1QORDER_NB087_SDS.pdf",
+        "content_type": "application/pdf"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "collected_at": "2025-09-29T23:48:11.925084",
+    "email_id": "9120",
+    "mailbox": "INBOX",
+    "index": 31
+  },
+  "content": {
+    "subject": "Bestellung #25501874",
+    "sender": "Dürrbeck Alexander <alexander@duerrbeck.com>",
+    "recipients": [
+      "\"order@sds-print.com\" <order@sds-print.com>"
+    ],
+    "date": "Thu, 25 Sep 2025 09:29:22 +0000",
+    "body_text": "Sehr geehrte Damen und Herren,\r\n \r\nim Anhang bersenden wir Ihnen unsere Bestellung mit der Bitte um Besttigung.\r\nBitte senden Sie Ihre AB direkt an: stefanie.ober@duerrbeck.com\r\n\r\nVielen Dank.\r\n\r\nMit freundlichen Gren\r\nAlexander Drrbeck\r\n",
+    "body_html": "",
+    "attachments": [
+      {
+        "filename": "best_25501874.pdf",
+        "filepath": "order-emails\\attachments\\20250929_234811_1391\\best_25501874.pdf",
+        "content_type": "application/pdf"
+      }
+    ]
+  }
+}

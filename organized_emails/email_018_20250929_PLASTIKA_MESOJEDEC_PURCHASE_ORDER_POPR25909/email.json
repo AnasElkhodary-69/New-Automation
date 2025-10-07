@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "collected_at": "2025-09-29T23:48:00.058409",
+    "email_id": "9107",
+    "mailbox": "INBOX",
+    "index": 18
+  },
+  "content": {
+    "subject": "PLASTIKA MESOJEDEC PURCHASE ORDER POPR25/909",
+    "sender": "Sabina Lorenci <sabina.lorenci@plastika-mesojedec.si>",
+    "recipients": [
+      "\"order@sds-print.com\" <order@sds-print.com>"
+    ],
+    "date": "Tue, 23 Sep 2025 11:01:35 +0000",
+    "body_text": "Hello,\r\n\r\nplease find enclosed our new order. I kindly ask for your confirmation.\r\n\r\nThank you.\r\n\r\nBest regards.\r\n\r\n\r\nSabina Lorenci\r\n",
+    "body_html": "<html xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" xmlns:m=\"http://schemas.microsoft.com/office/2004/12/omml\" xmlns=\"http://www.w3.org/TR/REC-html40\">\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Word 15 (filtered medium)\">\r\n<style><!--\r\n/* Font Definitions */\r\n@font-face\r\n\t{font-family:\"Cambria Math\";\r\n\tpanose-1:2 4 5 3 5 4 6 3 2 4;}\r\n@font-face\r\n\t{font-family:Aptos;}\r\n/* Style Definitions */\r\n.MsoChpDefault\r\n\t{mso-style-type:export-only;\r\n\tfont-size:10.0pt;\r\n\tmso-ligatures:none;}\r\n@page WordSection1\r\n\t{size:612.0pt 792.0pt;\r\n\tmargin:70.85pt 70.85pt 70.85pt 70.85pt;}\r\ndiv.WordSection1\r\n\t{page:WordSection1;}\r\n--></style><!--[if gte mso 9]><xml>\r\n<o:shapedefaults v:ext=\"edit\" spidmax=\"1026\" />\r\n</xml><![endif]--><!--[if gte mso 9]><xml>\r\n<o:shapelayout v:ext=\"edit\">\r\n<o:idmap v:ext=\"edit\" data=\"1\" />\r\n</o:shapelayout></xml><![endif]-->\r\n</head>\r\n<body lang=\"SL\" link=\"#0563C1\" vlink=\"#954F72\" style=\"word-wrap:break-word\">\r\n<div class=\"WordSection1\">\r\n<p style=\"mso-margin-top-alt:0cm;margin-right:0cm;margin-bottom:12.0pt;margin-left:0cm\">\r\n<span style=\"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif\">Hello,<br>\r\n<br>\r\nplease find enclosed our new order. I kindly ask for your confirmation.<br>\r\n<br>\r\nThank you.<br>\r\n<br>\r\nBest regards.<br>\r\n<br>\r\n<o:p></o:p></span></p>\r\n<p style=\"margin:0cm\"><span style=\"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif\">Sabina Lorenci<o:p></o:p></span></p>\r\n</div>\r\n</body>\r\n</html>\r\n",
+    "attachments": [
+      {
+        "filename": "POPR25-909.pdf",
+        "filepath": "order-emails\\attachments\\20250929_234800_5704\\POPR25-909.pdf",
+        "content_type": "application/pdf"
+      }
+    ]
+  }
+}

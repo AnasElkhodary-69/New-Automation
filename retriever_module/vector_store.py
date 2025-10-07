@@ -367,6 +367,24 @@ class VectorStore:
             logger.warning("⚠ No product data loaded")
             return result
 
+        # LEVEL 0: Extract code from product name if no code provided
+        if not product_code and product_name:
+            # Try to extract product code from name
+            code_patterns = [
+                r'\b([A-Z]-\d{2,4}-\d{2,4}-[A-Z]+)\b',   # C-40-20-RPE, G-25-20-125-RPE (FULL variant codes)
+                r'\b([A-Z]+\d{3,4}[A-Z]?)\b',            # SDS025, SDS025A, L1520, etc.
+                r'\b(3M\s+[A-Z]?\d{3,4})\b',             # 3M L1520, 3M 9353
+                r'\b([A-Z]-\d{2,4}-\d{2,4})\b',          # G-25-20-125 (base codes)
+            ]
+
+            for pattern in code_patterns:
+                match = re.search(pattern, product_name.upper())
+                if match:
+                    extracted_code = match.group(1).replace(' ', '')
+                    logger.info(f"   [L0] Code extracted from name: '{extracted_code}'")
+                    product_code = extracted_code
+                    break
+
         # LEVEL 1: Exact Product Code Match (with attribute refinement for variants)
         if product_code:
             normalized_search_code = self.normalize_code(product_code)
@@ -429,6 +447,68 @@ class VectorStore:
                 result['requires_review'] = True
                 logger.info(f"   [L1] ⚠ Exact code match (first variant, no attribute match): {code_matches[0].get('default_code')}")
                 return result
+
+        # LEVEL 1.5: Base Code Match (for product variants)
+        # If exact code didn't match, try matching as base code
+        if product_code:
+            normalized_search_code = self.normalize_code(product_code)
+
+            # Extract base code (e.g., SDS025 from SDS025A)
+            base_code_match = re.match(r'^([A-Z]+\d{3,4})', normalized_search_code)
+            if base_code_match:
+                base_code = base_code_match.group(1)
+                logger.debug(f"   [L1.5] Base code variant search: '{base_code}'")
+
+                # Find all products that start with this base code
+                variant_matches = []
+                for product in self.products_data:
+                    db_code = self.normalize_code(product.get('default_code', ''))
+                    if db_code and db_code.startswith(base_code):
+                        variant_matches.append(product)
+
+                if len(variant_matches) > 0:
+                    logger.info(f"   [L1.5] Found {len(variant_matches)} variants for base code {base_code}")
+
+                    # Use attributes to select best variant
+                    if product_name and len(variant_matches) > 1:
+                        search_attrs = self.extract_attributes(product_name)
+
+                        best_variant = None
+                        best_score = 0.0
+
+                        for product in variant_matches:
+                            product_text = f"{product.get('name', '')} {product.get('display_name', '')}"
+                            product_attrs = self.extract_attributes(product_text)
+                            attr_score = self._calculate_attribute_similarity(search_attrs, product_attrs)
+
+                            if attr_score > best_score:
+                                best_score = attr_score
+                                best_variant = product
+
+                        if best_variant and best_score >= 0.4:  # Lower threshold for variants
+                            result['match'] = best_variant
+                            result['confidence'] = 0.85 + (best_score * 0.15)  # 85-100%
+                            result['method'] = 'base_code_variant'
+                            result['requires_review'] = best_score < 0.7
+                            logger.info(f"   [L1.5] ✓ Base code variant match: {best_variant.get('default_code')} (attr: {best_score:.0%})")
+                            return result
+
+                    # If only one variant or no good attribute match, return first variant
+                    if len(variant_matches) == 1:
+                        result['match'] = variant_matches[0]
+                        result['confidence'] = 0.95
+                        result['method'] = 'base_code_single'
+                        result['requires_review'] = False
+                        logger.info(f"   [L1.5] ✓ Base code match (single variant): {variant_matches[0].get('default_code')}")
+                        return result
+                    elif len(variant_matches) > 1:
+                        # Multiple variants but no good attribute match - needs review
+                        result['match'] = variant_matches[0]
+                        result['confidence'] = 0.70
+                        result['method'] = 'base_code_ambiguous'
+                        result['requires_review'] = True
+                        logger.warning(f"   [L1.5] ⚠ Base code match (ambiguous - {len(variant_matches)} variants): {variant_matches[0].get('default_code')}")
+                        return result
 
         # LEVEL 2: Fuzzy Product Code Match (handle typos)
         if product_code:
@@ -531,8 +611,44 @@ class VectorStore:
                     result['method'] = 'low_confidence_name'
                     logger.info(f"   [L4] ⚠ Low confidence name match ({result['confidence']:.0%})")
 
-        # LEVEL 5: No reliable match found
-        logger.warning(f"   [L5] ✗ No reliable match found for: {product_name or product_code}")
+        # LEVEL 5: AI Semantic Matching (fallback for difficult cases)
+        logger.debug(f"   [L5] Attempting AI semantic matching...")
+        try:
+            from ai_product_matcher import AIProductMatcher
+            ai_matcher = AIProductMatcher()
+
+            # Get relaxed candidates for AI evaluation
+            candidates = ai_matcher.get_relaxed_candidates(
+                self,
+                product_name or "",
+                product_code,
+                max_candidates=10
+            )
+
+            if candidates:
+                # Prepare product for AI matching
+                search_product = {
+                    'name': product_name or "",
+                    'code': product_code or "",
+                    'specifications': ""  # Could extract from product_name if needed
+                }
+
+                # Let AI decide the best match
+                ai_result = ai_matcher.match_product(search_product, candidates)
+
+                if ai_result:
+                    result['match'] = ai_result['product']
+                    result['confidence'] = ai_result['confidence']
+                    result['method'] = 'ai_semantic_match'
+                    result['reasoning'] = ai_result.get('reasoning', '')
+                    result['requires_review'] = ai_result.get('requires_review', True)
+                    logger.info(f"   [L5] ✓ AI semantic match: {ai_result['product'].get('default_code')} ({result['confidence']:.0%})")
+                    return result
+        except Exception as e:
+            logger.debug(f"   [L5] AI matching unavailable or failed: {e}")
+
+        # LEVEL 6: No reliable match found
+        logger.warning(f"   [L6] ✗ No reliable match found for: {product_name or product_code}")
         result['method'] = 'no_match'
         result['requires_review'] = True
 

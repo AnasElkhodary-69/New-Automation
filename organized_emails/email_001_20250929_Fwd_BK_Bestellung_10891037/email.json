@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "collected_at": "2025-09-29T23:47:37.126179",
+    "email_id": "9090",
+    "mailbox": "INBOX",
+    "index": 1
+  },
+  "content": {
+    "subject": "Fwd: B+K_Bestellung_10891037",
+    "sender": "Karim Elouahabi <k.el@sds-print.com>",
+    "recipients": [
+      "Karim Elouahabi <order@sds-print.com>"
+    ],
+    "date": "Fri, 19 Sep 2025 16:25:32 +0800",
+    "body_text": "Neue Bestellung von B&K war im Spam Ordner.\r\nVon meinem iPhone gesendet\r\n\r\nAnfang der weitergeleiteten Nachricht:\r\n\r\n> Von: Sophia Deser <sophia.deser@bk-international.com>\r\n> Datum: 18. September 2025 um 14:26:15 GMT+8\r\n> An: order@sds-print.com\r\n> Betreff: B+K_Bestellung_10891037\r\n> \r\n> ﻿\r\n",
+    "body_html": "<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body dir=\"auto\">Neue Bestellung von B&amp;K war im Spam Ordner.<br id=\"lineBreakAtBeginningOfSignature\"><div dir=\"ltr\">Von meinem iPhone gesendet</div><div dir=\"ltr\"><br>Anfang der weitergeleiteten Nachricht:<br><br></div><blockquote type=\"cite\"><div dir=\"ltr\"><b>Von:</b> Sophia Deser &lt;sophia.deser@bk-international.com&gt;<br><b>Datum:</b> 18. September 2025 um 14:26:15 GMT+8<br><b>An:</b> order@sds-print.com<br><b>Betreff:</b> <b>B+K_Bestellung_10891037</b><br><br></div></blockquote><blockquote type=\"cite\"><div dir=\"ltr\">﻿</div></blockquote></body></html><html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=us-ascii\"></head><body dir=\"auto\"><blockquote type=\"cite\"><div dir=\"ltr\"></div></blockquote></body></html>",
+    "attachments": [
+      {
+        "filename": "B+K_Bestellung_10891037.pdf",
+        "filepath": "order-emails\\attachments\\20250929_234737_1062\\BK_Bestellung_10891037.pdf",
+        "content_type": "application/pdf"
+      }
+    ]
+  }
+}

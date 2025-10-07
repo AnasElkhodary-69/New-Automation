@@ -12,6 +12,14 @@ import logging
 from typing import Dict, List, Optional, Any
 from utils.step_logger import StepLogger
 
+# Import enhanced extraction (if available)
+try:
+    from fix_extraction import fix_product_alignment, validate_extraction
+    ENHANCED_EXTRACTION = True
+except ImportError:
+    ENHANCED_EXTRACTION = False
+    logger.warning("Enhanced extraction not available - using standard extraction")
+
 logger = logging.getLogger(__name__)
 
 
@@ -61,6 +69,21 @@ class EmailProcessor:
             # Step 3: Extract entities and key information
             logger.info("[AI] [3/9] Extracting entities...")
             entities = self._extract_entities(email)
+
+            # Apply enhanced extraction fixes if available
+            if ENHANCED_EXTRACTION:
+                entities = fix_product_alignment(entities)
+                validation = validate_extraction(entities)
+
+                if not validation['valid']:
+                    logger.warning(f"   [WARN] Extraction validation issues: {', '.join(validation['issues'])}")
+
+                # Log validation stats
+                logger.info(f"   [STATS] Products: {validation['stats'].get('total_products', 0)}, "
+                           f"With codes: {validation['stats'].get('products_with_codes', 0)}, "
+                           f"With quantities: {validation['stats'].get('products_with_quantities', 0)}, "
+                           f"With prices: {validation['stats'].get('products_with_prices', 0)}")
+
             entity_count = sum(1 for k, v in entities.items() if v and k not in ['urgency_level', 'sentiment'])
             logger.info(f"   [OK] Extracted {entity_count} entity types")
 

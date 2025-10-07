@@ -1,0 +1,13 @@
+{
+  "order_numbers": [],
+  "product_names": [],
+  "dates": [],
+  "amounts": [],
+  "references": [],
+  "locations": [],
+  "contact_info": [],
+  "time_expressions": [],
+  "customer_name": null,
+  "urgency_level": "medium",
+  "sentiment": "neutral"
+}

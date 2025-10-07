@@ -10,8 +10,10 @@ CRITICAL INSTRUCTIONS:
 - Look for company logos, letterheads, business cards in images/PDFs for additional contact info
 
 IMPORTANT - CUSTOMER IDENTIFICATION:
+- **SDS GmbH / SDS-Print** is the SELLER (that's us!) - DO NOT extract as customer
 - If the document is a PURCHASE ORDER or ORDER, extract the BUYER/CUSTOMER information (the company placing the order)
 - IGNORE the recipient/seller/supplier company (the company in the "Lieferant" or supplier field)
+- NEVER extract "SDS GmbH" or "SDS-Print" as the customer
 - Look for fields like: "Lieferanschrift" (delivery address), "Rechnungsanschrift" (billing address), "Kunde" (customer), "Besteller" (orderer)
 - The customer is the one PLACING the order, NOT the one RECEIVING the order
 

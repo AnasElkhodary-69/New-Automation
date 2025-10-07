@@ -107,11 +107,18 @@ class MistralAgent:
                 with open(intent_prompt_path, 'r', encoding='utf-8') as f:
                     prompts['intent'] = f.read()
 
-            # Load extraction prompt
-            extraction_prompt_path = Path("prompts/extraction_prompt.txt")
-            if extraction_prompt_path.exists():
-                with open(extraction_prompt_path, 'r', encoding='utf-8') as f:
+            # Load extraction prompt - prefer V2 if available
+            extraction_v2_path = Path("prompts/extraction_prompt_v2.txt")
+            extraction_v1_path = Path("prompts/extraction_prompt.txt")
+
+            if extraction_v2_path.exists():
+                with open(extraction_v2_path, 'r', encoding='utf-8') as f:
                     prompts['extraction'] = f.read()
+                logger.info("   Using extraction_prompt_v2.txt (structured extraction)")
+            elif extraction_v1_path.exists():
+                with open(extraction_v1_path, 'r', encoding='utf-8') as f:
+                    prompts['extraction'] = f.read()
+                logger.info("   Using extraction_prompt.txt (legacy)")
 
         except Exception as e:
             logger.error(f"Error loading prompts: {e}")
@@ -662,7 +669,7 @@ Response:
         }
 
     def _parse_entity_response(self, response_text: str) -> Dict:
-        """Parse Mistral's entity extraction response (with product_attributes support)"""
+        """Parse Mistral's entity extraction response (supports both V1 and V2 formats)"""
         try:
             import re
 
@@ -680,6 +687,12 @@ Response:
                 if json_match:
                     result = json.loads(json_match.group())
                     logger.debug(f"Parsed entities: {result}")
+
+                    # Check if this is V2 structured format
+                    if 'customer_info' in result and 'products' in result:
+                        logger.info("   Detected V2 structured format - converting to legacy format")
+                        return self._convert_v2_to_legacy(result)
+
                     return result
             except json.JSONDecodeError as e:
                 # Log the specific JSON error for debugging
@@ -736,6 +749,50 @@ Response:
             'amounts': [],
             'references': []
         }
+
+    def _convert_v2_to_legacy(self, v2_data: Dict) -> Dict:
+        """
+        Convert V2 structured format to legacy format for backward compatibility
+
+        Args:
+            v2_data: V2 format with customer_info and products objects
+
+        Returns:
+            Legacy format with separate arrays
+        """
+        entities = {
+            # Customer info
+            'customer_name': v2_data.get('customer_info', {}).get('name', ''),
+            'company_name': v2_data.get('customer_info', {}).get('company', ''),
+            'customer_emails': [v2_data.get('customer_info', {}).get('email', '')] if v2_data.get('customer_info', {}).get('email') else [],
+            'phone_numbers': [v2_data.get('customer_info', {}).get('phone', '')] if v2_data.get('customer_info', {}).get('phone') else [],
+            'addresses': [v2_data.get('customer_info', {}).get('address', '')] if v2_data.get('customer_info', {}).get('address') else [],
+
+            # Order info
+            'order_numbers': [v2_data.get('order_info', {}).get('order_number', '')] if v2_data.get('order_info', {}).get('order_number') else [],
+            'dates': [v2_data.get('order_info', {}).get('date', '')] if v2_data.get('order_info', {}).get('date') else [],
+            'urgency_level': v2_data.get('order_info', {}).get('urgency', 'medium'),
+            'sentiment': 'neutral',
+
+            # Products - PROPERLY ALIGNED
+            'product_names': [],
+            'product_codes': [],
+            'product_quantities': [],
+            'product_prices': [],
+            'references': [],
+
+            # Store structured products for enhanced matching
+            'products_structured': v2_data.get('products', [])
+        }
+
+        # Extract aligned arrays from product objects
+        for product in v2_data.get('products', []):
+            entities['product_names'].append(product.get('name', ''))
+            entities['product_codes'].append(product.get('code', ''))
+            entities['product_quantities'].append(product.get('quantity', 1))
+            entities['product_prices'].append(product.get('unit_price', 0))
+
+        return entities
 
     def _validate_entity_extraction(self, entities: Dict, original_text: str, retry_count: int) -> bool:
         """

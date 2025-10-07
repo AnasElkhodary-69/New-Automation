@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "collected_at": "2025-09-29T23:48:14.198182",
+    "email_id": "9123",
+    "mailbox": "INBOX",
+    "index": 34
+  },
+  "content": {
+    "subject": "Bestellung (4500060420)",
+    "sender": "\"stefan.rupprecht@schreiner-group.co\" <stefan.rupprecht@schreiner-group.com>",
+    "recipients": [
+      "<order@sds-print.com>"
+    ],
+    "date": "Thu, 25 Sep 2025 13:37:45 +0200",
+    "body_text": "Sehr geehrte Damen und Herren,\r\n\r\nanbei erhalten Sie unsere Bestellung Nr. 4500060420.\r\nWir bitten Sie, die Bestellung sachlich zu kontrollieren und den Besteller\r\ngegebenenfalls auf Fehler hinzuweisen.\r\nFür Fragen zur Bestellung stehen wir Ihnen jederzeit gerne zur Verfügung.\r\nFür die Zusendung der Auftragsbestätigung innerhalb von 3 Arbeitstagen und\r\ndie termingerechte Lieferung bedanken wir uns im Voraus.\r\n\r\nMit freundlichen Grüßen\r\n\r\nStefan Rupprecht\r\n\r\n\r\nSchreiner Group GmbH & Co. KG\r\nBruckmannring 22 · 85764 Oberschleißheim\r\nTel. +49 89 31584-5565, Fax\r\nstefan.rupprecht@schreiner-group.com · www.schreiner-group.de\r\nGF: Roland Schreiner · Sitz: München · Amtsgericht München HRA 53776\r\n\r\npersönlich haftende Gesellschafterin:\r\nSchreiner Group Beteiligungs-GmbH\r\nGeschäftsführer: Roland Schreiner · Sitz: München · Amtsgericht München\r\n\r\n\r\n\r\nDiese E-Mail enthält vertrauliche und/oder rechtlich geschützte\r\nInformationen. Falls Sie nicht der richtige Adressat sind oder diese E-Mail\r\nirrtümlich erhalten haben,\r\ninformieren Sie bitte sofort den Absender und löschen diese E-Mail.\r\nDas unerlaubte Kopieren sowie die unbefugte Weitergabe dieser E-Mail ist\r\nnicht gestattet.\r\n",
+    "body_html": "",
+    "attachments": [
+      {
+        "filename": "Bestellung (4500060420).pdf",
+        "filepath": "order-emails\\attachments\\20250929_234814_7278\\Bestellung 4500060420.pdf",
+        "content_type": "application/pdf"
+      }
+    ]
+  }
+}

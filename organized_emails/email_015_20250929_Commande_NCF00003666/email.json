@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "collected_at": "2025-09-29T23:47:54.048955",
+    "email_id": "9104",
+    "mailbox": "INBOX",
+    "index": 15
+  },
+  "content": {
+    "subject": "Commande N°CF00003666",
+    "sender": "<contact@promesser.com>",
+    "recipients": [
+      "\"'SDS GMBH'\" <order@sds-print.com>"
+    ],
+    "date": "Tue, 23 Sep 2025 10:02:00 +0200",
+    "body_text": "Hello,\r\n\r\nPlease find enclosed the order n CF00003666\r\nPlease wait for another order from us to ship everything.\r\n\r\nBest regards, \r\n\r\nThibaut MALAQUIN\r\nPRO Messer SAS\r\nVisitez notre nouveau site internet www.promesser.com\r\ncontact@promesser.com\r\n03.27.51.99.22\r\n",
+    "body_html": "",
+    "attachments": [
+      {
+        "filename": "Commande CF00003666.pdf",
+        "filepath": "order-emails\\attachments\\20250929_234754_2474\\Commande CF00003666.pdf",
+        "content_type": "application/pdf"
+      }
+    ]
+  }
+}
