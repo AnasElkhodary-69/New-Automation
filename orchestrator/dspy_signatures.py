@@ -248,7 +248,22 @@ DO NOT return SDS GmbH, SDS-Print, or SDS Print Services as the company - these 
 
 5. "specifications": Additional specs (dimensions, color, material, notes)
 
-CRITICAL: ALWAYS extract the specific product code from "Ihre Artikel-Nr." field if present. DO NOT use generic descriptions as codes.
+CRITICAL VALIDATION RULES:
+- ONLY extract if you find a SPECIFIC product code (alphanumeric with letters AND numbers)
+- DO NOT extract generic terms like:
+  * "Klebeband" (adhesive tape)
+  * "Rakel" (squeegee)
+  * "Dichtung" (seal)
+  * "Messer" (blade)
+  * "Folie" (film)
+  * "Anilox"
+  * Any generic product category without a specific code
+- If no specific code found, return empty array []
+- ALWAYS extract the specific product code from "Ihre Artikel-Nr." field if present
+- DO NOT use generic descriptions as codes
+
+VALID codes: "3M851-50-66", "SDS1951", "L1020-685-33" (have letters AND numbers)
+INVALID codes: "Klebeband", "tape", "adhesive", "Rakel" (generic terms only)
 
 Format: [{"name": "3M Cushion Mount Plus", "code": "3M L1020 685 33m", "quantity": 12, "unit_price": 356.00, "specifications": "685mm x 33m"}]"""
     )

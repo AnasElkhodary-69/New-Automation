@@ -7,6 +7,12 @@ Separated from EmailProcessor for better modularity
 
 import logging
 from typing import Dict, List, Optional
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.product_validator import is_valid_product_code, validate_product_codes
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +54,29 @@ class ContextRetriever:
             product_codes = entities.get('product_codes', [])
 
             if product_names:
+                # Validate extracted product codes (reject generic terms)
+                products_to_validate = [
+                    {'code': code, 'name': product_names[i]}
+                    for i, code in enumerate(product_codes) if i < len(product_names)
+                ]
+
+                valid_products, invalid_products = validate_product_codes(products_to_validate)
+
+                # Log rejections
+                if invalid_products:
+                    logger.warning(f"   [VALIDATOR] Rejected {len(invalid_products)} generic terms:")
+                    for prod in invalid_products[:5]:  # Show first 5
+                        logger.warning(f"      - '{prod['code']}': {prod['rejection_reason']}")
+
+                # Update product lists to only include valid ones
+                if valid_products:
+                    product_codes = [p['code'] for p in valid_products]
+                    product_names = [p['name'] for p in valid_products]
+                else:
+                    # All products were invalid
+                    logger.warning(f"   [VALIDATOR] All extracted products were generic terms")
+                    return order_context
+
                 logger.info(f"   [SEARCH] Searching {len(product_names)} products...")
 
                 if self.use_token_matching:

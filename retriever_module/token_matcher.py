@@ -10,6 +10,12 @@ import json
 import logging
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.product_validator import is_valid_product_code, get_code_confidence
 
 logger = logging.getLogger(__name__)
 
@@ -141,6 +147,12 @@ class TokenMatcher:
         if not query:
             return []
 
+        # Validate product code (reject generic terms)
+        is_valid, reason = is_valid_product_code(query)
+        if not is_valid:
+            logger.warning(f"[VALIDATOR] Rejected query: '{query}' - {reason}")
+            return []
+
         # Tokenize query
         query_tokens = self._tokenize(query)
 
@@ -175,6 +187,14 @@ class TokenMatcher:
                 product_copy = product.copy()
                 product_copy['similarity_score'] = score
                 product_copy['match_method'] = 'token_matching'
+
+                # Add confidence score based on match quality
+                match_type = "TOKEN" if score >= 0.75 else "FUZZY"
+                product_copy['confidence'] = get_code_confidence(
+                    product.get('default_code', ''),
+                    match_type
+                )
+
                 scored_products.append((score, product_copy))
 
         # Sort by score (highest first)
@@ -215,6 +235,7 @@ class TokenMatcher:
                 result = product.copy()
                 result['similarity_score'] = 1.0
                 result['match_method'] = 'exact_code'
+                result['confidence'] = get_code_confidence(code, "EXACT")
                 return result
 
         return None
