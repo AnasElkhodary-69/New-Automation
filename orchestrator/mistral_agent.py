@@ -689,7 +689,7 @@ Response:
                     logger.debug(f"Parsed entities: {result}")
 
                     # Check if this is V2 structured format
-                    if 'customer_info' in result and 'products' in result:
+                    if 'customer_info' in result and ('products' in result or 'extracted_products' in result):
                         logger.info("   Detected V2 structured format - converting to legacy format")
                         return self._convert_v2_to_legacy(result)
 
@@ -760,19 +760,21 @@ Response:
         Returns:
             Legacy format with separate arrays
         """
-        entities = {
-            # Customer info
-            'customer_name': v2_data.get('customer_info', {}).get('name', ''),
-            'company_name': v2_data.get('customer_info', {}).get('company', ''),
-            'customer_emails': [v2_data.get('customer_info', {}).get('email', '')] if v2_data.get('customer_info', {}).get('email') else [],
-            'phone_numbers': [v2_data.get('customer_info', {}).get('phone', '')] if v2_data.get('customer_info', {}).get('phone') else [],
-            'addresses': [v2_data.get('customer_info', {}).get('address', '')] if v2_data.get('customer_info', {}).get('address') else [],
+        customer_info = v2_data.get('customer_info', {})
 
-            # Order info
+        entities = {
+            # Customer info - support both formats (singular and array)
+            'customer_name': customer_info.get('contact', customer_info.get('name', '')),
+            'company_name': customer_info.get('company', ''),
+            'customer_emails': customer_info.get('emails', [customer_info.get('email')] if customer_info.get('email') else []),
+            'phone_numbers': customer_info.get('phones', [customer_info.get('phone')] if customer_info.get('phone') else []),
+            'addresses': customer_info.get('addresses', [customer_info.get('address')] if customer_info.get('address') else []),
+
+            # Order info - support both order_info and other_data
             'order_numbers': [v2_data.get('order_info', {}).get('order_number', '')] if v2_data.get('order_info', {}).get('order_number') else [],
-            'dates': [v2_data.get('order_info', {}).get('date', '')] if v2_data.get('order_info', {}).get('date') else [],
-            'urgency_level': v2_data.get('order_info', {}).get('urgency', 'medium'),
-            'sentiment': 'neutral',
+            'dates': v2_data.get('other_data', {}).get('dates', [v2_data.get('order_info', {}).get('date', '')] if v2_data.get('order_info', {}).get('date') else []),
+            'urgency_level': v2_data.get('other_data', {}).get('urgency', v2_data.get('order_info', {}).get('urgency', 'medium')),
+            'sentiment': v2_data.get('other_data', {}).get('sentiment', 'neutral'),
 
             # Products - PROPERLY ALIGNED
             'product_names': [],
@@ -785,12 +787,21 @@ Response:
             'products_structured': v2_data.get('products', [])
         }
 
-        # Extract aligned arrays from product objects
-        for product in v2_data.get('products', []):
-            entities['product_names'].append(product.get('name', ''))
-            entities['product_codes'].append(product.get('code', ''))
-            entities['product_quantities'].append(product.get('quantity', 1))
-            entities['product_prices'].append(product.get('unit_price', 0))
+        # Extract aligned arrays from product objects OR extracted_products
+        if 'extracted_products' in v2_data:
+            # Handle extracted_products format (arrays already structured)
+            extracted = v2_data['extracted_products']
+            entities['product_names'] = extracted.get('product_names', [])
+            entities['product_codes'] = extracted.get('product_codes', [])
+            entities['product_quantities'] = extracted.get('quantities', [])
+            entities['product_prices'] = extracted.get('prices', [])
+        else:
+            # Handle products format (array of objects)
+            for product in v2_data.get('products', []):
+                entities['product_names'].append(product.get('name', ''))
+                entities['product_codes'].append(product.get('code', ''))
+                entities['product_quantities'].append(product.get('quantity', 1))
+                entities['product_prices'].append(product.get('unit_price', 0))
 
         return entities
 

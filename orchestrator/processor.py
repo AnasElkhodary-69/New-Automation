@@ -32,13 +32,25 @@ class EmailProcessor:
 
         Args:
             odoo_connector: Instance of OdooConnector
-            vector_store: Instance of VectorStore
+            vector_store: Instance of VectorStore (used for customer matching)
             ai_agent: Instance of AI Agent (MistralAgent or ClaudeAgent)
         """
         self.odoo = odoo_connector
-        self.vector_store = vector_store
+        self.vector_store = vector_store  # Keep for customer matching
         self.ai_agent = ai_agent
         self.step_logger = StepLogger()
+
+        # Initialize Token Matcher for PRODUCT matching (exact token overlap)
+        try:
+            from retriever_module.token_matcher import TokenMatcher
+            logger.info("Initializing Token Matcher for product matching...")
+            self.token_matcher = TokenMatcher()
+            logger.info("[OK] Token Matcher ready (exact token overlap matching)")
+            self.use_token_matching = True
+        except Exception as e:
+            logger.warning(f"[!] Token Matcher unavailable: {e}")
+            logger.warning("[!] Falling back to VectorStore fuzzy matching")
+            self.use_token_matching = False
 
         logger.info("Email Processor initialized")
 
@@ -366,12 +378,69 @@ class EmailProcessor:
             product_codes = entities.get('product_codes', [])
 
             if product_names:
-                logger.info(f"   [SEARCH] Searching {len(product_names)} products in JSON database...")
-                matched_products = self.vector_store.search_products_batch(
-                    product_names=product_names,
-                    product_codes=product_codes,
-                    threshold=0.6
-                )
+                logger.info(f"   [SEARCH] Searching {len(product_names)} products...")
+
+                if self.use_token_matching:
+                    # HYBRID MATCHING: Try exact code first, then token matching
+                    matched_products = []
+                    for i, product_name in enumerate(product_names):
+                        product_code = product_codes[i] if i < len(product_codes) else None
+                        match = None
+
+                        # STRATEGY 1: Try exact code lookup (100% accurate when exists)
+                        if product_code:
+                            match = self.token_matcher.search_by_code(product_code)
+
+                            if match:
+                                # Exact code match found!
+                                match['match_score'] = 1.0  # 100% confidence for exact code
+                                match['match_method'] = 'exact_code'
+                                match['extracted_product_name'] = product_name
+                                match['requires_review'] = False
+                                logger.info(f"      [{i+1}] {product_code} [EXACT] (100%)")
+
+                        # STRATEGY 2: Token matching if no exact code match
+                        if not match:
+                            # Build query from code + name
+                            query = product_name
+                            if product_code:
+                                query = f"{product_code} {product_name}"
+
+                            # Token-based search
+                            results = self.token_matcher.search(query, top_k=1, min_score=0.5)
+
+                            if results:
+                                match = results[0]
+                                score = match.get('similarity_score', 0)
+
+                                # Add metadata for downstream processing
+                                match['match_score'] = score
+                                match['match_method'] = 'token_matching'
+                                match['extracted_product_name'] = product_name
+                                match['requires_review'] = score < 0.80
+
+                                # Log result with confidence level
+                                code = match.get('default_code', 'N/A')
+                                if score >= 0.80:
+                                    logger.info(f"      [{i+1}] {code} [TOKEN] ({score:.0%})")
+                                elif score >= 0.60:
+                                    logger.info(f"      [{i+1}] {code} [REVIEW] ({score:.0%})")
+                                else:
+                                    logger.warning(f"      [{i+1}] {code} [MANUAL] ({score:.0%})")
+
+                        if match:
+                            matched_products.append(match)
+                        else:
+                            logger.warning(f"      [{i+1}] NO MATCH for '{product_name[:40]}'")
+                else:
+                    # Fallback to VectorStore fuzzy matching
+                    logger.info(f"   [!] Using VectorStore fallback (Token Matcher unavailable)")
+                    matched_products = self.vector_store.search_products_batch(
+                        product_names=product_names,
+                        product_codes=product_codes,
+                        threshold=0.6
+                    )
+
                 order_context['products'] = matched_products
                 logger.info(f"   [OK] Product search complete: {len(matched_products)} matches found")
 
@@ -426,12 +495,71 @@ class EmailProcessor:
             product_codes = entities.get('product_codes', [])
 
             if product_names:
-                matched_products = self.vector_store.search_products_batch(
-                    product_names=product_names,
-                    product_codes=product_codes,
-                    threshold=0.6
-                )
+                logger.info(f"   [SEARCH] Searching {len(product_names)} products...")
+
+                if self.use_token_matching:
+                    # HYBRID MATCHING: Try exact code first, then token matching
+                    matched_products = []
+                    for i, product_name in enumerate(product_names):
+                        product_code = product_codes[i] if i < len(product_codes) else None
+                        match = None
+
+                        # STRATEGY 1: Try exact code lookup (100% accurate when exists)
+                        if product_code:
+                            match = self.token_matcher.search_by_code(product_code)
+
+                            if match:
+                                # Exact code match found!
+                                match['match_score'] = 1.0  # 100% confidence for exact code
+                                match['match_method'] = 'exact_code'
+                                match['extracted_product_name'] = product_name
+                                match['requires_review'] = False
+                                logger.info(f"      [{i+1}] {product_code} [EXACT] (100%)")
+
+                        # STRATEGY 2: Token matching if no exact code match
+                        if not match:
+                            # Build query from code + name
+                            query = product_name
+                            if product_code:
+                                query = f"{product_code} {product_name}"
+
+                            # Token-based search
+                            results = self.token_matcher.search(query, top_k=1, min_score=0.5)
+
+                            if results:
+                                match = results[0]
+                                score = match.get('similarity_score', 0)
+
+                                # Add metadata for downstream processing
+                                match['match_score'] = score
+                                match['match_method'] = 'token_matching'
+                                match['extracted_product_name'] = product_name
+                                match['requires_review'] = score < 0.80
+
+                                # Log result with confidence level
+                                code = match.get('default_code', 'N/A')
+                                if score >= 0.80:
+                                    logger.info(f"      [{i+1}] {code} [TOKEN] ({score:.0%})")
+                                elif score >= 0.60:
+                                    logger.info(f"      [{i+1}] {code} [REVIEW] ({score:.0%})")
+                                else:
+                                    logger.warning(f"      [{i+1}] {code} [MANUAL] ({score:.0%})")
+
+                        if match:
+                            matched_products.append(match)
+                        else:
+                            logger.warning(f"      [{i+1}] NO MATCH for '{product_name[:40]}'")
+                else:
+                    # Fallback to VectorStore fuzzy matching
+                    logger.info(f"   [!] Using VectorStore fallback (Token Matcher unavailable)")
+                    matched_products = self.vector_store.search_products_batch(
+                        product_names=product_names,
+                        product_codes=product_codes,
+                        threshold=0.6
+                    )
+
                 product_context['products'] = matched_products
+                logger.info(f"   [OK] Product search complete: {len(matched_products)} matches found")
 
         except Exception as e:
             logger.error(f"   [ERROR] Error retrieving product context: {e}")
@@ -662,52 +790,80 @@ class EmailProcessor:
             odoo_matches['match_summary']['products_total'] = len(json_products)
 
             if json_products:
-                logger.info(f"   [PRODUCTS] Searching Odoo for {len(json_products)} products...")
+                logger.info(f"   [PRODUCTS] Using matched products from Token Matcher ({len(json_products)} products)...")
 
                 for idx, json_product in enumerate(json_products, 1):
-                    product_code = json_product.get('default_code')
-                    product_name = json_product.get('name')
-                    extracted_name = json_product.get('extracted_product_name', product_name)
+                    # Check if product already has Token Matcher matching results
+                    if json_product.get('match_method') in ['exact_code', 'token_matching']:
+                        # Product was already matched by Token Matcher - use it directly!
+                        odoo_product = {
+                            'id': json_product.get('id'),
+                            'name': json_product.get('name'),
+                            'default_code': json_product.get('default_code'),
+                            'list_price': json_product.get('list_price', 0.0),
+                            'standard_price': json_product.get('standard_price', 0.0)
+                        }
 
-                    logger.info(f"      [{idx}] Searching: {extracted_name[:50]}...")
+                        extracted_name = json_product.get('extracted_product_name', json_product.get('name'))
+                        match_method = json_product.get('match_method')
+                        match_score = json_product.get('match_score', 0)
 
-                    odoo_product = None
+                        logger.info(f"      [{idx}] {json_product.get('default_code', 'N/A')} [{match_method.upper()}] ({match_score:.0%})")
 
-                    # Strategy 1: Search by product code (most reliable)
-                    if product_code:
-                        logger.info(f"          Trying code: '{product_code}'")
-                        products = self.odoo.query_products(product_code=product_code)
-                        if products:
-                            odoo_product = products[0]  # Take first match
-                            logger.info(f"          [OK] Found by code: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
-
-                    # Strategy 2: Search by product name
-                    if not odoo_product and product_name:
-                        logger.info(f"          Trying name: '{product_name[:40]}'")
-                        products = self.odoo.query_products(product_name=product_name)
-                        if products:
-                            odoo_product = products[0]  # Take first match
-                            logger.info(f"          [OK] Found by name: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
-
-                    if odoo_product:
-                        # Store matched product with JSON context
                         odoo_matches['products'].append({
                             'json_product': json_product,
                             'odoo_product': odoo_product,
                             'extracted_name': extracted_name,
-                            'match_method': 'code' if product_code and products else 'name'
+                            'match_method': match_method,
+                            'match_score': match_score
                         })
                         odoo_matches['match_summary']['products_matched'] += 1
+
                     else:
-                        logger.warning(f"          [X] Product not found in Odoo")
-                        odoo_matches['match_summary']['products_failed'] += 1
-                        # Still store the failed match for reference
-                        odoo_matches['products'].append({
-                            'json_product': json_product,
-                            'odoo_product': None,
-                            'extracted_name': extracted_name,
-                            'match_method': None
-                        })
+                        # Fallback: No Token matching - do simple search (backward compatibility)
+                        product_code = json_product.get('default_code')
+                        product_name = json_product.get('name')
+                        extracted_name = json_product.get('extracted_product_name', product_name)
+
+                        logger.info(f"      [{idx}] Searching (no RAG): {extracted_name[:50]}...")
+
+                        odoo_product = None
+
+                        # Strategy 1: Search by product code (most reliable)
+                        if product_code:
+                            logger.info(f"          Trying code: '{product_code}'")
+                            products = self.odoo.query_products(product_code=product_code)
+                            if products:
+                                odoo_product = products[0]  # Take first match
+                                logger.info(f"          [OK] Found by code: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
+
+                        # Strategy 2: Search by product name
+                        if not odoo_product and product_name:
+                            logger.info(f"          Trying name: '{product_name[:40]}'")
+                            products = self.odoo.query_products(product_name=product_name)
+                            if products:
+                                odoo_product = products[0]  # Take first match
+                                logger.info(f"          [OK] Found by name: {odoo_product.get('name')[:50]} (ID: {odoo_product.get('id')})")
+
+                        if odoo_product:
+                            # Store matched product with JSON context
+                            odoo_matches['products'].append({
+                                'json_product': json_product,
+                                'odoo_product': odoo_product,
+                                'extracted_name': extracted_name,
+                                'match_method': 'code' if product_code and products else 'name'
+                            })
+                            odoo_matches['match_summary']['products_matched'] += 1
+                        else:
+                            logger.warning(f"          [X] Product not found in Odoo")
+                            odoo_matches['match_summary']['products_failed'] += 1
+                            # Still store the failed match for reference
+                            odoo_matches['products'].append({
+                                'json_product': json_product,
+                                'odoo_product': None,
+                                'extracted_name': extracted_name,
+                                'match_method': None
+                            })
             else:
                 logger.info(f"   [PRODUCTS] No products from JSON to search in Odoo")
 
