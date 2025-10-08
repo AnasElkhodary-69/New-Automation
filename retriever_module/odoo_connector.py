@@ -341,23 +341,74 @@ class OdooConnector:
 
             # Strategy 2: Search by product code (highest priority)
             elif product_code:
-                # Try all normalized variations of the product code
-                variations = self._normalize_search_term(product_code)
+                # Normalize the product code for better matching
+                # Examples: "3M L1020 685 33m" -> ["L1020-685-33", "L1020 685 33", "L1020-685", "685"]
+                normalized_codes = self._normalize_product_code(product_code)
 
-                for variation in variations:
-                    domain = [['default_code', 'ilike', variation]]
-                    products = self.models.execute_kw(
-                        self.db, self.uid, self.password,
-                        'product.template', 'search_read',
-                        [domain],
-                        {
-                            'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
-                            'limit': 20
-                        }
-                    )
-                    if products:
-                        logger.info(f"Found {len(products)} product(s) by code variation '{variation}'")
-                        break
+                # Try exact match first
+                domain = [['default_code', '=', product_code]]
+                products = self.models.execute_kw(
+                    self.db, self.uid, self.password,
+                    'product.template', 'search_read',
+                    [domain],
+                    {
+                        'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                        'limit': 20
+                    }
+                )
+
+                if products:
+                    logger.info(f"Found {len(products)} product(s) by exact code '{product_code}'")
+                else:
+                    # Try normalized variations
+                    for norm_code in normalized_codes:
+                        domain = [['default_code', 'ilike', norm_code]]
+                        products = self.models.execute_kw(
+                            self.db, self.uid, self.password,
+                            'product.template', 'search_read',
+                            [domain],
+                            {
+                                'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                                'limit': 20
+                            }
+                        )
+
+                        if products:
+                            logger.info(f"Found {len(products)} product(s) by normalized code '{norm_code}' (from '{product_code}')")
+                            break
+
+                    if not products:
+                        # Try fuzzy matching with original code
+                        domain = [['default_code', 'ilike', product_code]]
+                        products = self.models.execute_kw(
+                            self.db, self.uid, self.password,
+                            'product.template', 'search_read',
+                            [domain],
+                            {
+                                'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                                'limit': 20
+                            }
+                        )
+
+                        if products:
+                            logger.info(f"Found {len(products)} product(s) by fuzzy code match '{product_code}'")
+                        else:
+                            # Try reversed: search for codes that contain the search term
+                            # Strip last char if it's a letter (SDS016E -> SDS016)
+                            if product_code and product_code[-1].isalpha():
+                                truncated = product_code[:-1]
+                                domain = [['default_code', 'ilike', truncated]]
+                                products = self.models.execute_kw(
+                                    self.db, self.uid, self.password,
+                                    'product.template', 'search_read',
+                                    [domain],
+                                    {
+                                        'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                                        'limit': 20
+                                    }
+                                )
+                                if products:
+                                    logger.info(f"Found {len(products)} product(s) by truncated code '{truncated}'")
 
             # Strategy 3: Search by product name with comprehensive fuzzy matching
             elif product_name:

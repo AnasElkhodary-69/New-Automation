@@ -1,0 +1,11 @@
+Index,Filename,Text_Length,OCR_Used,Intent,Confidence,Customer_Extracted,Customer_Odoo_Match,Customer_Odoo_Ref,Customer_Odoo_ID,Products_Count,Products_Matched,Match_Rate,Model_Used,Total_Tokens,Cost_USD,Success
+1,email_100_Proforma Invoice_Kiro Dandaro - 11.09.2025.pdf,947,True,order_inquiry,95%,Ilcho Petkovski,Ilcho Petkovski,N/A,4147,1,0,0%,mistral-small-latest,0,$0.000000,True
+2,email_102_Bestellung_2500257.pdf,1394,True,order_inquiry,95%,SDS GmbH,NOT FOUND,N/A,N/A,1,0,0%,mistral-small-latest,0,$0.000000,True
+3,email_103_best_118091.pdf,1292,True,order_inquiry,95%,SDS GmbH,NOT FOUND,N/A,N/A,1,0,0%,mistral-small-latest,0,$0.000000,True
+4,email_104_Order confirmation 36421.pdf,1040,True,order_inquiry,95%,PrimeBlade Sweden AB,PrimeBlade Sweden AB,N/A,3469,1,0,0%,mistral-small-latest,0,$0.000000,True
+5,email_105_Order confirmation 36422.pdf,1286,True,order_inquiry,95%,SDS GmbH,NOT FOUND,N/A,N/A,4,0,0%,mistral-small-latest,0,$0.000000,True
+6,email_106_167 PC25-1109167 SDS.pdf,700,True,order_inquiry,95%,"Niltor Grup, S.L.U",Niltor Grup S.L.U,N/A,3440,4,0,0%,mistral-small-latest,0,$0.000000,True
+7,email_107_MO108886469_1109.pdf,948,True,payment_inquiry,95%,KIRO DANDARO DOO,NOT FOUND,N/A,N/A,1,0,0%,mistral-small-latest,0,$0.000000,True
+8,email_108_Order confirmatiom_blades - 12.09.2025.pdf,1535,True,order_inquiry,95%,Machine Knives Inc.,Machine Knives Inc.,N/A,3417,4,0,0%,mistral-small-latest,0,$0.000000,True
+9,email_109_Order confirmation_Niltor_blades- 12.09.2025.pdf,986,True,order_inquiry,95%,Niltor Grup S.L,Niltor Grup S.L,N/A,3439,1,0,0%,mistral-small-latest,0,$0.000000,True
+10,email_10_AB Update 1118376 Bestellung Bestellung Nr. 251.PDF,2162,True,order_inquiry,95%,SDS Print Services GmbH,NOT FOUND,N/A,N/A,1,0,0%,mistral-small-latest,0,$0.000000,True

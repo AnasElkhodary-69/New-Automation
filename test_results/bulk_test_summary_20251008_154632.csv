@@ -1,0 +1,4 @@
+Index,Filename,Text_Length,OCR_Used,Intent,Confidence,Customer_Extracted,Customer_Odoo_Match,Customer_Odoo_Ref,Customer_Odoo_ID,Products_Count,Products_Matched,Match_Rate,Model_Used,Total_Tokens,Cost_USD,Success
+1,email_100_Proforma Invoice_Kiro Dandaro - 11.09.2025.pdf,947,True,order_inquiry,95%,Ilcho Petkovski,Ilcho Petkovski,N/A,4147,1,0,0%,mistral-small-latest,0,$0.000000,True
+2,email_102_Bestellung_2500257.pdf,1394,True,order_inquiry,95%,SDS GmbH,SDS GmbH,N/A,3500,1,0,0%,mistral-small-latest,0,$0.000000,True
+3,email_103_best_118091.pdf,1292,True,order_inquiry,95%,SDS GmbH,SDS GmbH,N/A,3500,1,0,0%,mistral-small-latest,0,$0.000000,True

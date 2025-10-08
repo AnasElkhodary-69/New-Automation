@@ -1,0 +1,20 @@
+PDF_Index,PDF_Filename,Product_Index,Extracted_Name,Extracted_Code,Quantity,Price,JSON_Match,JSON_Score,Odoo_Match,Odoo_ID,Odoo_Code
+1,email_100_Proforma Invoice_Kiro Dandaro - 11.09.2025.pdf,1,Duro Seal Bobst 20SIX,SDS016E,2340.0,2.34,105364-545-ORG-SX-BLU / Duro Seal Bobst 20Six HS SPX 1mm,80%,NOT FOUND,N/A,N/A
+2,email_102_Bestellung_2500257.pdf,1,SDS Anilox Cleaner M,SDS Anilox Cleaner M,4.0,68.37,SDS Anilox Cleaner M,100%,NOT FOUND,N/A,N/A
+3,email_103_best_118091.pdf,1,Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black,DR1-000300,246.0,3.85,105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco,50%,NOT FOUND,N/A,N/A
+4,email_104_Order confirmation 36421.pdf,1,"650 30x0,25 1,7/0,125",15264,500.0,0.8,NOT FOUND,N/A,NOT FOUND,N/A,N/A
+5,email_105_Order confirmation 36422.pdf,1,"40x0,25 1664mm",15267 625,100.0,1.635,NOT FOUND,N/A,NOT FOUND,N/A,N/A
+5,email_105_Order confirmation 36422.pdf,2,"25x0,20 1194mm",15268 625,100.0,0.88,NOT FOUND,N/A,NOT FOUND,N/A,N/A
+5,email_105_Order confirmation 36422.pdf,3,"40x0,20 1069mm",14894 825,100.0,3.42,NOT FOUND,N/A,NOT FOUND,N/A,N/A
+5,email_105_Order confirmation 36422.pdf,4,"40x0,20 1567mm",15102 825,50.0,4.91,NOT FOUND,N/A,NOT FOUND,N/A,N/A
+6,email_106_167 PC25-1109167 SDS.pdf,1,3M Cushion Mount Plus L1520,L1520-457,7.0,0.0,3MCushion Mount Plus L1520 1372mm x 23m,50%,NOT FOUND,N/A,N/A
+6,email_106_167 PC25-1109167 SDS.pdf,2,3M Cushion Mount Plus L1020,L1020-457,3.0,0.0,3MCushion Mount Plus L1020 1372mm x 23m,50%,NOT FOUND,N/A,N/A
+6,email_106_167 PC25-1109167 SDS.pdf,3,3M Cushion Mount Plus L1320,L1320-457,1.0,0.0,3MCushion Mount Plus L1320 1372mm x 23m,50%,NOT FOUND,N/A,N/A
+6,email_106_167 PC25-1109167 SDS.pdf,4,3M Cushion Mount Plus L1720,L1720-457,3.0,0.0,3MCushion Mount Plus L1720 1372mm x 23m,50%,NOT FOUND,N/A,N/A
+7,email_107_MO108886469_1109.pdf,1,Product,PRO5726,0.0,0.0,NOT FOUND,N/A,NOT FOUND,N/A,N/A
+8,email_108_Order confirmatiom_blades - 12.09.2025.pdf,1,Doctor Blade Carbon,C-40-25-RPE-L1664,100.0,3.3,"Doctor Blade Carbon 40x 0,25 mm / RPE / L1664 mm",75%,NOT FOUND,N/A,N/A
+8,email_108_Order confirmatiom_blades - 12.09.2025.pdf,2,Doctor Blade Carbon,C-25-20-RPE-L1194,100.0,1.66,"Doctor Blade Carbon 25x0,20 mm / RPE / L1194 mm ",75%,NOT FOUND,N/A,N/A
+8,email_108_Order confirmatiom_blades - 12.09.2025.pdf,3,Doctor Blade Gold,G-40-20-RPE-L1069,100.0,6.81,"Doctor Blade Gold 40x0,20 mm / RPE / L1069 mm",75%,NOT FOUND,N/A,N/A
+8,email_108_Order confirmatiom_blades - 12.09.2025.pdf,4,Doctor Blade Gold,G-40-20-RPE-L1567,100.0,10.05,"Doctor Blade Gold 40x0,20 mm / RPE / L1567 mm",75%,NOT FOUND,N/A,N/A
+9,email_109_Order confirmation_Niltor_blades- 12.09.2025.pdf,1,Doctor Blade Carbon,C-30-25-125-17,200.0,1.9,"Doctor Blade Carbon 17x0,25 mm / 3° / L464 mm",50%,NOT FOUND,N/A,N/A
+10,email_10_AB Update 1118376 Bestellung Bestellung Nr. 251.PDF,1,"1256QS, 999 undefiniert, 33/50, neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt",30073284,75.0,25.25,"ORAFIX® 1256QS / neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt / 50mm x 33m",58%,NOT FOUND,N/A,N/A

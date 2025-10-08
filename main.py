@@ -120,30 +120,34 @@ class RAGEmailSystem:
         Returns:
             Configuration dictionary
         """
-        # TODO: Implement configuration loading from JSON file
         logger.info(f"Loading configuration from {self.config_path}")
-        return {}
+        # Configuration is handled by individual modules through config_loader
+        # This method exists for future centralized config if needed
+        return {
+            'initialized': True,
+            'config_path': self.config_path
+        }
 
     def _initialize_modules(self):
         """Initialize all system modules"""
         logger.info("Initializing system modules...")
 
-        # TODO: Initialize email reader with IMAP configuration
+        # Initialize email reader (loads config from config_loader)
         self.email_reader = EmailReader()
 
-        # TODO: Initialize email sender with SMTP configuration
+        # Initialize email sender (loads config from config_loader)
         self.email_sender = EmailSender()
 
-        # TODO: Initialize Odoo connector with database configuration
+        # Initialize Odoo connector (loads config from environment)
         self.odoo_connector = OdooConnector()
 
-        # TODO: Initialize vector store (FAISS/Qdrant)
+        # Initialize vector store (uses JSON databases)
         self.vector_store = VectorStore()
 
-        # TODO: Initialize Mistral AI agent for RAG processing
+        # Initialize Mistral AI agent (loads config from environment)
         self.ai_agent = MistralAgent()
 
-        # TODO: Initialize email processor with all dependencies
+        # Initialize email processor with all dependencies
         self.processor = EmailProcessor(
             odoo_connector=self.odoo_connector,
             vector_store=self.vector_store,
@@ -509,26 +513,9 @@ class RAGEmailSystem:
 
         print("\n" + "="*100 + "\n")
 
-    # def _send_response(self, original_email: Dict, response_text: str):
-    #     """
-    #     Send email response (COMMENTED OUT - Currently logging only)
-    #
-    #     Args:
-    #         original_email: Original email to reply to
-    #         response_text: Generated response text
-    #     """
-    #     logger.info("Sending email response...")
-    #
-    #     try:
-    #         self.email_sender.send_reply(
-    #             to_address=original_email.get('from'),
-    #             subject=f"Re: {original_email.get('subject')}",
-    #             body=response_text,
-    #             in_reply_to=original_email.get('message_id')
-    #         )
-    #         logger.info("Response sent successfully")
-    #     except Exception as e:
-    #         logger.error(f"Failed to send response: {str(e)}")
+    # NOTE: We do NOT send automated email responses
+    # The system processes emails and creates orders, but does not reply via SMTP
+    # Email responses should be handled manually or through Odoo's communication module
 
     def run_continuous(self, interval_seconds: int = 60):
         """
@@ -540,9 +527,6 @@ class RAGEmailSystem:
         import time
 
         logger.info(f"Starting continuous mode (checking every {interval_seconds} seconds)")
-
-        # TODO: Implement continuous monitoring with proper error handling
-        # and graceful shutdown
 
         try:
             while True:
@@ -557,17 +541,27 @@ class RAGEmailSystem:
         """Cleanup and shutdown all modules"""
         logger.info("Shutting down RAG Email System...")
 
-        # TODO: Implement proper cleanup for all modules
-        # Close database connections, email connections, etc.
+        # Close all module connections gracefully
+        try:
+            if self.email_reader:
+                self.email_reader.close()
+                logger.info("Email reader closed")
+        except Exception as e:
+            logger.error(f"Error closing email reader: {e}")
 
-        if self.email_reader:
-            self.email_reader.close()
+        try:
+            if self.odoo_connector:
+                self.odoo_connector.close()
+                logger.info("Odoo connector closed")
+        except Exception as e:
+            logger.error(f"Error closing Odoo connector: {e}")
 
-        if self.odoo_connector:
-            self.odoo_connector.close()
-
-        if self.vector_store:
-            self.vector_store.close()
+        try:
+            if self.vector_store:
+                self.vector_store.close()
+                logger.info("Vector store closed")
+        except Exception as e:
+            logger.error(f"Error closing vector store: {e}")
 
         logger.info("Shutdown complete")
 
