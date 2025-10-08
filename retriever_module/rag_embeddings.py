@@ -28,7 +28,7 @@ class ProductRAG:
     def __init__(
         self,
         products_json: str = "odoo_database/odoo_products.json",
-        model_name: str = "all-MiniLM-L6-v2",
+        model_name: str = "Alibaba-NLP/gte-modernbert-base",
         index_path: str = "odoo_database/product_faiss.index",
         metadata_path: str = "odoo_database/product_metadata.pkl"
     ):
@@ -38,7 +38,8 @@ class ProductRAG:
         Args:
             products_json: Path to products JSON file
             model_name: Sentence Transformers model name
-                - all-MiniLM-L6-v2: Fast, lightweight, PyTorch-only (384 dim) - DEFAULT
+                - Alibaba-NLP/gte-modernbert-base: State-of-the-art retrieval (768 dim) - DEFAULT [0.92-0.97 confidence]
+                - all-MiniLM-L6-v2: Fast, lightweight baseline (384 dim) [0.82-0.98 confidence]
                 - paraphrase-multilingual-mpnet-base-v2: Multilingual/German (768 dim)
             index_path: Path to save/load FAISS index
             metadata_path: Path to save/load product metadata
@@ -110,9 +111,13 @@ class ProductRAG:
             # Create rich text representation for better semantic matching
             text_parts = []
 
-            # Product code (highest weight)
+            # Product code (HIGHEST PRIORITY - repeat 3x for emphasis)
             if product.get('default_code'):
-                text_parts.append(f"Code: {product['default_code']}")
+                code = product['default_code']
+                # Repeat code multiple times to increase matching weight
+                text_parts.append(f"{code} {code} {code}")
+                text_parts.append(f"Code: {code}")
+                text_parts.append(f"Product Code: {code}")
 
             # Product name
             if product.get('name'):
