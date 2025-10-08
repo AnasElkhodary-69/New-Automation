@@ -7,7 +7,8 @@
       "Bash(python:*)",
       "Bash(awk:*)",
       "Bash(pip install:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nComplete 158 email test with comprehensive analysis and enhancement roadmap\n\nTest Results:\n- 158/158 emails processed successfully\n- Customer Extraction: 100/100 (0 SDS false positives)\n- Product Matching: 100/100 (203/203 products matched)\n- Intent Classification: 97.5/100\n- Overall System Score: 89.2/100\n\nKey Achievements:\n- DSPy enhancement eliminated all SDS false positives (was 30%, now 0%)\n- 100% product matching rate maintained\n- System is production ready\n\nAdded Files:\n- DSPy integration (dspy_config.py, dspy_signatures.py, dspy_intent_classifier.py, dspy_entity_extractor.py)\n- Context retriever and Odoo matcher modules\n- Order creator module (disabled by default)\n- Comprehensive analysis scripts\n- Test results and enhancement roadmap\n- Missing customers list (37 unique companies)\n\nAnalysis Reports:\n- TEST_RESULTS_SUMMARY.md - Executive summary\n- ENHANCEMENT_ROADMAP.md - Detailed improvement plan\n- MISSING_CUSTOMERS.md - List of 37 customers to add to Odoo\n- comprehensive_analysis_report.txt - Full technical analysis\n- full_test_results.txt - Quick results summary\n\nArchitecture Changes:\n- Modular processor with DSPy integration\n- Multi-level product matching (JSON + Odoo + Token)\n- Enhanced customer extraction (ignores SDS as customer)\n- Organized test scripts and debug tools in archive/\n\nStatus: Production Ready (main blocker: add missing customers to Odoo)\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []
