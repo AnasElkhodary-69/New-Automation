@@ -56,3 +56,21 @@ htmlcov/
 *_config_local.json
 *.pem
 *.key
+
+# BERT Models and Caches (large files - deploy separately)
+models/
+.bert_cache/
+*.npy
+checkpoints/
+
+# Training logs and debug scripts
+training_log.txt
+analyze_generic_terms.py
+check_email_images.py
+check_ocr_content.py
+debug_single_email.py
+fetch_and_show_raw_emails.py
+generic_terms_analysis.txt
+show_detailed_process.py
+test_token_matcher_validation.py
+view_email_details.py

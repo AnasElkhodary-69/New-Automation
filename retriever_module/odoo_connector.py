@@ -564,84 +564,47 @@ class OdooConnector:
             logger.error(f"Error executing custom query: {str(e)}")
             return []
 
-    def create_sale_order(self, customer_id: int, order_lines: List[Dict], order_data: Optional[Dict] = None) -> Optional[Dict]:
+    def create_sale_order(self, order_data: Dict) -> Optional[int]:
         """
         Create a sales order in Odoo
 
         Args:
-            customer_id: Odoo customer ID (res.partner)
-            order_lines: List of order line dictionaries with:
-                - product_id: Odoo product ID
-                - quantity: Product quantity
-                - price_unit: Unit price (optional, uses product price if not provided)
-                - name: Product description (optional)
-            order_data: Optional additional order data:
-                - date_order: Order date
-                - note: Order notes
-                - client_order_ref: Customer reference
+            order_data: Order dictionary with:
+                - partner_id: Odoo customer ID (required)
+                - order_line: List of order line tuples in format (0, 0, {line_data})
+                - note: Order notes (optional)
+                - client_order_ref: Customer reference (optional)
+                - date_order: Order date (optional)
 
         Returns:
-            Dictionary with created order info or None if failed
+            Order ID if successful, None if failed
         """
-        logger.info(f"Creating sale order for customer {customer_id} with {len(order_lines)} line(s)")
+        partner_id = order_data.get('partner_id')
+        order_lines = order_data.get('order_line', [])
+
+        logger.info(f"Creating sale order for customer {partner_id} with {len(order_lines)} line(s)")
 
         try:
             # Prepare order values
             order_vals = {
-                'partner_id': customer_id,
+                'partner_id': partner_id,
                 'state': 'draft',  # Create as draft
             }
 
-            # Add optional order data
-            if order_data:
-                if order_data.get('date_order'):
-                    order_vals['date_order'] = order_data['date_order']
-                if order_data.get('note'):
-                    order_vals['note'] = order_data['note']
-                if order_data.get('client_order_ref'):
-                    order_vals['client_order_ref'] = order_data['client_order_ref']
+            # Add optional fields from order_data
+            if order_data.get('note'):
+                order_vals['note'] = order_data['note']
+            if order_data.get('client_order_ref'):
+                order_vals['client_order_ref'] = order_data['client_order_ref']
+            if order_data.get('date_order'):
+                order_vals['date_order'] = order_data['date_order']
 
-            # Prepare order lines
-            line_vals = []
-            for idx, line in enumerate(order_lines, 1):
-                product_id = line.get('product_id')
-                product_template_id = line.get('product_template_id')
-                quantity = line.get('quantity', 1)
-                price_unit = line.get('price_unit')
-                product_name = line.get('name')
+            # Add order lines (already formatted as tuples)
+            order_vals['order_line'] = order_lines
 
-                # Check if we have either product_id or product_template_id
-                if not product_id and not product_template_id:
-                    logger.warning(f"Skipping line {idx}: Missing both product_id and product_template_id")
-                    continue
-
-                line_data = {
-                    'product_uom_qty': quantity,
-                }
-
-                # Use product_template_id if product_id is not available
-                # (Some Odoo instances have no product.product records)
-                if product_id:
-                    line_data['product_id'] = product_id
-                elif product_template_id:
-                    line_data['product_template_id'] = product_template_id
-                    logger.debug(f"Using product_template_id {product_template_id} for line {idx}")
-
-                # Add price if provided
-                if price_unit is not None:
-                    line_data['price_unit'] = price_unit
-
-                # Add custom description if provided
-                if product_name:
-                    line_data['name'] = product_name
-
-                line_vals.append((0, 0, line_data))
-
-            if not line_vals:
-                logger.error("No valid order lines to create")
+            if not order_lines:
+                logger.error("No order lines provided")
                 return None
-
-            order_vals['order_line'] = line_vals
 
             # Create the order
             logger.info(f"Sending create request to Odoo...")
@@ -653,34 +616,38 @@ class OdooConnector:
 
             if order_id:
                 logger.info(f"[OK] Sale order created successfully! Order ID: {order_id}")
-
-                # Fetch created order details
-                order = self.models.execute_kw(
-                    self.db, self.uid, self.password,
-                    'sale.order', 'read',
-                    [order_id],
-                    {'fields': ['name', 'id', 'partner_id', 'amount_total', 'state', 'date_order']}
-                )
-
-                if order:
-                    order_info = order[0]
-                    logger.info(f"   Order Number: {order_info.get('name')}")
-                    logger.info(f"   Amount Total: €{order_info.get('amount_total', 0):.2f}")
-                    logger.info(f"   State: {order_info.get('state')}")
-
-                    return {
-                        'id': order_id,
-                        'name': order_info.get('name'),
-                        'amount_total': order_info.get('amount_total'),
-                        'state': order_info.get('state'),
-                        'date_order': order_info.get('date_order'),
-                        'line_count': len(order_lines)
-                    }
+                return order_id
 
             return None
 
         except Exception as e:
             logger.error(f"Error creating sale order: {str(e)}", exc_info=True)
+            return None
+
+    def get_sale_order(self, order_id: int) -> Optional[Dict]:
+        """
+        Get sales order details by ID
+
+        Args:
+            order_id: Order ID
+
+        Returns:
+            Order dictionary or None
+        """
+        try:
+            order = self.models.execute_kw(
+                self.db, self.uid, self.password,
+                'sale.order', 'read',
+                [order_id],
+                {'fields': ['name', 'id', 'partner_id', 'amount_total', 'state', 'date_order']}
+            )
+
+            if order:
+                return order[0]
+            return None
+
+        except Exception as e:
+            logger.error(f"Error getting sale order: {str(e)}")
             return None
 
     def close(self):

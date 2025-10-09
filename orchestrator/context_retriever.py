@@ -20,17 +20,36 @@ logger = logging.getLogger(__name__)
 class ContextRetriever:
     """Handles context retrieval from JSON and Odoo databases"""
 
-    def __init__(self, vector_store, token_matcher=None):
+    def __init__(self, vector_store, token_matcher=None, hybrid_matcher=None):
         """
         Initialize Context Retriever
 
         Args:
             vector_store: VectorStore instance for fallback matching
-            token_matcher: TokenMatcher instance for product matching (optional)
+            token_matcher: TokenMatcher instance for product matching (optional, deprecated)
+            hybrid_matcher: HybridMatcher instance for BERT+Token matching (recommended)
         """
         self.vector_store = vector_store
+
+        # Prefer hybrid matcher over token matcher
+        if hybrid_matcher is not None:
+            self.matcher = hybrid_matcher
+            self.use_hybrid_matching = True
+            self.use_token_matching = False
+            logger.info("   [INIT] Using HybridMatcher (BERT + Token)")
+        elif token_matcher is not None:
+            self.matcher = token_matcher
+            self.use_hybrid_matching = False
+            self.use_token_matching = True
+            logger.info("   [INIT] Using TokenMatcher only")
+        else:
+            self.matcher = None
+            self.use_hybrid_matching = False
+            self.use_token_matching = False
+            logger.info("   [INIT] No matcher available, using VectorStore fallback")
+
+        # Keep reference for backward compatibility
         self.token_matcher = token_matcher
-        self.use_token_matching = token_matcher is not None
 
     def retrieve_order_context_json(self, entities: Dict) -> Dict:
         """
@@ -79,8 +98,8 @@ class ContextRetriever:
 
                 logger.info(f"   [SEARCH] Searching {len(product_names)} products...")
 
-                if self.use_token_matching:
-                    # HYBRID MATCHING: Try exact code first, then token matching
+                if self.use_token_matching or self.use_hybrid_matching:
+                    # HYBRID MATCHING: Try exact code first, then semantic+token matching
                     matched_products = []
                     for i, product_name in enumerate(product_names):
                         product_code = product_codes[i] if i < len(product_codes) else None
@@ -88,7 +107,7 @@ class ContextRetriever:
 
                         # STRATEGY 1: Try exact code lookup (100% accurate when exists)
                         if product_code:
-                            match = self.token_matcher.search_by_code(product_code)
+                            match = self.matcher.search_by_code(product_code)
 
                             if match:
                                 # Exact code match found!
@@ -98,30 +117,36 @@ class ContextRetriever:
                                 match['requires_review'] = False
                                 logger.info(f"      [{i+1}] {product_code} [EXACT] (100%)")
 
-                        # STRATEGY 2: Token matching if no exact code match
+                        # STRATEGY 2: Hybrid/Token matching if no exact code match
                         if not match:
                             # Build query from code + name
                             query = product_name
                             if product_code:
                                 query = f"{product_code} {product_name}"
 
-                            # Token-based search
-                            results = self.token_matcher.search(query, top_k=1, min_score=0.5)
+                            # Search using matcher (hybrid or token)
+                            results = self.matcher.search(query, top_k=1, min_score=0.5)
 
                             if results:
                                 match = results[0]
-                                score = match.get('similarity_score', 0)
+                                # Get score (different field names for hybrid vs token)
+                                score = match.get('final_score') or match.get('similarity_score', 0)
 
                                 # Add metadata for downstream processing
                                 match['match_score'] = score
-                                match['match_method'] = 'token_matching'
+                                if self.use_hybrid_matching:
+                                    match['match_method'] = 'hybrid_bert_token'
+                                else:
+                                    match['match_method'] = 'token_matching'
                                 match['extracted_product_name'] = product_name
                                 match['requires_review'] = score < 0.80
 
                                 # Log result with confidence level
-                                code = match.get('default_code', 'N/A')
+                                code = match.get('default_code') or match.get('product_code', 'N/A')
+                                method_label = 'HYBRID' if self.use_hybrid_matching else 'TOKEN'
+
                                 if score >= 0.80:
-                                    logger.info(f"      [{i+1}] {code} [TOKEN] ({score:.0%})")
+                                    logger.info(f"      [{i+1}] {code} [{method_label}] ({score:.0%})")
                                 elif score >= 0.60:
                                     logger.info(f"      [{i+1}] {code} [REVIEW] ({score:.0%})")
                                 else:
@@ -206,26 +231,26 @@ class ContextRetriever:
             product_codes = entities.get('product_codes', [])
 
             if product_names:
-                if self.use_token_matching:
-                    # Use token matching
+                if self.use_token_matching or self.use_hybrid_matching:
+                    # Use hybrid/token matching
                     matched_products = []
                     for i, product_name in enumerate(product_names):
                         product_code = product_codes[i] if i < len(product_codes) else None
 
                         if product_code:
-                            match = self.token_matcher.search_by_code(product_code)
+                            match = self.matcher.search_by_code(product_code)
                             if match:
-                                match['match_score'] = 1.0
+                                match['match_score'] = match.get('final_score') or match.get('similarity_score') or 1.0
                                 match['match_method'] = 'exact_code'
                                 matched_products.append(match)
                                 continue
 
-                        # Try token matching
+                        # Try hybrid/token matching
                         query = product_name
                         if product_code:
                             query = f"{product_code} {product_name}"
 
-                        results = self.token_matcher.search(query, top_k=3, min_score=0.5)
+                        results = self.matcher.search(query, top_k=3, min_score=0.5)
                         matched_products.extend(results)
                 else:
                     # Fallback to VectorStore

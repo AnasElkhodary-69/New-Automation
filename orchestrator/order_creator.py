@@ -60,7 +60,7 @@ class OrderCreator:
                 }
 
             # Filter to only products found in Odoo
-            valid_products = [p for p in product_matches if p.get('odoo_product')]
+            valid_products = [p for p in product_matches if p.get('found')]
             if not valid_products:
                 logger.error("   [ERROR] Cannot create order: No valid products found in Odoo")
                 return {
@@ -75,33 +75,33 @@ class OrderCreator:
             order_lines = []
 
             # Get extracted quantities and prices
-            product_quantities = entities.get('product_quantities', [])
-            product_prices = entities.get('product_prices', [])
+            quantities = entities.get('quantities', [])
+            prices = entities.get('prices', [])
             product_names = entities.get('product_names', [])
 
-            # Build maps for easy lookup
+            # Build maps for easy lookup (use product code as key)
             quantity_map = {}
             price_map = {}
 
             for idx, prod_name in enumerate(product_names):
-                if idx < len(product_quantities):
-                    quantity_map[prod_name] = product_quantities[idx]
-                if idx < len(product_prices):
-                    price_map[prod_name] = product_prices[idx]
+                if idx < len(quantities):
+                    quantity_map[prod_name] = quantities[idx]
+                if idx < len(prices):
+                    price_map[prod_name] = prices[idx]
 
-            for match in valid_products:
-                json_product = match.get('json_product', {})
-                odoo_product = match.get('odoo_product', {})
+            for idx, match in enumerate(valid_products):
+                product_id = match.get('id')
+                product_name = match.get('name', 'Unknown')
+                product_code = match.get('code', 'N/A')
 
-                product_id = odoo_product.get('id')
-                product_name = odoo_product.get('name', 'Unknown')
-                extracted_name = json_product.get('extracted_product_name', '')
+                # Try to find corresponding extracted product name
+                extracted_name = product_names[idx] if idx < len(product_names) else ''
 
                 # Get quantity (from extraction or default to 1)
-                quantity = quantity_map.get(extracted_name, 1)
+                quantity = quantity_map.get(extracted_name, quantities[idx] if idx < len(quantities) else 1)
 
-                # Get price (from extraction or from Odoo)
-                unit_price = price_map.get(extracted_name, odoo_product.get('list_price', 0))
+                # Get price (from extraction or query from Odoo product)
+                unit_price = price_map.get(extracted_name, prices[idx] if idx < len(prices) else 0)
 
                 # Create order line
                 order_line = (0, 0, {
@@ -111,7 +111,7 @@ class OrderCreator:
                 })
 
                 order_lines.append(order_line)
-                logger.info(f"      + {product_name[:50]} (Qty: {quantity}, Price: EUR {unit_price:.2f})")
+                logger.info(f"      + [{product_code}] {product_name[:40]} (Qty: {quantity}, Price: EUR {unit_price:.2f})")
 
             # Prepare order data
             order_data = {

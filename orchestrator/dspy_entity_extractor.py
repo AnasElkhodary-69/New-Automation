@@ -229,8 +229,11 @@ class EntityExtractor:
             r'(\d{2,4}\s*\*\s*\d{1,3}(?:[.,]\d{1,2})?\s*mm)',    # 25 * 0,20 mm
             r'(\d{2,4}\s*\*\s*\d{1,3}(?:[.,]\d{1,2})?)',         # 25 * 0,20, 25*0.20
 
+            # Format: Länge NNNNmm or Length NNNNmm
+            r'(?:Länge|Length|L)[\s:]*(\d{3,5}\s*mm)',           # Länge 1335mm, Length 1328mm, L 1335mm
+
             # Format: NNNmm (single dimension)
-            r'(\d{3,4}\s*mm)',                                    # 457mm, 685mm
+            r'(\d{3,4}\s*mm)',                                    # 457mm, 685mm, 1335mm
         ]
 
         updated_count = 0
@@ -239,37 +242,57 @@ class EntityExtractor:
             if i >= len(product_names):
                 break
 
-            # Search for this product code in email text
-            # Look for code followed by product info, then capture next 200 chars
-            code_pattern = rf'{re.escape(code)}[^\n]*(?:\n([^\n]{{0,200}}))?'
+            current_name = product_names[i]
+            dimension_found = None
+
+            # Strategy 1: Search near product CODE in email text
+            code_pattern = rf'{re.escape(code)}[^\n]*(?:\n([^\n]{{0,300}}))?'
             code_match = re.search(code_pattern, email_text, re.IGNORECASE)
 
             if code_match:
                 # Get the text after the product line (next line)
                 next_line_text = code_match.group(1) if code_match.lastindex >= 1 else ""
-
-                # Also check the same line
                 same_line_text = code_match.group(0)
                 search_text = same_line_text + " " + (next_line_text or "")
 
                 # Try to find dimension in this text
-                dimension_found = None
                 for dim_pattern in dimension_patterns:
                     dim_match = re.search(dim_pattern, search_text, re.IGNORECASE)
                     if dim_match:
                         dimension_found = dim_match.group(1).strip()
+                        logger.debug(f"   [POST] Found dimension near code '{code}': {dimension_found}")
                         break
 
-                if dimension_found:
-                    # Check if dimension is already in product name
-                    current_name = product_names[i]
-                    if dimension_found.lower() not in current_name.lower():
-                        # Add dimension to product name
-                        product_names[i] = f"{current_name} {dimension_found}"
-                        logger.info(f"   [POST] Added dimension to '{code}': {dimension_found}")
-                        updated_count += 1
-                    else:
-                        logger.debug(f"   [POST] Dimension already present for '{code}'")
+            # Strategy 2: If not found, search near product NAME (first 30 chars)
+            if not dimension_found:
+                # Extract key words from product name (e.g., "Doctor Blade", "Cushion Mount")
+                name_keywords = current_name.split()[:4]  # First 4 words
+                if len(name_keywords) >= 2:
+                    name_search = ' '.join(name_keywords[:3])  # Use first 3 words
+                    name_pattern = rf'{re.escape(name_search)}[^\n]*(?:\n([^\n]{{0,300}}))?'
+                    name_match = re.search(name_pattern, email_text, re.IGNORECASE)
+
+                    if name_match:
+                        next_line_text = name_match.group(1) if name_match.lastindex >= 1 else ""
+                        same_line_text = name_match.group(0)
+                        search_text = same_line_text + " " + (next_line_text or "")
+
+                        # Try to find dimension
+                        for dim_pattern in dimension_patterns:
+                            dim_match = re.search(dim_pattern, search_text, re.IGNORECASE)
+                            if dim_match:
+                                dimension_found = dim_match.group(1).strip()
+                                logger.debug(f"   [POST] Found dimension near name '{name_search}': {dimension_found}")
+                                break
+
+            # Add dimension to product name if found and not already present
+            if dimension_found:
+                if dimension_found.lower() not in current_name.lower():
+                    product_names[i] = f"{current_name} {dimension_found}"
+                    logger.info(f"   [POST] Added dimension to '{code}': {dimension_found}")
+                    updated_count += 1
+                else:
+                    logger.debug(f"   [POST] Dimension already present for '{code}'")
 
         if updated_count > 0:
             logger.info(f"Post-processing complete: Updated {updated_count}/{len(product_codes)} products with dimensions")

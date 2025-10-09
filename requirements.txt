@@ -16,9 +16,14 @@ litellm>=1.0.0
 # ============================================================
 # Database & Storage
 # ============================================================
-# Vector storage and embeddings (optional - not currently used)
+# Sentence transformers for BERT embeddings (used by HybridMatcher)
+sentence-transformers>=2.2.2
+
+# PyTorch (required by sentence-transformers)
+torch>=2.0.0
+
+# Vector storage (optional - for future use)
 # faiss-cpu>=1.7.4
-# sentence-transformers>=2.2.2
 
 # ============================================================
 # Document Processing
@@ -95,6 +100,9 @@ mypy>=1.5.0
 # Notes
 # ============================================================
 # 1. Install with: pip install -r requirements.txt
-# 2. For GPU support (optional): pip install faiss-gpu (instead of faiss-cpu)
+# 2. For GPU support with PyTorch (recommended for BERT):
+#    Visit https://pytorch.org/get-started/locally/ for GPU-specific installation
 # 3. Tesseract and Poppler paths must be configured in .env file
 # 4. Minimum Python version: 3.9+
+# 5. BERT model (Alibaba-NLP/gte-modernbert-base) will be downloaded automatically
+#    on first run (~500MB) and cached locally

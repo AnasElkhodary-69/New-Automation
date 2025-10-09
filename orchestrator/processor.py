@@ -25,7 +25,7 @@ class EmailProcessor:
     """Main processor for coordinating email handling workflow"""
 
     # Feature toggles (set to True to enable)
-    ENABLE_ORDER_CREATION = False  # Set to True to automatically create orders in Odoo
+    ENABLE_ORDER_CREATION = True  # Set to True to automatically create orders in Odoo
     # Note: Email responses are NOT sent via SMTP - we don't use automated email replies
 
     def __init__(self, odoo_connector, vector_store, ai_agent):
@@ -52,19 +52,46 @@ class EmailProcessor:
             'total_tokens': 0
         }
 
-        # Initialize Token Matcher for product matching
+        # Initialize Hybrid Matcher (BERT + Token) for product matching
+        hybrid_matcher = None
         token_matcher = None
         try:
-            from retriever_module.token_matcher import TokenMatcher
-            logger.info("Initializing Token Matcher for product matching...")
-            token_matcher = TokenMatcher()
-            logger.info("[OK] Token Matcher ready (exact + token overlap matching)")
+            from retriever_module.hybrid_matcher import HybridMatcher
+            logger.info("Initializing Hybrid Matcher (BERT + Token) for product matching...")
+            # Check if we should use BERT (enabled by default, can be disabled via environment variable)
+            use_bert = os.getenv('USE_BERT', 'true').lower() == 'true'
+
+            hybrid_matcher = HybridMatcher(
+                products_json_path="odoo_database/odoo_products.json",
+                use_bert=use_bert,
+                bert_model_name="Alibaba-NLP/gte-modernbert-base"
+            )
+
+            if use_bert:
+                logger.info("[INFO] BERT semantic matching enabled (set USE_BERT=false to disable)")
+            else:
+                logger.info("[INFO] BERT semantic matching disabled (token matching only)")
+            logger.info("[OK] Hybrid Matcher ready (BERT semantic + Token dimension matching)")
         except Exception as e:
-            logger.warning(f"[!] Token Matcher unavailable: {e}")
-            logger.warning("[!] Falling back to VectorStore fuzzy matching")
+            logger.warning(f"[!] Hybrid Matcher initialization failed: {e}")
+            logger.warning("[!] Falling back to Token Matcher...")
+
+            # Fallback to Token Matcher only
+            try:
+                from retriever_module.token_matcher import TokenMatcher
+                logger.info("Initializing Token Matcher for product matching...")
+                token_matcher = TokenMatcher()
+                logger.info("[OK] Token Matcher ready (exact + token overlap matching)")
+            except Exception as e2:
+                logger.warning(f"[!] Token Matcher unavailable: {e2}")
+                logger.warning("[!] Falling back to VectorStore fuzzy matching")
 
         # Initialize modular components
-        self.context_retriever = ContextRetriever(vector_store, token_matcher)
+        self.context_retriever = ContextRetriever(
+            vector_store,
+            token_matcher=token_matcher,
+            hybrid_matcher=hybrid_matcher
+        )
         self.odoo_matcher = OdooMatcher(odoo_connector)
         self.order_creator = OrderCreator(odoo_connector)
 
