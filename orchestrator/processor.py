@@ -102,6 +102,13 @@ class EmailProcessor:
         """
         logger.info("Processing email...")
 
+        # Initialize step logging for this email
+        email_id = email.get('message_id', email.get('id', 'unknown'))
+        self.step_logger.start_email_log(email_id)
+
+        # Log step 1: Email parsing
+        self.step_logger.log_step_1_email_parsing(email)
+
         result = {
             'success': False,
             'intent': {},
@@ -125,8 +132,8 @@ class EmailProcessor:
 
             # Log step 2: Entity Extraction
             self.step_logger.log_step_2_entity_extraction(
-                result['entities'],
-                email.get('body', '')
+                result['intent'],
+                result['entities']
             )
 
             # STEP 3: Retrieve context (with logging)

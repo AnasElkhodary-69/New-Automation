@@ -1,33 +1,26 @@
 ```json
 {
   "customer_info": {
-    "name": "Saad/Karim",
-    "company": "CI SEALS SA (PTY) LTD",
-    "email": "sales@cisealssa.co.za",
-    "phone": "031-5002859/0604767661",
-    "address": "10 EDENWOOD, 18 VUTHELA PLACE, KINDLEWOOD ESTATE, MOUNTEGDECOMBE 4156"
+    "name": "Michael Grünau",
+    "company": "folian gmbh",
+    "email": "gruenau@folian.com",
+    "phone": "+49 3831 4828-15",
+    "address": "Feldstraße 30, 18442 Groß Lüdershagen (Stralsund)"
   },
   "products": [
     {
-      "name": "SDS 115D MIRAFLEX",
-      "code": "SDS 115D",
-      "quantity": 1500,
-      "unit_price": 1.40,
-      "specifications": "GREY"
-    },
-    {
-      "name": "SDS 1264 ALPHAFLEX",
-      "code": "SDS 1264",
-      "quantity": 100,
-      "unit_price": 1.40,
-      "specifications": "GREY"
+      "name": "Klebeband",
+      "code": "",
+      "quantity": 1,
+      "unit_price": 0,
+      "specifications": "1 Palette (80x160cm), 146 kg"
     }
   ],
   "order_info": {
-    "order_number": "106227",
-    "date": "2025-09-03",
+    "order_number": "20203609",
+    "date": "2020-12-08",
     "urgency": "medium",
-    "notes": "PLEASE REVIEW PRICE"
+    "notes": "Abholung am 8.12.2020"
   }
 }
 ```

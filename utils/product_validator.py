@@ -27,6 +27,16 @@ GENERIC_TERMS = {
     'quote', 'angebot',
 }
 
+# Known brand/product prefixes that override generic term filtering
+VALID_PREFIXES = {
+    'sds',      # SDS Anilox Cleaner, etc.
+    '3m',       # 3M products
+    'rpr-',     # RPR codes
+    'l1020',    # L1020 series
+    'e1320',    # E1320 series
+    'e1520',    # E1520 series
+}
+
 def is_valid_product_code(code: str) -> tuple[bool, str]:
     """
     Validate if string is a valid product code
@@ -45,6 +55,12 @@ def is_valid_product_code(code: str) -> tuple[bool, str]:
         return False, f"Too short ({len(code_clean)} chars)"
 
     code_lower = code_clean.lower()
+
+    # Check if code starts with a known valid prefix (overrides generic term filtering)
+    has_valid_prefix = any(code_lower.startswith(prefix) for prefix in VALID_PREFIXES)
+
+    if has_valid_prefix:
+        return True, f"Valid brand prefix detected"
 
     # Check against generic terms (exact match)
     if code_lower in GENERIC_TERMS:
