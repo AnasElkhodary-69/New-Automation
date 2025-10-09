@@ -456,8 +456,8 @@ class RAGEmailSystem:
         if products:
             # Get AI-extracted quantities and prices (already aligned with product_names by Mistral)
             product_names = entities.get('product_names', [])
-            product_quantities = entities.get('product_quantities', [])
-            product_prices = entities.get('product_prices', [])
+            product_quantities = entities.get('quantities', [])
+            product_prices = entities.get('prices', [])
 
             # Build maps for easy lookup
             quantity_map = {}

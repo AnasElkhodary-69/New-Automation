@@ -113,8 +113,8 @@ class StepLogger:
                 'count': len(entities.get('product_names', [])),
                 'product_names': entities.get('product_names', []),
                 'product_codes': entities.get('product_codes', []),
-                'quantities': entities.get('product_quantities', []),
-                'prices': entities.get('product_prices', [])
+                'quantities': entities.get('quantities', []),
+                'prices': entities.get('prices', [])
             },
             'other_data': {
                 'dates': entities.get('dates', []),

@@ -129,18 +129,88 @@ class ExtractProducts(dspy.Signature):
         desc="""JSON array of products. For each product, extract in this priority order:
 
 1. "code": Extract from "Ihre Artikel-Nr." (Your Article No.) FIRST. If not found, use "Artikel-Nr." Examples: "3M L1020 685 33m", "SDS1951", "L1020-685"
-2. "name": Full product name with specifications. Examples: "3M Cushion Mount Plus L1020 685mm", "Duro Seal Bobst"
+2. "name": Full product name with specifications INCLUDING DIMENSIONS IN THE NAME. Examples: "3M Cushion Mount Plus L1020 685mm x 23m", "Cushion Mount Plus E1320 gelb 457x23 mm"
 3. "quantity": Integer quantity ordered
 4. "unit_price": Float price per unit in EUR
 5. "specifications": Additional specs like dimensions, color, material
 
-CRITICAL RULES:
+🔴 CRITICAL DIMENSION EXTRACTION RULES - READ CAREFULLY:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**RULE 1: ALWAYS SCAN FOR DIMENSIONS IN THE EMAIL/PDF**
+- Look for patterns like: "457x23", "685mm", "760x23 mm", "1372mm x 23m"
+- Dimensions are often near product names in tables or line items
+- Common formats: "NNNxNN mm", "NNN mm x NN m", "NNN x NN"
+
+**RULE 2: INCLUDE DIMENSIONS IN THE PRODUCT NAME FIELD**
+- ✅ CORRECT: "Cushion Mount Plus E1320 gelb 457x23 mm"
+- ❌ WRONG: "Cushion Mount Plus E1320 gelb" (missing dimensions!)
+- ✅ CORRECT: "3M L1020 685mm x 33m"
+- ❌ WRONG: "3M L1020" (missing dimensions!)
+
+**RULE 3: DIMENSIONS HAVE HIGHEST PRIORITY**
+- Even if color/variant is in the description, dimensions are MORE important
+- Without dimensions, the product cannot be matched correctly
+- A product WITHOUT dimensions is INCOMPLETE
+
+**RULE 4: WHERE TO FIND DIMENSIONS - CRITICAL!**
+- ⚠️ **DIMENSIONS ARE OFTEN ON THE NEXT LINE AFTER THE PRODUCT NAME**
+  Example format in PDF:
+  ```
+  RPR-123965 Cushion Mount Plus E1320 gelb  ...
+  457x23 mm    ← LOOK FOR DIMENSIONS HERE!
+  ```
+- In PDF tables: usually in "Beschreibung" (Description) column or line below
+- After product name (same line): "Cushion Mount Plus E1320 gelb 457x23 mm"
+- On next line after product: Look for patterns like "457x23 mm", "760x23 mm"
+- In separate dimension columns: Width, Height, Length
+- In specifications field
+
+**⚠️ MULTI-LINE PRODUCT ENTRIES:**
+When you see a product code (e.g., RPR-123965) followed by a product name, ALWAYS check the NEXT LINE for dimensions!
+The next line often contains ONLY dimensions like "457x23 mm" or "760x23 mm".
+
+**RULE 5: TRANSLATE PRODUCT NAMES TO ENGLISH**
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ **CRITICAL**: Many emails are in German or other languages. The product database is in English.
+
+**YOU MUST:**
+- Translate ALL product descriptive terms (materials, colors, categories) to English
+- Use standard English industry terminology for product names
+- This ensures matching with the English product database
+
+**DO NOT TRANSLATE:**
+- Brand names
+- Model numbers and product codes
+- Dimensions and measurements
+- Technical specifications and units
+
+If you extract a non-English product name, it will NOT match the database even if it's the same product!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXAMPLES WITH DIMENSIONS (including multi-line format):
+
+**Example 1: Multi-line format (COMMON IN PDFs)**
+PDF Text:
+```
+RPR-123965 Cushion Mount Plus E1320 gelb 3 Stück 165,00 /  Stück 495,00
+457x23 mm
+```
+✅ CORRECT: {"name": "Cushion Mount Plus E1320 gelb 457x23 mm", "code": "RPR-123965", "quantity": 3, "unit_price": 165.00, "specifications": "yellow, 457x23 dimensions"}
+
+**Example 2: Same line format**
+✅ {"name": "Cushion Mount Plus E1520 viol. 760x23 mm", "code": "RPR-123969", "quantity": 3, "unit_price": 275.00, "specifications": "violet"}
+✅ {"name": "3M L1020 685mm x 33m", "code": "L1020-685-33", "quantity": 12, "unit_price": 356.00, "specifications": "685mm width, 33m length"}
+
+❌ BAD EXAMPLES (missing dimensions):
+❌ {"name": "Cushion Mount Plus E1320 gelb", "code": "RPR-123965", ...}  ← NO DIMENSIONS!
+❌ {"name": "Cushion Mount Plus E1520 viol.", "code": "RPR-123968", ...}  ← NO DIMENSIONS!
+
+OTHER RULES:
 - ALWAYS prioritize "Ihre Artikel-Nr." over "Beschreibung" (description)
 - Extract the FULL code including numbers and dimensions (e.g., "3M L1020 685 33m", not just "PLATTENKLEBEBAND")
-- For 3M products, include width/length (e.g., "L1020 685 33m")
-- If multiple codes exist for one product, prefer the supplier's code ("Ihre Artikel-Nr.")
-
-Example: [{"name": "3M Cushion Mount Plus L1020 685mm", "code": "L1020-685-33", "quantity": 12, "unit_price": 356.00, "specifications": "33m length"}]"""
+- If multiple codes exist for one product, prefer the supplier's code ("Ihre Artikel-Nr.")"""
     )
 
 
@@ -232,19 +302,47 @@ DO NOT return SDS GmbH, SDS-Print, or SDS Print Services as the company - these 
     products_json: str = dspy.OutputField(
         desc="""JSON array of products. Extract each with:
 
-1. "code": Product code - PRIORITY ORDER:
-   a) "Ihre Artikel-Nr." (Your Article No.) - HIGHEST PRIORITY (supplier's code)
-   b) "Artikel-Nr." or "Art.-No." (Article No.)
-   c) Any product code near the item
+⚠️ **CRITICAL FIRST**: TRANSLATE product names to ENGLISH but KEEP ALL DIMENSIONS!
+- Translate: material names, colors, product categories (German→English)
+- MUST KEEP UNCHANGED: dimensions (25x0,20, 457x23, etc.), technical specs (RPE, mm), brand names, numbers
+- Example: "Rakelmesser Edelstahl Gold 25x0,20 RPE" → "Doctor Blade Stainless Steel Gold 25x0,20 RPE"
 
-   Examples: "3M L1020 685 33m", "SDS1951", "L1020-685-33", "KB-WK-MW-B3"
+1. "code": Product code ONLY (short alphanumeric identifier)
+   - PRIORITY: "Ihre Artikel-Nr." (Your Article No.) if available
+   - Otherwise: The SHORT product code (E1320, L1020-685, RPR-123965, etc.)
+   - ❌ DO NOT PUT FULL DESCRIPTIONS HERE
+   - ❌ DO NOT include colors, dimensions, or long names in the code field
 
-2. "name": Full product name with specifications
-   Examples: "3M Cushion Mount Plus L1020 685mm", "Duro Seal Bobst", "PLATTENKLEBEBAND"
+   ✅ GOOD: "E1320", "L1020-685", "RPR-123965", "SDS1951"
+   ❌ BAD: "E1320 3M Cushion Mount Plus gelb 457mm 3.0Rl" (this is a full description, NOT a code!)
 
-3. "quantity": Integer quantity ordered (from "Bestellmenge" or quantity field)
+2. "name": COMPLETE product name with ALL specifications
+   - Must include: Brand + Product Line + Model Number + Color + Dimensions
+   - This should be TRANSLATED to English
+   - Include ALL details from the product description
 
-4. "unit_price": Float unit price in EUR (from "Preis/PE" or price field)
+   ✅ GOOD: "3M Cushion Mount Plus E1320 Yellow 457mm"
+   ✅ GOOD: "3M Cushion Mount Plus E1720 Green 350mm"
+   ❌ BAD: "3M Cushion Mount Plus" (missing model, color, dimensions!)
+
+3. "quantity": Integer quantity ordered
+   - Look for fields: "Bestellmenge", "Menge", "Quantity", "Qty", "Amount"
+   - Extract the NUMERIC value only (ignore units like "Stück", "St", "pcs", "m", "Rl")
+   - Examples:
+     * "500,000 Stück" → 500
+     * "12 pcs" → 12
+     * "3.0 Rl" → 3
+     * "250 m" → 250
+   - If quantity not found, use 0
+
+4. "unit_price": Float unit price in EUR
+   - Look for fields: "Preis/PE", "Preis je Einheit", "Unit Price", "Price", "EUR"
+   - Extract the NUMERIC value only (ignore currency symbols)
+   - Examples:
+     * "1,85 EUR" → 1.85
+     * "€356.00" → 356.0
+     * "125,50" → 125.5
+   - If price not found, use 0.0
 
 5. "specifications": Additional specs (dimensions, color, material, notes)
 
@@ -265,7 +363,15 @@ CRITICAL VALIDATION RULES:
 VALID codes: "3M851-50-66", "SDS1951", "L1020-685-33" (have letters AND numbers)
 INVALID codes: "Klebeband", "tape", "adhesive", "Rakel" (generic terms only)
 
-Format: [{"name": "3M Cushion Mount Plus", "code": "3M L1020 685 33m", "quantity": 12, "unit_price": 356.00, "specifications": "685mm x 33m"}]"""
+⚠️ IMPORTANT: You MUST extract quantity and unit_price for EVERY product! Do not leave these fields empty or null.
+
+Example format:
+[
+  {"code": "RPR-123965", "name": "3M Cushion Mount Plus E1320 Yellow 457x23 mm", "quantity": 12, "unit_price": 356.50, "specifications": "Yellow, 457x23mm"},
+  {"code": "E1520-760", "name": "3M Cushion Mount Plus E1520 Violet 760x23 mm", "quantity": 5, "unit_price": 425.00, "specifications": "Violet, 760x23mm"}
+]
+
+⚠️ Remember: Extract quantities from "Menge" or "Bestellmenge" column, and prices from "Preis/PE" or "Preis je Einheit" column!"""
     )
 
     # Order info (as nested JSON)

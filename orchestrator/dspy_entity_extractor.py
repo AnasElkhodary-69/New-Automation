@@ -68,6 +68,9 @@ class EntityExtractor:
         try:
             logger.debug(f"Extracting entities from email ({len(email_text)} chars)")
 
+            # DEBUG: Log first 3000 chars to check for dimensions
+            logger.debug(f"Email text preview (first 3000 chars):\n{email_text[:3000]}")
+
             # Call DSPy module
             result = self.extractor(email_text=email_text)
 
@@ -76,12 +79,22 @@ class EntityExtractor:
             products = self._parse_json(result.products_json, [])
             order_info = self._parse_json(result.order_info_json, {})
 
+            # DEBUG: Log what DSPy returned
+            logger.debug(f"[DEBUG] DSPy returned {len(products)} products")
+            logger.debug(f"[DEBUG] Raw products_json: {result.products_json[:500]}")
+            if products:
+                logger.debug(f"[DEBUG] First product keys: {list(products[0].keys())}")
+                logger.debug(f"[DEBUG] First product: {products[0]}")
+
             # Convert to legacy format for backward compatibility
             entities = self._convert_to_legacy_format(
                 customer_info,
                 products,
                 order_info
             )
+
+            # POST-PROCESSING: Extract dimensions from email text and add to product names
+            entities = self._post_process_add_dimensions(entities, email_text)
 
             # Log summary
             product_count = len(entities.get('product_names', []))
@@ -142,6 +155,10 @@ class EntityExtractor:
         quantities = [p.get('quantity', 0) for p in products]
         prices = [p.get('unit_price', 0.0) for p in products]
 
+        # DEBUG
+        logger.debug(f"[CONVERT] Extracted {len(quantities)} quantities: {quantities}")
+        logger.debug(f"[CONVERT] Extracted {len(prices)} prices: {prices}")
+
         # Build legacy format
         return {
             # Customer info
@@ -173,6 +190,94 @@ class EntityExtractor:
                 'order': order_info
             }
         }
+
+    def _post_process_add_dimensions(self, entities: Dict, email_text: str) -> Dict:
+        """
+        Post-process extracted entities to add dimensions from email text.
+
+        Handles multi-line PDF format where dimensions appear on line after product:
+        RPR-123965 Cushion Mount Plus E1320 gelb ...
+        457x23 mm
+
+        Args:
+            entities: Extracted entities dict
+            email_text: Full email text including attachments
+
+        Returns:
+            Updated entities with dimensions added to product names
+        """
+        import re
+
+        product_codes = entities.get('product_codes', [])
+        product_names = entities.get('product_names', [])
+
+        if not product_codes or not product_names:
+            return entities
+
+        logger.debug(f"Post-processing: Looking for dimensions for {len(product_codes)} products")
+
+        # Pattern to find dimensions in various formats
+        dimension_patterns = [
+            # Format with technical specs (RPE, etc.) - HIGHEST PRIORITY
+            r'(\d{2,4}\s*[xX*]\s*\d{1,3}(?:[.,]\d{1,2})?\s*(?:mm)?\s*(?:RPE|RPS|mm))',  # 25 * 0,20 RPE, 25x0,20 mm RPE
+
+            # Format: NNNxNN mm or NNN x NN mm
+            r'(\d{2,4}\s*[xX]\s*\d{1,3}(?:[.,]\d{1,2})?\s*mm)',  # 457x23 mm, 25x0.20 mm
+            r'(\d{2,4}\s*[xX]\s*\d{1,3}(?:[.,]\d{1,2})?)',       # 457x23, 25x0.20
+
+            # Format: NN * N,NN (asterisk with comma/dot)
+            r'(\d{2,4}\s*\*\s*\d{1,3}(?:[.,]\d{1,2})?\s*mm)',    # 25 * 0,20 mm
+            r'(\d{2,4}\s*\*\s*\d{1,3}(?:[.,]\d{1,2})?)',         # 25 * 0,20, 25*0.20
+
+            # Format: NNNmm (single dimension)
+            r'(\d{3,4}\s*mm)',                                    # 457mm, 685mm
+        ]
+
+        updated_count = 0
+
+        for i, code in enumerate(product_codes):
+            if i >= len(product_names):
+                break
+
+            # Search for this product code in email text
+            # Look for code followed by product info, then capture next 200 chars
+            code_pattern = rf'{re.escape(code)}[^\n]*(?:\n([^\n]{{0,200}}))?'
+            code_match = re.search(code_pattern, email_text, re.IGNORECASE)
+
+            if code_match:
+                # Get the text after the product line (next line)
+                next_line_text = code_match.group(1) if code_match.lastindex >= 1 else ""
+
+                # Also check the same line
+                same_line_text = code_match.group(0)
+                search_text = same_line_text + " " + (next_line_text or "")
+
+                # Try to find dimension in this text
+                dimension_found = None
+                for dim_pattern in dimension_patterns:
+                    dim_match = re.search(dim_pattern, search_text, re.IGNORECASE)
+                    if dim_match:
+                        dimension_found = dim_match.group(1).strip()
+                        break
+
+                if dimension_found:
+                    # Check if dimension is already in product name
+                    current_name = product_names[i]
+                    if dimension_found.lower() not in current_name.lower():
+                        # Add dimension to product name
+                        product_names[i] = f"{current_name} {dimension_found}"
+                        logger.info(f"   [POST] Added dimension to '{code}': {dimension_found}")
+                        updated_count += 1
+                    else:
+                        logger.debug(f"   [POST] Dimension already present for '{code}'")
+
+        if updated_count > 0:
+            logger.info(f"Post-processing complete: Updated {updated_count}/{len(product_codes)} products with dimensions")
+        else:
+            logger.debug(f"Post-processing complete: No dimensions added")
+
+        entities['product_names'] = product_names
+        return entities
 
     def _get_empty_entities(self) -> Dict:
         """
