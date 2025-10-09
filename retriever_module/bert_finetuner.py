@@ -117,10 +117,23 @@ class BERTFineTuner:
             if keyword in text_lower:
                 materials.append(keyword)
 
+        # Extract seal sub-type for distinguishing different seal products
+        seal_subtype = None
+        if 'seal' in text_lower or 'dichtung' in text_lower:
+            if 'duro seal' in text_lower or 'duroseal' in text_lower:
+                seal_subtype = 'duro_seal'
+            elif 'foam seal' in text_lower or 'schaumstoff' in text_lower:
+                seal_subtype = 'foam_seal'
+            elif 'end seal' in text_lower or 'enddichtung' in text_lower:
+                seal_subtype = 'end_seal'
+            elif 'side seal' in text_lower or 'seitendichtung' in text_lower:
+                seal_subtype = 'side_seal'
+
         return {
             'category': category,
             'dimensions': dimensions,
             'materials': materials,
+            'seal_subtype': seal_subtype,
             'full_text': f"{code} {name}".strip()
         }
 
@@ -132,6 +145,7 @@ class BERTFineTuner:
         - Same category (L, E, G, etc.)
         - Similar dimensions (within 10%)
         - Same material type
+        - Same seal sub-type (if applicable) - CRITICAL: Duro Seal != Foam Seal
         """
         feat1 = self._extract_product_features(prod1)
         feat2 = self._extract_product_features(prod2)
@@ -139,6 +153,12 @@ class BERTFineTuner:
         # Must have same category
         if feat1['category'] and feat2['category']:
             if feat1['category'] != feat2['category']:
+                return False
+
+        # CRITICAL: If both have seal sub-types, they MUST match
+        # This prevents Duro Seal from being matched with Foam Seal
+        if feat1['seal_subtype'] and feat2['seal_subtype']:
+            if feat1['seal_subtype'] != feat2['seal_subtype']:
                 return False
 
         # Check dimension similarity
@@ -228,8 +248,43 @@ class BERTFineTuner:
                             label=score
                         ))
 
+        # Strategy 3: Generate explicit negative pairs for different seal types
+        # This is CRITICAL to prevent Duro Seal from matching with Foam Seal
+        logger.info("Generating explicit seal sub-type negative pairs...")
+        seal_products_by_type = {}
+        for prod in self.products:
+            feat = self._extract_product_features(prod)
+            if feat['seal_subtype']:
+                if feat['seal_subtype'] not in seal_products_by_type:
+                    seal_products_by_type[feat['seal_subtype']] = []
+                seal_products_by_type[feat['seal_subtype']].append(prod)
+
+        # Create negative pairs between different seal types
+        seal_types = list(seal_products_by_type.keys())
+        for i, type1 in enumerate(seal_types):
+            for type2 in seal_types[i+1:]:
+                # Sample products from each type
+                prods1 = seal_products_by_type[type1]
+                prods2 = seal_products_by_type[type2]
+
+                for prod1 in random.sample(prods1, min(5, len(prods1))):
+                    for prod2 in random.sample(prods2, min(2, len(prods2))):
+                        feat1 = self._extract_product_features(prod1)
+                        feat2 = self._extract_product_features(prod2)
+
+                        text1 = feat1['full_text']
+                        text2 = feat2['full_text']
+
+                        if text1 and text2:
+                            # Very low similarity (0.0-0.2) for different seal types
+                            score = random.uniform(0.0, 0.2)
+                            negative_pairs.append(InputExample(
+                                texts=[text1, text2],
+                                label=score
+                            ))
+
         logger.info(f"Generated {len(positive_pairs)} positive pairs")
-        logger.info(f"Generated {len(negative_pairs)} negative pairs")
+        logger.info(f"Generated {len(negative_pairs)} negative pairs (including seal sub-type negatives)")
 
         return positive_pairs, negative_pairs
 
