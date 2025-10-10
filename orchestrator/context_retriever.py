@@ -51,6 +51,59 @@ class ContextRetriever:
         # Keep reference for backward compatibility
         self.token_matcher = token_matcher
 
+    def _extract_dimensions(self, text: str) -> set:
+        """Extract dimension numbers from text for validation."""
+        import re
+        patterns = [
+            r'\b(\d{2,4})\s*[xX*]\s*(\d{1,3}(?:[.,]\d{1,2})?)',  # 343x22.85
+            r'\b(\d{3,5})\s*mm\b',  # 343mm
+        ]
+        dimensions = set()
+        for pattern in patterns:
+            matches = re.finditer(pattern, text, re.IGNORECASE)
+            for match in matches:
+                for group in match.groups():
+                    if group:
+                        normalized = group.replace(' ', '').replace(',', '.')
+                        # Only keep significant dimensions (width/length, typically 3+ digits)
+                        if len(normalized.replace('.', '')) >= 2:
+                            dimensions.add(normalized)
+        return dimensions
+
+    def _validate_dimension_match(self, query: str, product_text: str) -> bool:
+        """
+        Validate that dimensions in query match dimensions in product.
+
+        Returns True if:
+        - No dimensions in query (nothing to validate)
+        - Product has no dimensions in DB (can't validate, accept match)
+        - Dimensions in query match dimensions in product
+
+        Returns False if:
+        - Dimensions in query DON'T match product dimensions
+        """
+        query_dims = self._extract_dimensions(query)
+        product_dims = self._extract_dimensions(product_text)
+
+        # If no dimensions in query, nothing to validate
+        if not query_dims:
+            return True
+
+        # If dimensions in query but no dimensions in product, ACCEPT (can't validate)
+        if query_dims and not product_dims:
+            logger.warning(f"      [DIMENSION MISSING] Product has no dimensions in DB, accepting match anyway")
+            return True  # Accept the match - dimensions can't be validated
+
+        # Check if at least one dimension from query matches product
+        matches = query_dims & product_dims
+
+        if not matches:
+            logger.warning(f"      [DIMENSION MISMATCH] Query dims {query_dims} don't match product dims {product_dims}")
+            return False
+
+        logger.info(f"      [DIMENSION OK] Matched dimensions: {matches}")
+        return True
+
     def retrieve_order_context_json(self, entities: Dict) -> Dict:
         """
         Retrieve order-related context from JSON
@@ -99,58 +152,74 @@ class ContextRetriever:
                 logger.info(f"   [SEARCH] Searching {len(product_names)} products...")
 
                 if self.use_token_matching or self.use_hybrid_matching:
-                    # HYBRID MATCHING: Try exact code first, then semantic+token matching
+                    # HYBRID MATCHING: Always use full product name with dimensions for accurate matching
                     matched_products = []
                     for i, product_name in enumerate(product_names):
                         product_code = product_codes[i] if i < len(product_codes) else None
                         match = None
 
-                        # STRATEGY 1: Try exact code lookup (100% accurate when exists)
+                        # Build search query: Always include product name (with dimensions)
+                        # If code exists, prepend it to query
+                        query = product_name
                         if product_code:
+                            query = f"{product_code} {product_name}"
+
+                        # STRATEGY 1: Try exact code lookup (only if no dimensions in product name)
+                        # Skip exact code lookup if dimensions are present - they must be validated
+                        import re
+                        has_dimensions = bool(re.search(r'\d{2,4}\s*[xX*]\s*\d{1,3}', product_name))
+
+                        if product_code and not has_dimensions:
                             match = self.matcher.search_by_code(product_code)
 
                             if match:
-                                # Exact code match found!
+                                # Exact code match found (no dimensions to validate)
                                 match['match_score'] = 1.0  # 100% confidence for exact code
                                 match['match_method'] = 'exact_code'
                                 match['extracted_product_name'] = product_name
                                 match['requires_review'] = False
                                 logger.info(f"      [{i+1}] {product_code} [EXACT] (100%)")
 
-                        # STRATEGY 2: Hybrid/Token matching if no exact code match
+                        # STRATEGY 2: Hybrid/Token matching with dimension validation
                         if not match:
-                            # Build query from code + name
-                            query = product_name
-                            if product_code:
-                                query = f"{product_code} {product_name}"
-
                             # Search using matcher (hybrid or token)
-                            results = self.matcher.search(query, top_k=1, min_score=0.5)
+                            # Lowered threshold to 0.60 to match BERT semantic threshold
+                            results = self.matcher.search(query, top_k=1, min_score=0.60)
 
                             if results:
-                                match = results[0]
-                                # Get score (different field names for hybrid vs token)
-                                score = match.get('final_score') or match.get('similarity_score', 0)
+                                candidate = results[0]
 
-                                # Add metadata for downstream processing
-                                match['match_score'] = score
-                                if self.use_hybrid_matching:
-                                    match['match_method'] = 'hybrid_bert_token'
+                                # CRITICAL: Validate dimensions before accepting match
+                                product_text = f"{candidate.get('default_code', '')} {candidate.get('product_code', '')} {candidate.get('product_name', '')}"
+                                dimension_valid = self._validate_dimension_match(query, product_text)
+
+                                if dimension_valid:
+                                    match = candidate
+                                    # Get score (different field names for hybrid vs token)
+                                    score = match.get('final_score') or match.get('similarity_score', 0)
+
+                                    # Add metadata for downstream processing
+                                    match['match_score'] = score
+                                    if self.use_hybrid_matching:
+                                        match['match_method'] = 'hybrid_bert_token'
+                                    else:
+                                        match['match_method'] = 'token_matching'
+                                    match['extracted_product_name'] = product_name
+                                    match['requires_review'] = score < 0.80
+
+                                    # Log result with confidence level
+                                    code = match.get('default_code') or match.get('product_code', 'N/A')
+                                    method_label = 'HYBRID' if self.use_hybrid_matching else 'TOKEN'
+
+                                    if score >= 0.80:
+                                        logger.info(f"      [{i+1}] {code} [{method_label}] ({score:.0%})")
+                                    elif score >= 0.60:
+                                        logger.info(f"      [{i+1}] {code} [REVIEW] ({score:.0%})")
+                                    else:
+                                        logger.warning(f"      [{i+1}] {code} [MANUAL] ({score:.0%})")
                                 else:
-                                    match['match_method'] = 'token_matching'
-                                match['extracted_product_name'] = product_name
-                                match['requires_review'] = score < 0.80
-
-                                # Log result with confidence level
-                                code = match.get('default_code') or match.get('product_code', 'N/A')
-                                method_label = 'HYBRID' if self.use_hybrid_matching else 'TOKEN'
-
-                                if score >= 0.80:
-                                    logger.info(f"      [{i+1}] {code} [{method_label}] ({score:.0%})")
-                                elif score >= 0.60:
-                                    logger.info(f"      [{i+1}] {code} [REVIEW] ({score:.0%})")
-                                else:
-                                    logger.warning(f"      [{i+1}] {code} [MANUAL] ({score:.0%})")
+                                    # Dimension mismatch - REJECT this match
+                                    logger.warning(f"      [{i+1}] REJECTED match {candidate.get('default_code', 'N/A')} - dimension mismatch")
 
                         if match:
                             matched_products.append(match)
@@ -250,7 +319,8 @@ class ContextRetriever:
                         if product_code:
                             query = f"{product_code} {product_name}"
 
-                        results = self.matcher.search(query, top_k=3, min_score=0.5)
+                        # Lowered threshold to 0.60 to match BERT semantic threshold
+                        results = self.matcher.search(query, top_k=3, min_score=0.60)
                         matched_products.extend(results)
                 else:
                     # Fallback to VectorStore

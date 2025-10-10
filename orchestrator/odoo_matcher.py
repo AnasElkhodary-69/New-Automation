@@ -51,6 +51,23 @@ class OdooMatcher:
             # Use EXTRACTED company name from entities, not JSON match
             extracted_company = entities.get('company_name')
             extracted_email = entities.get('email')
+            extracted_phones = entities.get('phone_numbers', [])
+            extracted_addresses = entities.get('addresses', [])
+
+            # Extract phone (first one if available)
+            extracted_phone = extracted_phones[0] if extracted_phones else None
+
+            # Extract address (first one if available)
+            extracted_address = extracted_addresses[0] if extracted_addresses else None
+
+            # Try to extract zip code from address if available
+            extracted_zip = None
+            if extracted_address:
+                import re
+                # Look for zip code patterns (5 digits or 5+4 format)
+                zip_match = re.search(r'\b(\d{5})(?:-\d{4})?\b', extracted_address)
+                if zip_match:
+                    extracted_zip = zip_match.group(1)
 
             # Filter out SDS (our own company) from customer matching
             excluded_companies = ['SDS', 'SDS GmbH', 'SDS Print Services', 'SDS Print Services GmbH']
@@ -58,11 +75,14 @@ class OdooMatcher:
 
             if extracted_company and not is_sds_company:
                 logger.info(f"   [1/2] Searching customer in Odoo...")
-                logger.info(f"      Searching in Odoo (company={extracted_company}, email={extracted_email})...")
+                logger.info(f"      Searching in Odoo (company={extracted_company}, email={extracted_email}, phone={extracted_phone}, zip={extracted_zip})...")
 
                 result = self.odoo.query_customer_info(
                     company_name=extracted_company,
-                    email=extracted_email
+                    email=extracted_email,
+                    phone=extracted_phone,
+                    address=extracted_address,
+                    zip_code=extracted_zip
                 )
 
                 if result:

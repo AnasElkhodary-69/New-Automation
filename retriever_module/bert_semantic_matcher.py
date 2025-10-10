@@ -28,11 +28,9 @@ from pathlib import Path
 import logging
 import os
 
-# Force CPU mode on Windows to avoid CUDA/bitsandbytes issues
+# GPU mode enabled - CUDA is now supported on Windows
+# Removed CPU enforcement to allow GPU acceleration
 import platform
-if platform.system() == 'Windows':
-    os.environ['CUDA_VISIBLE_DEVICES'] = ''  # Disable CUDA
-    os.environ['FORCE_CPU'] = '1'
 
 from sentence_transformers import SentenceTransformer
 import torch
@@ -80,15 +78,13 @@ class BertSemanticMatcher:
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
 
-        # Auto-detect device (prefer CPU to avoid CUDA issues on Windows)
+        # Auto-detect device (GPU if available, CPU fallback)
         if device is None:
-            # Force CPU on Windows to avoid CUDA library issues
-            import platform
-            if platform.system() == 'Windows':
-                self.device = 'cpu'
-                logger.info("Using CPU mode (Windows detected, avoiding CUDA issues)")
+            self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+            if self.device == 'cuda':
+                logger.info(f"GPU detected: {torch.cuda.get_device_name(0)} - Using CUDA acceleration")
             else:
-                self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+                logger.info("No GPU detected - Using CPU mode")
         else:
             self.device = device
 
@@ -157,13 +153,15 @@ class BertSemanticMatcher:
         """
         parts = []
 
-        # Product code (most important)
-        if product.get('product_code'):
-            parts.append(product['product_code'])
+        # Product code (most important) - try both field names
+        code = product.get('default_code') or product.get('product_code')
+        if code:
+            parts.append(code)
 
-        # Product name
-        if product.get('product_name'):
-            parts.append(product['product_name'])
+        # Product name - try both field names
+        name = product.get('name') or product.get('product_name')
+        if name:
+            parts.append(name)
 
         # Alternative names/codes
         if product.get('alternative_names'):
@@ -323,9 +321,10 @@ class BertSemanticMatcher:
         Returns:
             Matching product or None
         """
-        # Try exact match first
+        # Try exact match first - check both field names
         for idx, product in enumerate(self.products):
-            if product.get('product_code') == product_code:
+            code = product.get('default_code') or product.get('product_code')
+            if code == product_code:
                 logger.info(f"Exact code match: {product_code}")
                 result = product.copy()
                 result['bert_score'] = 1.0

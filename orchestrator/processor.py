@@ -276,8 +276,10 @@ class EmailProcessor:
         search_criteria = {
             'intent_type': intent.get('type'),
             'customer_search': entities.get('company_name') or entities.get('customer_name'),
-            'product_count': len(entities.get('product_names', [])),
-            'product_codes_count': len(entities.get('product_codes', []))
+            'product_search': {
+                'product_names': entities.get('product_names', []),
+                'product_codes': entities.get('product_codes', [])
+            }
         }
 
         # LOG STEP 3: RAG Input

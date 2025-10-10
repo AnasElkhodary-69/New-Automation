@@ -37,6 +37,15 @@ VALID_PREFIXES = {
     'e1520',    # E1520 series
 }
 
+# Known brand names that indicate valid product codes
+BRAND_NAMES = {
+    'inoxswiss',    # InoxSwiss Doctor Blades
+    'longlife',     # Longlife Doctor Blades
+    'cushion mount', # 3M Cushion Mount
+    'duroseal',     # DuroSeal products
+    'miraflex',     # Miraflex products
+}
+
 def is_valid_product_code(code: str) -> tuple[bool, str]:
     """
     Validate if string is a valid product code
@@ -62,21 +71,34 @@ def is_valid_product_code(code: str) -> tuple[bool, str]:
     if has_valid_prefix:
         return True, f"Valid brand prefix detected"
 
+    # Check if code contains a known brand name (overrides generic term filtering)
+    has_brand_name = any(brand in code_lower for brand in BRAND_NAMES)
+
+    if has_brand_name:
+        return True, f"Valid brand name detected"
+
     # Check against generic terms (exact match)
     if code_lower in GENERIC_TERMS:
         return False, f"Generic term: '{code_clean}'"
 
-    # Check if it's ONLY a generic term (no numbers)
+    # Check if it's ONLY a generic term (no numbers and no brand)
     for term in GENERIC_TERMS:
         if term in code_lower:
-            # If it contains a generic term, it must also have numbers to be valid
+            # If it contains a generic term, it must also have numbers or brand to be valid
             has_number = any(c.isdigit() for c in code_clean)
-            if not has_number:
+            if not has_number and not has_brand_name:
                 return False, f"Generic term without code: '{code_clean}' (contains '{term}')"
 
     # Valid product codes should have both letters and numbers
     has_letter = any(c.isalpha() for c in code_clean)
     has_number = any(c.isdigit() for c in code_clean)
+
+    # Special case: All-uppercase letter codes (likely product acronyms like RPE, OPP, SDS)
+    if has_letter and not has_number and len(code_clean) >= 3:
+        # Check if it's all uppercase letters (product acronym)
+        alpha_only = ''.join(c for c in code_clean if c.isalpha())
+        if alpha_only.isupper() and len(alpha_only) >= 3:
+            return True, f"Uppercase acronym (3+ letters)"
 
     if not (has_letter and has_number):
         # Exception: could be all numbers (like "1951")

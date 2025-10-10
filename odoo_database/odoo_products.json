@@ -14221,8 +14221,8 @@
   },
   {
     "id": 4137,
-    "name": "[C-40-20-RPE-L1335] Docotr Blade Carbon 40x0,20 mm / RPE / L1335 mm",
-    "default_code": "",
+    "name": "Docotr Blade Carbon 40x0,20 mm / RPE / L1335 mm",
+    "default_code": "C-40-20-RPE-L1335",
     "list_price": 0.0,
     "standard_price": 0.0,
     "type": "consu",
@@ -19341,8 +19341,8 @@
   },
   {
     "id": 4136,
-    "name": "[SDS2573] 008-UB-SX-BLU / Foam Seal OTTURATORE RITR 152 x 75 x 10 MM con inserto",
-    "default_code": "",
+    "name": "008-UB-SX-BLU / Foam Seal OTTURATORE RITR 152 x 75 x 10 MM con inserto",
+    "default_code": "SDS2573",
     "list_price": 120.0,
     "standard_price": 0.0,
     "type": "consu",

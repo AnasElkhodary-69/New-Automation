@@ -70,12 +70,12 @@ class OdooConnector:
             # Common endpoint for authentication
             self.common = xmlrpc.client.ServerProxy(f'{self.url}/xmlrpc/2/common')
 
-            # Authenticate
+            # Authenticate with English language context to avoid de_DE errors
             self.uid = self.common.authenticate(
                 self.db,
                 self.username,
                 self.password,
-                {}
+                {'lang': 'en_US'}
             )
 
             if not self.uid:
@@ -95,20 +95,25 @@ class OdooConnector:
         self._connect()
 
     def query_customer_info(self, customer_id: Optional[int] = None, email: Optional[str] = None,
-                           customer_name: Optional[str] = None, company_name: Optional[str] = None) -> Optional[Dict]:
+                           customer_name: Optional[str] = None, company_name: Optional[str] = None,
+                           address: Optional[str] = None, zip_code: Optional[str] = None,
+                           phone: Optional[str] = None) -> Optional[Dict]:
         """
-        Query customer information from Odoo with fuzzy matching support
+        Query customer information from Odoo with multi-field fuzzy matching support
 
         Args:
             customer_id: Customer ID in Odoo
             email: Customer email address (used for reply-to only)
             customer_name: Customer name from email body/signature
             company_name: Company name from email body/signature
+            address: Customer street address
+            zip_code: Customer postal/zip code
+            phone: Customer phone number
 
         Returns:
             Customer information dictionary or None
         """
-        logger.info(f"Querying customer info: id={customer_id}, email={email}, name={customer_name}, company={company_name}")
+        logger.info(f"Querying customer info: id={customer_id}, email={email}, name={customer_name}, company={company_name}, address={address}, zip={zip_code}, phone={phone}")
 
         try:
             customers = None
@@ -120,13 +125,113 @@ class OdooConnector:
                     self.db, self.uid, self.password,
                     'res.partner', 'search_read',
                     [domain],
-                    {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'country_id'], 'limit': 1}
+                    {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 1}
                 )
                 if customers:
                     logger.info(f"Found customer by ID: {customers[0].get('name')}")
                     return customers[0]
 
-            # Strategy 2: Search by company name (preferred for B2B)
+            # Strategy 2: Multi-field matching (phone, zip, address)
+            # Try to match using phone, zip code, or address if provided
+            if phone or zip_code or address:
+                logger.info("Attempting multi-field matching with phone/zip/address")
+
+                # Sub-strategy 2a: Search by phone number (very reliable)
+                if phone:
+                    # Clean phone number (remove spaces, dashes, parentheses)
+                    clean_phone = ''.join(c for c in phone if c.isdigit() or c == '+')
+                    if len(clean_phone) >= 6:  # Minimum length for meaningful search
+                        # Try exact match first
+                        domain = [['phone', '=', phone]]
+                        customers = self.models.execute_kw(
+                            self.db, self.uid, self.password,
+                            'res.partner', 'search_read',
+                            [domain],
+                            {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 5}
+                        )
+
+                        if customers:
+                            logger.info(f"Found {len(customers)} customer(s) by phone: {customers[0].get('name')}")
+                            return customers[0]
+
+                        # Try partial phone match
+                        domain = [['phone', 'ilike', clean_phone[-8:]]]  # Last 8 digits
+                        customers = self.models.execute_kw(
+                            self.db, self.uid, self.password,
+                            'res.partner', 'search_read',
+                            [domain],
+                            {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 5}
+                        )
+
+                        if customers:
+                            logger.info(f"Found {len(customers)} customer(s) by partial phone match: {customers[0].get('name')}")
+                            return customers[0]
+
+                # Sub-strategy 2b: Search by zip code (reliable for unique locations)
+                if zip_code:
+                    domain = [['zip', '=', zip_code], ['is_company', '=', True]]
+                    customers = self.models.execute_kw(
+                        self.db, self.uid, self.password,
+                        'res.partner', 'search_read',
+                        [domain],
+                        {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 5}
+                    )
+
+                    if customers:
+                        logger.info(f"Found {len(customers)} customer(s) by zip code '{zip_code}': {customers[0].get('name')}")
+                        # ALWAYS verify company name if provided, even with single result
+                        if company_name:
+                            # Normalize company name for better matching (remove special chars)
+                            import re
+                            clean_company = re.sub(r'[^\w\s]', '', company_name.lower()).strip()
+
+                            for customer in customers:
+                                clean_customer_name = re.sub(r'[^\w\s]', '', customer.get('name', '').lower()).strip()
+                                if clean_company in clean_customer_name or clean_customer_name in clean_company:
+                                    logger.info(f"Matched by zip+name: {customer.get('name')}")
+                                    return customer
+
+                            # No match found - log warning and return first (might be wrong)
+                            logger.warning(f"Company name '{company_name}' not found in {len(customers)} zip matches, returning first result")
+
+                        return customers[0]
+
+                # Sub-strategy 2c: Search by zip + address combination (more accurate than address alone)
+                # Only use address matching when we ALSO have a zip code to narrow results
+                if zip_code and address and len(address) > 10:
+                    import re
+                    # Extract key parts from address (street name, building number)
+                    address_parts = re.findall(r'\b\w{4,}\b', address)
+
+                    for part in address_parts[:3]:  # Try first 3 meaningful parts
+                        # Search with BOTH zip code AND address part for accuracy
+                        domain = [['zip', '=', zip_code], ['street', 'ilike', part], ['is_company', '=', True]]
+                        customers = self.models.execute_kw(
+                            self.db, self.uid, self.password,
+                            'res.partner', 'search_read',
+                            [domain],
+                            {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 5}
+                        )
+
+                        if customers:
+                            logger.info(f"Found {len(customers)} customer(s) by zip+address ('{zip_code}' + '{part}'): {customers[0].get('name')}")
+                            # ALWAYS verify company name if provided
+                            if company_name:
+                                # Normalize company name for better matching
+                                clean_company = re.sub(r'[^\w\s]', '', company_name.lower()).strip()
+
+                                for customer in customers:
+                                    clean_customer_name = re.sub(r'[^\w\s]', '', customer.get('name', '').lower()).strip()
+                                    if clean_company in clean_customer_name or clean_customer_name in clean_company:
+                                        logger.info(f"Matched by zip+address+name: {customer.get('name')}")
+                                        return customer
+
+                                # No match found - log warning
+                                logger.warning(f"Company name '{company_name}' not found in zip+address matches")
+
+                            return customers[0]
+
+            # Strategy 3: Search by company name (preferred for B2B)
             if company_name:
                 # Try exact match first
                 domain = [['name', 'ilike', company_name], ['is_company', '=', True]]
@@ -134,7 +239,7 @@ class OdooConnector:
                     self.db, self.uid, self.password,
                     'res.partner', 'search_read',
                     [domain],
-                    {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'country_id'], 'limit': 5}
+                    {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 5}
                 )
 
                 if customers:
@@ -150,13 +255,13 @@ class OdooConnector:
                         self.db, self.uid, self.password,
                         'res.partner', 'search_read',
                         [domain],
-                        {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'country_id'], 'limit': 5}
+                        {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 5}
                     )
                     if customers:
                         logger.info(f"Found company using variation '{variation}': {customers[0].get('name')}")
                         return customers[0]
 
-            # Strategy 3: Search by customer name
+            # Strategy 4: Search by customer name
             if customer_name:
                 # Try exact match
                 domain = [['name', 'ilike', customer_name]]
@@ -164,21 +269,21 @@ class OdooConnector:
                     self.db, self.uid, self.password,
                     'res.partner', 'search_read',
                     [domain],
-                    {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'country_id'], 'limit': 5}
+                    {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 5}
                 )
 
                 if customers:
                     logger.info(f"Found {len(customers)} customer match(es) for '{customer_name}': {customers[0].get('name')}")
                     return customers[0]
 
-            # Strategy 4: Search by email (fallback, mainly for reply-to)
+            # Strategy 5: Search by email (fallback, mainly for reply-to)
             if email:
                 domain = [['email', '=', email]]
                 customers = self.models.execute_kw(
                     self.db, self.uid, self.password,
                     'res.partner', 'search_read',
                     [domain],
-                    {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'country_id'], 'limit': 1}
+                    {'fields': ['id', 'name', 'email', 'phone', 'street', 'city', 'zip', 'country_id'], 'limit': 1}
                 )
 
                 if customers:
@@ -326,18 +431,42 @@ class OdooConnector:
         try:
             products = []
 
-            # Strategy 1: Search by product ID
+            # Strategy 1: Search by product template ID (convert to variant)
             if product_id:
-                domain = [['id', '=', product_id]]
+                # Query product.product by template ID to get variant
+                domain = [['product_tmpl_id', '=', product_id]]
                 products = self.models.execute_kw(
                     self.db, self.uid, self.password,
-                    'product.template', 'search_read',
+                    'product.product', 'search_read',
                     [domain],
                     {
-                        'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                        'fields': ['id', 'name', 'default_code', 'lst_price', 'standard_price', 'product_tmpl_id'],
                         'limit': 20
                     }
                 )
+
+                # If no variant found, try to create one
+                if not products:
+                    logger.warning(f"No variant found for template {product_id}, attempting to create one...")
+                    try:
+                        variant_id = self.models.execute_kw(
+                            self.db, self.uid, self.password,
+                            'product.product', 'create',
+                            [{'product_tmpl_id': product_id}]
+                        )
+                        logger.info(f"Created variant ID {variant_id} for template {product_id}")
+                        # Query the newly created variant
+                        products = self.models.execute_kw(
+                            self.db, self.uid, self.password,
+                            'product.product', 'search_read',
+                            [[['id', '=', variant_id]]],
+                            {
+                                'fields': ['id', 'name', 'default_code', 'lst_price', 'standard_price', 'product_tmpl_id'],
+                                'limit': 1
+                            }
+                        )
+                    except Exception as e:
+                        logger.error(f"Failed to create variant for template {product_id}: {e}")
 
             # Strategy 2: Search by product code (highest priority)
             elif product_code:
@@ -345,14 +474,14 @@ class OdooConnector:
                 # Examples: "3M L1020 685 33m" -> ["L1020-685-33", "L1020 685 33", "L1020-685", "685"]
                 normalized_codes = self._normalize_product_code(product_code)
 
-                # Try exact match first
+                # Try exact match first (search product.product variants)
                 domain = [['default_code', '=', product_code]]
                 products = self.models.execute_kw(
                     self.db, self.uid, self.password,
-                    'product.template', 'search_read',
+                    'product.product', 'search_read',
                     [domain],
                     {
-                        'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                        'fields': ['id', 'name', 'default_code', 'lst_price', 'standard_price', 'product_tmpl_id'],
                         'limit': 20
                     }
                 )
@@ -365,10 +494,10 @@ class OdooConnector:
                         domain = [['default_code', 'ilike', norm_code]]
                         products = self.models.execute_kw(
                             self.db, self.uid, self.password,
-                            'product.template', 'search_read',
+                            'product.product', 'search_read',
                             [domain],
                             {
-                                'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                                'fields': ['id', 'name', 'default_code', 'lst_price', 'standard_price', 'product_tmpl_id'],
                                 'limit': 20
                             }
                         )
@@ -382,10 +511,10 @@ class OdooConnector:
                         domain = [['default_code', 'ilike', product_code]]
                         products = self.models.execute_kw(
                             self.db, self.uid, self.password,
-                            'product.template', 'search_read',
+                            'product.product', 'search_read',
                             [domain],
                             {
-                                'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                                'fields': ['id', 'name', 'default_code', 'lst_price', 'standard_price', 'product_tmpl_id'],
                                 'limit': 20
                             }
                         )
@@ -400,10 +529,10 @@ class OdooConnector:
                                 domain = [['default_code', 'ilike', truncated]]
                                 products = self.models.execute_kw(
                                     self.db, self.uid, self.password,
-                                    'product.template', 'search_read',
+                                    'product.product', 'search_read',
                                     [domain],
                                     {
-                                        'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                                        'fields': ['id', 'name', 'default_code', 'lst_price', 'standard_price', 'product_tmpl_id'],
                                         'limit': 20
                                     }
                                 )
@@ -426,10 +555,10 @@ class OdooConnector:
 
                     products = self.models.execute_kw(
                         self.db, self.uid, self.password,
-                        'product.template', 'search_read',
+                        'product.product', 'search_read',
                         [domain],
                         {
-                            'fields': ['id', 'name', 'default_code', 'list_price', 'standard_price', 'product_variant_id'],
+                            'fields': ['id', 'name', 'default_code', 'lst_price', 'standard_price', 'product_tmpl_id'],
                             'limit': 20
                         }
                     )
@@ -606,12 +735,13 @@ class OdooConnector:
                 logger.error("No order lines provided")
                 return None
 
-            # Create the order
+            # Create the order with English language context to avoid de_DE error
             logger.info(f"Sending create request to Odoo...")
             order_id = self.models.execute_kw(
                 self.db, self.uid, self.password,
                 'sale.order', 'create',
-                [order_vals]
+                [order_vals],
+                {'context': {'lang': 'en_US'}}  # Force English to avoid language errors
             )
 
             if order_id:
