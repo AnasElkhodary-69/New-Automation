@@ -1,0 +1,4 @@
+PDF_Index,PDF_Filename,Product_Index,Extracted_Name,Extracted_Code,Quantity,Price,JSON_Match,JSON_Score,Odoo_Match,Odoo_ID,Odoo_Code
+1,email_100_Proforma Invoice_Kiro Dandaro - 11.09.2025.pdf,1,Duro Seal Bobst 20SIX,SDS016E,2340,2.34,105364-545-ORG-SX-BLU / Duro Seal Bobst 20Six HS SPX 1mm,80%,NOT FOUND,N/A,N/A
+2,email_102_Bestellung_2500257.pdf,1,SDS Anilox Cleaner M,SDS Anilox Cleaner M,4,68.37,SDS Anilox Cleaner M,100%,NOT FOUND,N/A,N/A
+3,email_103_best_118091.pdf,1,Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black,DR1-000300,246,3.85,105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco,50%,NOT FOUND,N/A,N/A

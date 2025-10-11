@@ -1,0 +1,587 @@
+[
+  {
+    "index": 1,
+    "filename": "email_100_Proforma Invoice_Kiro Dandaro - 11.09.2025.pdf",
+    "pdf_path": "attachments\\email_100_Proforma Invoice_Kiro Dandaro - 11.09.2025.pdf",
+    "timestamp": "2025-10-08T15:46:29.744297",
+    "success": true,
+    "error": null,
+    "parsed_text": "SDS GmbH - Kruppstraße 122 - 60388 Frankfurt am Main\nKiro Dandaro\nIlcho Petkovski\nBanica 3\n7000 Bitola\nNorth Macedonia\nCustomer No.: 10647\nProcessed by: Herr Kaddouri\nOrder No.: 426\nDelivery date: 30.09.2025\nDate: 11.09.2025\nProforma Invoice No. 5726\nI. Qty.Unit Art.-No. Description Unit price Discount Value\nEUR % EUR\n1 2.340,00 Stk. SDS016E 166-367-ORG-SX-STE / 2,32 5.428,80\nDuro Seal Bobst 20SIX\n234 Pcs./ Box\nHS Code 40169300\nplus Transport costs 90,00\nNet amount 5.518,80\ntax free (tax free export consignment ) 5.518,80\nTotal value 5.518,80\nAdvance payment\nEx Works\nCountry of Origin: Germany\nSDS GmbH Tel +49 6940802970 Ust-ID.-Nr. DE284216833 Frankfurter Sparkasse\nKruppstraße 122 Fax +49 6940802973 Amstgericht Konstanz Konto 200524984 BLZ50050201\n60388 Frankfurt am Main info@sds-print.com Managing Director Karim El Ouahabi IBAN DE57 5005 0201 0200 5249 84\nDeutschland www.sds-print.com EORI-NR. DE250627839236080 BIC-Code HELADEF1822",
+    "text_length": 947,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "sub_type": "order_confirmation",
+      "confidence": 0.95,
+      "urgency": "medium",
+      "reasoning": "The email contains a proforma invoice with details about an order, including order number, delivery date, and item descriptions. The subject line and body both indicate that this is related to an order inquiry or confirmation."
+    },
+    "entities": {
+      "customer_name": "Kiro Dandaro",
+      "company_name": "Ilcho Petkovski",
+      "email": "",
+      "phone": "",
+      "address": "Banica 3, 7000 Bitola, North Macedonia",
+      "product_names": [
+        "Duro Seal Bobst 20SIX"
+      ],
+      "product_codes": [
+        "SDS016E"
+      ],
+      "quantities": [
+        2340
+      ],
+      "prices": [
+        2.34
+      ],
+      "order_number": "426",
+      "order_date": "11.09.2025",
+      "delivery_date": "30.09.2025",
+      "urgency": "",
+      "payment_terms": "Advance payment",
+      "shipping_terms": "Ex Works",
+      "notes": "plus Transport costs 90,00, Net amount 5.518,80, tax free (tax free export consignment ) 5.518,80, Total value 5.518,80, Country of Origin: Germany",
+      "structured": {
+        "customer": {
+          "name": "Kiro Dandaro",
+          "company": "Ilcho Petkovski",
+          "email": "",
+          "phone": "",
+          "address": "Banica 3, 7000 Bitola, North Macedonia"
+        },
+        "products": [
+          {
+            "name": "Duro Seal Bobst 20SIX",
+            "code": "SDS016E",
+            "quantity": 2340,
+            "unit_price": 2.34,
+            "specifications": "234 Pcs./ Box, HS Code 40169300"
+          }
+        ],
+        "order": {
+          "order_number": "426",
+          "date": "11.09.2025",
+          "delivery_date": "30.09.2025",
+          "urgency": "",
+          "payment_terms": "Advance payment",
+          "shipping_terms": "Ex Works",
+          "notes": "plus Transport costs 90,00, Net amount 5.518,80, tax free (tax free export consignment ) 5.518,80, Total value 5.518,80, Country of Origin: Germany"
+        }
+      }
+    },
+    "context": {
+      "customer_info": {
+        "id": 4147,
+        "name": "Ilcho Petkovski",
+        "ref": false,
+        "email": false,
+        "phone": false,
+        "address": {
+          "street": "Banica 3 ",
+          "street2": false,
+          "city": "Bitola",
+          "zip": "7000",
+          "country": "",
+          "state": ""
+        },
+        "vat": false,
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 2178,
+            "name": "105364-545-ORG-SX-BLU / Duro Seal Bobst 20Six HS SPX 1mm",
+            "code": "SDS1509",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.8,
+            "match_method": "token_matching",
+            "match_score": 0.8,
+            "extracted_product_name": "Duro Seal Bobst 20SIX",
+            "requires_review": false
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 4147,
+        "name": "Ilcho Petkovski",
+        "ref": "",
+        "email": false,
+        "phone": false
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 2178,
+            "name": "105364-545-ORG-SX-BLU / Duro Seal Bobst 20Six HS SPX 1mm",
+            "code": "SDS1509",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.8,
+            "match_method": "token_matching",
+            "match_score": 0.8,
+            "extracted_product_name": "Duro Seal Bobst 20SIX",
+            "requires_review": false
+          },
+          "odoo_product": {
+            "id": 2178,
+            "name": "105364-545-ORG-SX-BLU / Duro Seal Bobst 20Six HS SPX 1mm",
+            "default_code": "SDS1509",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 1,
+        "products_total": 1
+      }
+    },
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "customer": {
+      "extracted_name": "Ilcho Petkovski",
+      "extracted_contact": "Kiro Dandaro",
+      "extracted_email": "",
+      "json_match": "Ilcho Petkovski",
+      "json_match_score": 1.0,
+      "odoo_match": "Ilcho Petkovski",
+      "odoo_ref": "",
+      "odoo_id": 4147
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "Duro Seal Bobst 20SIX",
+        "extracted_code": "SDS016E",
+        "quantity": 2340,
+        "price": 2.34,
+        "json_match": "105364-545-ORG-SX-BLU / Duro Seal Bobst 20Six HS SPX 1mm",
+        "json_match_score": 0.8,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-small-latest",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "input_cost_usd": 0.0,
+      "output_cost_usd": 0.0,
+      "total_cost_usd": 0.0
+    }
+  },
+  {
+    "index": 2,
+    "filename": "email_102_Bestellung_2500257.pdf",
+    "pdf_path": "attachments\\email_102_Bestellung_2500257.pdf",
+    "timestamp": "2025-10-08T15:46:31.420637",
+    "success": true,
+    "error": null,
+    "parsed_text": "Heyne & Penke Verpackungen GmbH · Am Burgberg 10 · D-37586 Dassel\nSDS GmbH\nKruppstraße 122 Telefon (0 55 64) 96 19 0\n60388 Frankfurt am Main Telefax (0 55 64) 96 19 500\nDeutschland eMail: info@heynepenke.com\nInternet: www.heynepenke.eu\nSachbearb.: Denise Wirths\nTelefon: 05564 9619 139\nFax: 05564 9619 520\nE-Mail: d.wirths@heynepenke.com\nDatum: 11.09.2025\nBestellung\nUnsere Bestellnummer: 2500257\nUnsere Kundennummer: 1267\nAnsprechpartner: Herr Spitzer\nTelefon: 069 40802970\nE-Mail: order@sds-print.com\nHiermit bestellen wir folgende Positionen:\nPreis in\nPos. Artikelnummer Artikelbeschreibung Menge VE\n€/ VE\n1 SDS Anilox Cleaner M SDS Anilox Cleaner M 4 Flasche 68,37\nLiefertermin: schnellstmöglich\nLieferbedingungen: Frei Haus\nZahlungsbedingungen: 14 Tage 2%, 30 Tage netto\nLieferanschrift: Heyne & Penke Verpackungen GmbH\nTeamleiter\nAm Burgberg 10\n37586 Dassel\nDeutschland\nAnlieferzeiten: Mo.-Do. 7:00 bis 16:00 Uhr\nFr. 7:00 bis 12:00 Uhr\nMit freundlichen Grüßen\nHEYNE & PENKE Verpackungen GmbH\ni.A. Denise Wirths\nSeite 1 von 1\nHeyne & Penke Verpackungen GmbH · Am Burgberg 10 · D-37586 Dassel\nGeschäftsführer: Handelsregister: Bankverbindungen:\nPeter Penke-Wevelhoff Göttingen HRB 13 10 76 Postbank Hannover VR-Bank in Südniedersachsen eG\nChristoph Penke-Wevelhoff UST-Id-Nr. DE 116009044 IBAN: DE20 2501 0030 0002 4613 06 IBAN: DE70 2606 2433 0008 1064 60\nBIC: PBNKDEFF250 BIC: GENODEF1DRA",
+    "text_length": 1394,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "sub_type": "new_order",
+      "confidence": 0.95,
+      "urgency": "medium",
+      "reasoning": "The email contains a formal order with specific details such as order number, customer number, items ordered, quantities, prices, and delivery instructions. The subject line also indicates it's related to an order."
+    },
+    "entities": {
+      "customer_name": "Herr Spitzer",
+      "company_name": "SDS GmbH",
+      "email": "order@sds-print.com",
+      "phone": "069 40802970",
+      "address": "Kruppstraße 122, 60388 Frankfurt am Main, Deutschland",
+      "product_names": [
+        "SDS Anilox Cleaner M"
+      ],
+      "product_codes": [
+        "SDS Anilox Cleaner M"
+      ],
+      "quantities": [
+        4
+      ],
+      "prices": [
+        68.37
+      ],
+      "order_number": "2500257",
+      "order_date": "11.09.2025",
+      "delivery_date": "schnellstmöglich",
+      "urgency": "schnellstmöglich",
+      "payment_terms": "14 Tage 2%, 30 Tage netto",
+      "shipping_terms": "Frei Haus",
+      "notes": "Anlieferzeiten: Mo.-Do. 7:00 bis 16:00 Uhr, Fr. 7:00 bis 12:00 Uhr",
+      "structured": {
+        "customer": {
+          "name": "Herr Spitzer",
+          "company": "SDS GmbH",
+          "email": "order@sds-print.com",
+          "phone": "069 40802970",
+          "address": "Kruppstraße 122, 60388 Frankfurt am Main, Deutschland"
+        },
+        "products": [
+          {
+            "name": "SDS Anilox Cleaner M",
+            "code": "SDS Anilox Cleaner M",
+            "quantity": 4,
+            "unit_price": 68.37,
+            "specifications": "Flasche"
+          }
+        ],
+        "order": {
+          "order_number": "2500257",
+          "date": "11.09.2025",
+          "delivery_date": "schnellstmöglich",
+          "urgency": "schnellstmöglich",
+          "payment_terms": "14 Tage 2%, 30 Tage netto",
+          "shipping_terms": "Frei Haus",
+          "notes": "Anlieferzeiten: Mo.-Do. 7:00 bis 16:00 Uhr, Fr. 7:00 bis 12:00 Uhr"
+        }
+      }
+    },
+    "context": {
+      "customer_info": {
+        "id": 3500,
+        "name": "SDS GmbH",
+        "ref": "false",
+        "email": "order@sds-print.com",
+        "phone": "+49 (0) 69 4080 29 70",
+        "address": {
+          "street": "Kruppstr. 122",
+          "street2": false,
+          "city": "Frankfurt",
+          "zip": "D-60388",
+          "country": "Germany",
+          "state": "Galapagos (EC)"
+        },
+        "vat": "DE284216833",
+        "website": "http://www.sds-print.com",
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 4037,
+            "name": "SDS Anilox Cleaner M",
+            "code": "SDS Anilox Cleaner M",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 1.0,
+            "match_method": "token_matching",
+            "match_score": 1.0,
+            "extracted_product_name": "SDS Anilox Cleaner M",
+            "requires_review": false
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3500,
+        "name": "SDS GmbH",
+        "ref": "",
+        "email": "order@sds-print.com",
+        "phone": "+49 (0) 69 4080 29 70"
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 4037,
+            "name": "SDS Anilox Cleaner M",
+            "code": "SDS Anilox Cleaner M",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 1.0,
+            "match_method": "token_matching",
+            "match_score": 1.0,
+            "extracted_product_name": "SDS Anilox Cleaner M",
+            "requires_review": false
+          },
+          "odoo_product": {
+            "id": 4037,
+            "name": "SDS Anilox Cleaner M",
+            "default_code": "SDS Anilox Cleaner M",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 1,
+        "products_total": 1
+      }
+    },
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "customer": {
+      "extracted_name": "SDS GmbH",
+      "extracted_contact": "Herr Spitzer",
+      "extracted_email": "order@sds-print.com",
+      "json_match": "SDS GmbH",
+      "json_match_score": 1.0,
+      "odoo_match": "SDS GmbH",
+      "odoo_ref": "",
+      "odoo_id": 3500
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "SDS Anilox Cleaner M",
+        "extracted_code": "SDS Anilox Cleaner M",
+        "quantity": 4,
+        "price": 68.37,
+        "json_match": "SDS Anilox Cleaner M",
+        "json_match_score": 1.0,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-small-latest",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "input_cost_usd": 0.0,
+      "output_cost_usd": 0.0,
+      "total_cost_usd": 0.0
+    }
+  },
+  {
+    "index": 3,
+    "filename": "email_103_best_118091.pdf",
+    "pdf_path": "attachments\\email_103_best_118091.pdf",
+    "timestamp": "2025-10-08T15:46:32.288206",
+    "success": true,
+    "error": null,
+    "parsed_text": "SDS GmbH Sachbearbeiter Lars Marunde\nSicherheitsdruck Service Telefon +49 5271 689 365\nKruppstrasse. 122 farblager@trioworld.com\nDE-60388 Frankfurt\nDatum 11.09.2025\nLieferant-Nr 118126\nLieferanschrift\nTrioworld Höxter GmbH\nEugen-Diesel-Str. 12\nIhre Faxnummer +49 (0) 6940802973\nD-37671 Höxter Unsere Kundennr 10130\nBESTELLUNG Nr. 118091\nBlatt 1 / 1\nPos ArtikelNr/-Bezeichnung Menge Preis PE Summe\nSehr geehrte Damen und Herren,\nhiermit erteilen wir den nachstehenden Auftrag und bitten um Bestätigung.\nBitte geben Sie unsere Bestell- und Artikel-Nummer auf allen Schriftstücken an, da ansonsten keine Bearbeitung erfolgen kann.\n1 DR1-000300\nKammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black\nBestellmenge 246 3,85 per 1 Stück EUR 947,10\nKostenstelle: 6200 Druckerei allgemein\nLLiieeffeerrtteerrmmiinn KKWW:: 3388..22002255\nSSuummmmee NNeettttoo == EEUURR 994477,,1100\n1199,,0000 %% MMeehhrrwweerrttsstteeuueerr ++ EEUURR 117799,,9955\nSSuummmmee BBrruuttttoo == EEUURR 11..112277,,0055\nLLiieeffeerrbbeeddiinngguunngg :: AAbb WWeerrkk,, vveerrppaacckktt\nZZaahhlluunnggssbbeeddiinngguunngg :: 3300 TTaaggee NNeettttoo\nWir bitten um verbindliche Anlieferung in KW 38\n==================================\nMMiitt ffrreeuunnddlliicchheenn GGrrüüßßeenn\nTTrriioowwoorrlldd HHööxxtteerr GGmmbbHH",
+    "text_length": 1292,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "sub_type": "order_confirmation",
+      "confidence": 0.95,
+      "urgency": "medium",
+      "reasoning": "The email contains a formal order confirmation with specific details such as order number, item descriptions, quantities, prices, and delivery instructions. The subject line and body clearly indicate that this is an order-related communication."
+    },
+    "entities": {
+      "customer_name": "Lars Marunde",
+      "company_name": "SDS GmbH",
+      "email": "farblager@trioworld.com",
+      "phone": "+49 5271 689 365",
+      "address": "Kruppstrasse. 122, DE-60388 Frankfurt",
+      "product_names": [
+        "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black"
+      ],
+      "product_codes": [
+        "DR1-000300"
+      ],
+      "quantities": [
+        246
+      ],
+      "prices": [
+        3.85
+      ],
+      "order_number": "118091",
+      "order_date": "11.09.2025",
+      "delivery_date": "KW 38",
+      "urgency": "verbindliche Anlieferung in KW 38",
+      "payment_terms": "LLiieeffeerrtteerrmmiinn KKWW:: 3388..22002255",
+      "shipping_terms": "AAbb WWeerrkk,, vveerrppaacckktt",
+      "notes": "ZZaahhlluunnggssbbeeddiinngguunngg :: 3300 TTaaggee NNeettttoo",
+      "structured": {
+        "customer": {
+          "name": "Lars Marunde",
+          "company": "SDS GmbH",
+          "email": "farblager@trioworld.com",
+          "phone": "+49 5271 689 365",
+          "address": "Kruppstrasse. 122, DE-60388 Frankfurt"
+        },
+        "products": [
+          {
+            "name": "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black",
+            "code": "DR1-000300",
+            "quantity": 246,
+            "unit_price": 3.85,
+            "specifications": ""
+          }
+        ],
+        "order": {
+          "order_number": "118091",
+          "date": "11.09.2025",
+          "delivery_date": "KW 38",
+          "urgency": "verbindliche Anlieferung in KW 38",
+          "payment_terms": "LLiieeffeerrtteerrmmiinn KKWW:: 3388..22002255",
+          "shipping_terms": "AAbb WWeerrkk,, vveerrppaacckktt",
+          "notes": "ZZaahhlluunnggssbbeeddiinngguunngg :: 3300 TTaaggee NNeettttoo"
+        }
+      }
+    },
+    "context": {
+      "customer_info": {
+        "id": 3500,
+        "name": "SDS GmbH",
+        "ref": "false",
+        "email": "order@sds-print.com",
+        "phone": "+49 (0) 69 4080 29 70",
+        "address": {
+          "street": "Kruppstr. 122",
+          "street2": false,
+          "city": "Frankfurt",
+          "zip": "D-60388",
+          "country": "Germany",
+          "state": "Galapagos (EC)"
+        },
+        "vat": "DE284216833",
+        "website": "http://www.sds-print.com",
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 2280,
+            "name": "105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco",
+            "code": "SDS1832",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5,
+            "match_method": "token_matching",
+            "match_score": 0.5,
+            "extracted_product_name": "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black",
+            "requires_review": true
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3500,
+        "name": "SDS GmbH",
+        "ref": "",
+        "email": "order@sds-print.com",
+        "phone": "+49 (0) 69 4080 29 70"
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 2280,
+            "name": "105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco",
+            "code": "SDS1832",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5,
+            "match_method": "token_matching",
+            "match_score": 0.5,
+            "extracted_product_name": "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 2280,
+            "name": "105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco",
+            "default_code": "SDS1832",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 1,
+        "products_total": 1
+      }
+    },
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "customer": {
+      "extracted_name": "SDS GmbH",
+      "extracted_contact": "Lars Marunde",
+      "extracted_email": "farblager@trioworld.com",
+      "json_match": "SDS GmbH",
+      "json_match_score": 1.0,
+      "odoo_match": "SDS GmbH",
+      "odoo_ref": "",
+      "odoo_id": 3500
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black",
+        "extracted_code": "DR1-000300",
+        "quantity": 246,
+        "price": 3.85,
+        "json_match": "105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco",
+        "json_match_score": 0.5,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-small-latest",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "input_cost_usd": 0.0,
+      "output_cost_usd": 0.0,
+      "total_cost_usd": 0.0
+    }
+  }
+]

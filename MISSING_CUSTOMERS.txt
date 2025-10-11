@@ -1,0 +1,159 @@
+# Missing Customers NOT in Odoo Database
+
+**Total Instances:** 81 emails
+**Unique Companies:** 37
+
+These customers were correctly extracted from emails but are NOT in the Odoo database.
+
+---
+
+## Priority List (Sorted by Frequency)
+
+### HIGH PRIORITY (5+ emails)
+```
+12x - Geisser-Innoflex AG
+ 5x - Celloclair AG
+ 5x - Segezha Packaging GmbH
+ 5x - Faubel & Co. Nachfolger GmbH
+ 5x - Amcor Flexibles Lugo
+ 5x - GIKO VERPACKUNGEN GmbH
+```
+
+### MEDIUM PRIORITY (2-4 emails)
+```
+ 3x - GIKO Verpackungen GmbH
+ 3x - Thüringer Papierwarenfabrik C. Schröter GmbH & Co KG
+ 3x - Schreiner Group GmbH & Co. KG
+ 2x - ppg > wegoflex GmbH
+ 2x - LEIPA Georg Leinfelder GmbH
+ 2x - Schäfer GmbH & Co. KG
+ 2x - Anoop Plastic Products Trd. Est.
+ 2x - Beuke Flexodruck GmbH
+ 2x - PAPIERSACKFABRIK TENAX GmbH & Co. KG
+ 2x - COVERIS Flexibles Deutschland GmbH
+```
+
+### LOW PRIORITY (1 email each)
+```
+ 1x - Flxon Incorporated
+ 1x - bn tapes & labels GmbH
+ 1x - M. NEEMANN OHG
+ 1x - Schmid Folien GmbH & Co KG
+ 1x - PEP Labels AG
+ 1x - Pohl Verpackungen GmbH
+ 1x - dy-pack Verpackungen Gustav Dyckerhoff GmbH
+ 1x - Etimark AG
+ 1x - ETIKON Deutschland GmbH & Co. KG
+ 1x - Koninklijke Verpakkingsindustrie Stempher B.V.
+ 1x - TC Transcontinental
+ 1x - Flexpak
+ 1x - RTP Company
+ 1x - CCL Label Meerane GmbH
+ 1x - Amcor Flexibles Burgdorf
+ 1x - Krämer Druck GmbH
+ 1x - VPK Packaging Ltd
+ 1x - Multi-Color Hann. Münden Germany GmbH
+ 1x - HOERBIGER Kompressortechnik GmbH
+ 1x - Multi-Color Corporation
+```
+
+---
+
+## Alphabetical List (All 37 Companies)
+
+1. Amcor Flexibles Burgdorf
+2. Amcor Flexibles Lugo
+3. Anoop Plastic Products Trd. Est.
+4. Beuke Flexodruck GmbH
+5. bn tapes & labels GmbH
+6. CCL Label Meerane GmbH
+7. Celloclair AG
+8. COVERIS Flexibles Deutschland GmbH
+9. dy-pack Verpackungen Gustav Dyckerhoff GmbH
+10. ETIKON Deutschland GmbH & Co. KG
+11. Etimark AG
+12. Faubel & Co. Nachfolger GmbH
+13. Flexpak
+14. Flxon Incorporated
+15. Geisser-Innoflex AG
+16. GIKO Verpackungen GmbH
+17. GIKO VERPACKUNGEN GmbH
+18. HOERBIGER Kompressortechnik GmbH
+19. Koninklijke Verpakkingsindustrie Stempher B.V.
+20. Krämer Druck GmbH
+21. LEIPA Georg Leinfelder GmbH
+22. M. NEEMANN OHG
+23. Multi-Color Corporation
+24. Multi-Color Hann. Münden Germany GmbH
+25. PAPIERSACKFABRIK TENAX GmbH & Co. KG
+26. PEP Labels AG
+27. Pohl Verpackungen GmbH
+28. ppg > wegoflex GmbH
+29. RTP Company
+30. Schäfer GmbH & Co. KG
+31. Schmid Folien GmbH & Co KG
+32. Schreiner Group GmbH & Co. KG
+33. Segezha Packaging GmbH
+34. TC Transcontinental
+35. Thüringer Papierwarenfabrik C. Schröter GmbH & Co KG
+36. VPK Packaging Ltd
+
+---
+
+## Notes:
+
+1. **Name Variations Detected:**
+   - "GIKO Verpackungen GmbH" (3x) vs "GIKO VERPACKUNGEN GmbH" (5x)
+   - These are likely the same company - total 8 emails
+
+2. **Recommendation:**
+   - Add top 6 HIGH PRIORITY customers first (32 emails covered)
+   - Then add MEDIUM PRIORITY (26 more emails = 58 total)
+   - LOW PRIORITY can be added as needed (17 emails)
+
+3. **Quick Win:**
+   - Adding just 6 customers covers 32/81 emails (39.5%)
+   - Adding top 16 customers covers 58/81 emails (71.6%)
+
+---
+
+## CSV Format (for import):
+
+Company Name,Frequency
+"Geisser-Innoflex AG",12
+"Celloclair AG",5
+"Segezha Packaging GmbH",5
+"Faubel & Co. Nachfolger GmbH",5
+"Amcor Flexibles Lugo",5
+"GIKO VERPACKUNGEN GmbH",5
+"GIKO Verpackungen GmbH",3
+"Thüringer Papierwarenfabrik C. Schröter GmbH & Co KG",3
+"Schreiner Group GmbH & Co. KG",3
+"ppg > wegoflex GmbH",2
+"LEIPA Georg Leinfelder GmbH",2
+"Schäfer GmbH & Co. KG",2
+"Anoop Plastic Products Trd. Est.",2
+"Beuke Flexodruck GmbH",2
+"PAPIERSACKFABRIK TENAX GmbH & Co. KG",2
+"COVERIS Flexibles Deutschland GmbH",2
+"Flxon Incorporated",1
+"bn tapes & labels GmbH",1
+"M. NEEMANN OHG",1
+"Schmid Folien GmbH & Co KG",1
+"PEP Labels AG",1
+"Pohl Verpackungen GmbH",1
+"dy-pack Verpackungen Gustav Dyckerhoff GmbH",1
+"Etimark AG",1
+"ETIKON Deutschland GmbH & Co. KG",1
+"Koninklijke Verpakkingsindustrie Stempher B.V.",1
+"TC Transcontinental",1
+"Flexpak",1
+"RTP Company",1
+"CCL Label Meerane GmbH",1
+"Amcor Flexibles Burgdorf",1
+"Krämer Druck GmbH",1
+"VPK Packaging Ltd",1
+"Multi-Color Hann. Münden Germany GmbH",1
+"HOERBIGER Kompressortechnik GmbH",1
+"Multi-Color Corporation",1
+

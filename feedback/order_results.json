@@ -1,0 +1,3457 @@
+[
+  {
+    "order_id": "TEST_ORDER_20251012_000445",
+    "timestamp": "2025-10-12T00:04:46.246384",
+    "email": {
+      "subject": "Test Order - Telegram Integration",
+      "from": "test@example.com",
+      "body": "This is a test email for Telegram integration",
+      "message_id": "test_123"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "confidence": 0.95
+      },
+      "entities": {
+        "company_name": "Test Company GmbH",
+        "customer_name": "John Doe",
+        "product_names": [
+          "Test Product 1",
+          "Test Product 2"
+        ],
+        "quantities": [
+          10,
+          20
+        ],
+        "prices": [
+          15.5,
+          25.0
+        ]
+      },
+      "context": {
+        "customer_info": {
+          "name": "Test Company GmbH",
+          "email": "test@company.com",
+          "phone": "+49 123 456789",
+          "match_score": 0.95
+        },
+        "json_data": {
+          "products": [
+            {
+              "default_code": "TEST001",
+              "name": "Test Product 1",
+              "match_score": 0.92,
+              "standard_price": 15.5,
+              "extracted_product_name": "Test Product 1"
+            },
+            {
+              "default_code": "TEST002",
+              "name": "Test Product 2",
+              "match_score": 0.88,
+              "standard_price": 25.0,
+              "extracted_product_name": "Test Product 2"
+            }
+          ]
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "id": 12345,
+          "name": "Test Company GmbH",
+          "email": "test@company.com"
+        },
+        "products": [
+          {
+            "json_product": {
+              "default_code": "TEST001"
+            },
+            "odoo_product": {
+              "id": 67890
+            }
+          },
+          {
+            "json_product": {
+              "default_code": "TEST002"
+            },
+            "odoo_product": {
+              "id": 67891
+            }
+          }
+        ]
+      },
+      "order_created": {
+        "created": false,
+        "message": "Test mode - order not created"
+      }
+    },
+    "telegram_message_id": 4,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_000714",
+    "timestamp": "2025-10-12T00:07:15.469106",
+    "email": {
+      "subject": "WG: Einkauf-Bestellung BE25002223",
+      "from": "\"Karim Elouahabi\" <k.el@sds-print.com>",
+      "body": "Mit freundlichen Grüßen / Kind regards\n\n\n\nKarim El Ouahabi\n\nTechnischer Leiter / Technical Director\n\n\n\nSDS GmbH\nKruppstr. 122\nD-60388 Frankfurt\n\n\nTel:   +49 (0) 69 4080 29 70\nMobil +49 (0) 151 158 24 393\n\n\n\n <mailto:k.el@sds-print.com> k.el@sds-print.com\n\nwww.sds-print.com <http://www.sds-print.com/>\n\n\n\nVon: Kuge, Tanja <tanja.kuge@maag.de>\nGesendet: Mittwoch, 8. Oktober 2025 08:24\nAn: 'order@sds-print.com' <order@sds-print.com>\nBetreff: Einkauf-Bestellung BE25002223\n\n\n\n\n\n\n\nViele Grüße | Best regards\n\n\n\ni. A. Tanja Kuge\n\nPurchasing\n\n\n\nMaag GmbH\n\nZum Sauerland 4\n\nD-59469 Ense | Germany\n\n\n\nPhone   +49 (0) 2938 | 9796 - 122\n\nFax       +49 (0) 2938 | 9796 - 150\n\nMail      tanja.kuge@maag.de <mailto:tanja.kuge@maag.de>\n\n\n\n <https://maag.de/> maag.de |  <https://twitter.com/GmbhMaag> Twitter |\n<https://www.facebook.com/Maag-GmbH-1280237575373400/> Facebook |\n<https://www.linkedin.com/company/maag-gmbh> LinkedIn |\n<https://www.xing.com/companies/maaggmbh> Xing |  <https://maag.de/blog>\nBlog\n\n\n\n\n\n\n\nAmtsgericht Iserlohn | HRB 1362\n\nGeschäftsführer: Ansgar Schonlau\n\n\n\n\n\n\n=== ATTACHMENT: Einkauf-Bestellung BE25002223.pdf ===\n\n--- Page 1 ---\nMaag GmbH\nZum Sauerland 4 · 59469 Ense\nSDS GmbH\nKruppstraße 122\n60388 Frankfurt am Main\nDeutschland\nBestellung Bestell-Nr.: BE25/002223\nDatum: 8. Oktober 2025\nIhre Lieferanten-Nr.: 81903\nArtikelnr. Bezeichnung Menge ME Preis/PE % Betrag\n9000841 Rakelmesser Edelstahl Gold 35x0,20 100 Stück 8,69 / 1 869,00\nRPELänge 1335mm, 50 Stk. pro Box\nUnsere Komission:\nLiefertermin: 10.10.25\n9000826 DuroSeal W&H End Seals Miraflex SDS 200 Stück 5,00 / 1 1.000,00\n007 CR Grau\nUnsere Komission:\nLiefertermin: 10.10.25\nTotal EUR ohne USt. 1.869,00\n19% USt. 355,11\nTotal EUR inkl. USt. 2.224,11\nLieferadresse: Betriebsbedarf\nZahlung: 14 Tage 2 %, 30 Tage netto\nLieferung: Delivered at place\nMaag GmbH · Zum Sauerland 4 · 59469 Ense · T:+49 2938 9796 0 · F:+49 2938 9796 150 · info@maag.de · www.maag.de\nSparkasse Iserlohn · IBAN: DE 32 4455 0045 0018 0130 78 · BIC: WELA DE D1ISL · Commerzbank Iserlohn · IBAN: DE 08 4454 0022 0570 2774 00 · BIC: COBA DE FF 445\nGeschäftsführer: Ansgar Schonlau · Amtsgericht Iserlohn HRB 1362 · USt-IdNr.DE125582505",
+      "message_id": "<022d01dc38f8$98578670$c9069350$@sds-print.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_status",
+        "confidence": 0.85,
+        "urgency": "medium",
+        "reasoning": "The email contains a reference to a purchase order (Einkauf-Bestellung BE25002223) and is sent from a purchasing department, indicating it is related to an order inquiry. The subject line and the context suggest that the sender is following up on an order."
+      },
+      "entities": {
+        "customer_name": "Tanja Kuge",
+        "company_name": "Maag GmbH",
+        "email": "tanja.kuge@maag.de",
+        "phone": "+49 (0) 2938 9796 - 122",
+        "address": "Zum Sauerland 4, 59469 Ense, Germany",
+        "product_names": [
+          "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm 35x0,20",
+          "DuroSeal W&H End Seals Miraflex 007 CR Gray"
+        ],
+        "product_codes": [
+          "9000841",
+          "9000826"
+        ],
+        "quantities": [
+          100,
+          200
+        ],
+        "prices": [
+          8.69,
+          5.0
+        ],
+        "order_number": "BE25002223",
+        "order_date": "8. Oktober 2025",
+        "delivery_date": "10.10.25",
+        "urgency": "",
+        "payment_terms": "14 Tage 2 %, 30 Tage netto",
+        "shipping_terms": "Delivered at place",
+        "notes": "",
+        "structured": {
+          "customer": {
+            "name": "Tanja Kuge",
+            "company": "Maag GmbH",
+            "email": "tanja.kuge@maag.de",
+            "phone": "+49 (0) 2938 9796 - 122",
+            "address": "Zum Sauerland 4, 59469 Ense, Germany"
+          },
+          "products": [
+            {
+              "code": "9000841",
+              "name": "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm",
+              "quantity": 100,
+              "unit_price": 8.69,
+              "specifications": "50 pieces per box"
+            },
+            {
+              "code": "9000826",
+              "name": "DuroSeal W&H End Seals Miraflex 007 CR Gray",
+              "quantity": 200,
+              "unit_price": 5.0,
+              "specifications": ""
+            }
+          ],
+          "order": {
+            "order_number": "BE25002223",
+            "date": "8. Oktober 2025",
+            "delivery_date": "10.10.25",
+            "urgency": "",
+            "payment_terms": "14 Tage 2 %, 30 Tage netto",
+            "shipping_terms": "Delivered at place",
+            "notes": ""
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3076,
+          "name": "Maag GmbH",
+          "ref": "1256",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Zum Sauerland 4",
+            "street2": "",
+            "city": "Ense",
+            "zip": "59469",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE125582505",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 9630,
+              "name": "Doctor Blade Gold 35x0,20 mm / RPE / L1335 mm",
+              "default_code": "G-35-20-RPE-L1335",
+              "list_price": 0.0,
+              "standard_price": 3.72,
+              "type": "consu",
+              "category": "Rakelmesser",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7428571428571429,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7428571428571429
+            },
+            {
+              "id": 9945,
+              "name": "SDS006 444 US DuroSeal W&H End seals Miraflex Grey Hard",
+              "default_code": "SDS006US Grey",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.0363636363636364,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.0363636363636364
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm",
+              "matched_odoo_id": 9630,
+              "confidence": 1.7428571428571429,
+              "reasoning": "Auto-matched (high confidence: 174%)"
+            },
+            {
+              "requested": "DuroSeal W&H End Seals Miraflex 007 CR Gray",
+              "matched_odoo_id": 9945,
+              "confidence": 1.0363636363636364,
+              "reasoning": "Auto-matched (high confidence: 104%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 2,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3076,
+          "name": "Maag GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [
+          {
+            "found": true,
+            "id": 9630,
+            "name": "Doctor Blade Gold 35x0,20 mm / RPE / L1335 mm",
+            "code": "G-35-20-RPE-L1335",
+            "match_method": "json_id_verified",
+            "json_match_score": 1.7428571428571429
+          },
+          {
+            "found": true,
+            "id": 9945,
+            "name": "SDS006 444 US DuroSeal W&H End seals Miraflex Grey Hard",
+            "code": "SDS006US Grey",
+            "match_method": "json_id_verified",
+            "json_match_score": 1.0363636363636364
+          }
+        ],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 2,
+          "products_total": 2
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 6,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_001108",
+    "timestamp": "2025-10-12T00:11:09.215109",
+    "email": {
+      "subject": "[OK] New Order Inquiry - Maag GmbH",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "",
+      "message_id": "<68ea80b1.170a0220.1a7f7b.794e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The subject line \"New Order Inquiry - Maag GmbH\" and the body of the email indicate that the customer is inquiring about placing a new order. The mention of a specific company (Maag GmbH) suggests a business-related inquiry."
+      },
+      "entities": {
+        "customer_name": "",
+        "company_name": "SDS",
+        "email": "",
+        "phone": "",
+        "address": "",
+        "product_names": [
+          "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm",
+          "Cushion Mount Plus E1320 Yellow 457x23 mm",
+          "DuroSeal W&H End Seals Miraflex 007 CR Gray"
+        ],
+        "product_codes": [
+          "9000841",
+          "RPR-123965",
+          "9000826"
+        ],
+        "quantities": [
+          50,
+          0,
+          0
+        ],
+        "prices": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "order_number": "",
+        "order_date": "",
+        "delivery_date": "",
+        "urgency": "",
+        "payment_terms": "",
+        "shipping_terms": "",
+        "notes": "",
+        "structured": {
+          "customer": {
+            "name": "",
+            "company": "SDS",
+            "email": "",
+            "phone": "",
+            "address": ""
+          },
+          "products": [
+            {
+              "code": "9000841",
+              "name": "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm",
+              "quantity": 50,
+              "unit_price": 0.0,
+              "specifications": "Stainless Steel, Gold, 35x0.20, RPE Length 1335mm"
+            },
+            {
+              "code": "RPR-123965",
+              "name": "Cushion Mount Plus E1320 Yellow 457x23 mm",
+              "quantity": 0,
+              "unit_price": 0.0,
+              "specifications": "Yellow, 457x23 mm"
+            },
+            {
+              "code": "9000826",
+              "name": "DuroSeal W&H End Seals Miraflex 007 CR Gray",
+              "quantity": 0,
+              "unit_price": 0.0,
+              "specifications": "Gray, 007 CR"
+            }
+          ],
+          "order": {
+            "order_number": "",
+            "date": "",
+            "delivery_date": "",
+            "urgency": "",
+            "payment_terms": "",
+            "shipping_terms": "",
+            "notes": ""
+          }
+        }
+      },
+      "context": {
+        "customer_info": null,
+        "json_data": {
+          "products": [
+            {
+              "id": 9630,
+              "name": "Doctor Blade Gold 35x0,20 mm / RPE / L1335 mm",
+              "default_code": "G-35-20-RPE-L1335",
+              "list_price": 0.0,
+              "standard_price": 3.72,
+              "type": "consu",
+              "category": "Rakelmesser",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7428571428571429,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7428571428571429
+            },
+            {
+              "id": 8650,
+              "name": "3M Cushion Mount Plus E1320 457mm x 23m",
+              "default_code": "E1320-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.8,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 0.8
+            },
+            {
+              "id": 9945,
+              "name": "SDS006 444 US DuroSeal W&H End seals Miraflex Grey Hard",
+              "default_code": "SDS006US Grey",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.0363636363636364,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.0363636363636364
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm",
+              "matched_odoo_id": 9630,
+              "confidence": 1.7428571428571429,
+              "reasoning": "Auto-matched (high confidence: 174%)"
+            },
+            {
+              "requested": "Cushion Mount Plus E1320 Yellow 457x23 mm",
+              "matched_odoo_id": 8650,
+              "confidence": 0.8,
+              "reasoning": "Auto-matched (high confidence: 80%)"
+            },
+            {
+              "requested": "DuroSeal W&H End Seals Miraflex 007 CR Gray",
+              "matched_odoo_id": 9945,
+              "confidence": 1.0363636363636364,
+              "reasoning": "Auto-matched (high confidence: 104%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 3,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": false,
+          "reason": "SDS company excluded"
+        },
+        "products": [
+          {
+            "found": true,
+            "id": 9630,
+            "name": "Doctor Blade Gold 35x0,20 mm / RPE / L1335 mm",
+            "code": "G-35-20-RPE-L1335",
+            "match_method": "json_id_verified",
+            "json_match_score": 1.7428571428571429
+          },
+          {
+            "found": true,
+            "id": 8650,
+            "name": "3M Cushion Mount Plus E1320 457mm x 23m",
+            "code": "E1320-457-23",
+            "match_method": "json_id_verified",
+            "json_match_score": 0.8
+          },
+          {
+            "found": true,
+            "id": 9945,
+            "name": "SDS006 444 US DuroSeal W&H End seals Miraflex Grey Hard",
+            "code": "SDS006US Grey",
+            "match_method": "json_id_verified",
+            "json_match_score": 1.0363636363636364
+          }
+        ],
+        "match_summary": {
+          "customer_matched": false,
+          "products_matched": 3,
+          "products_total": 3
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 7,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_001410",
+    "timestamp": "2025-10-12T00:14:11.410254",
+    "email": {
+      "subject": "[Testing] Antwort: AW: Bestellung",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: Gerhard.Kleinferchner@stenqvist.at\nDate: Thu, 29 Oct 2020 11:09:14 +0100\nSubject: Antwort: AW: Bestellung\n\n------------------------\nOriginal Message:\n------------------------\n\n\n=== ATTACHMENT: image002.jpg ===\nPrint Services\n\n=== ATTACHMENT: Auftragsbestättigung Stenqvist Austria GmbH 29.10.2020.pdf ===\n\n--- Page 1 ---\nSDS GmbH - Kruppstraße 122 - 60388 Frankfurt am Main\nStenqvist Austria GmbH\nGerhard Kleinferchner\n3G Gewerbepark 1\n8755 St. Peter ob Judenburg\nÖsterreich\nKunden Nr.: 1337\nBearbeiter: Herr Amine Znaidi\nBestellnr.: PON036.027675/001\nKD.USt-IdNr.: ATU39281905\nLieferdatum: 06.11.2020\nDatum: 29.10.2020\nAuftragsbestätigung Nr. 359\nMenge Artikelbezeichnung Einzelpreis Rabatt Gesamtpreis\nEUR % EUR\n24,00 Rolle 3M Cushion Mount Plus E1520 457mm x 23m 156,90 3.765,60\n1,00 Rolle 3M 9353R Splicetape 50mm x 33m\nMuster\n5,00 Meter Rakelmesser Edelstahl Gold 35 x 0,20 RPE\n100 Meter pro Box\n10,00 Meter Rakelmesser Longlife2 35x0,20x125x1,7mm\n100 Meter pro Box\nGesamt Netto 3.765,60\nsteuerfrei (Innergemeinschaftliche Lieferung) 3.765,60\nGesamtbetrag 3.765,60\nZahlbar innerhalb von 30 Tagen ohne Abzug\nLieferung frei Haus\nZukünftige Bestellungen bitte an order@sds-print.com versenden.\nSDS GmbH Tel +49 6940802970 Ust-ID.-Nr. DE284216833 Frankfurter Sparkasse\nKruppstraße 122 Fax +49 69408073 Amtsgericht Konstanz Konto 200524984 BLZ50050201\n60388 Frankfurt am Main info@sds-print.com Geschäftsführer Karim El Ouahabi IBAN DE57 5005 0201 0200 5249 84\nDeutschland www.sds-print.com BIC-Code HELADEF1822",
+      "message_id": "<68e657b3.170a0220.9a56d.9b51@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.95,
+        "urgency": "low",
+        "reasoning": "The email contains an order confirmation attachment and mentions details like order number, customer number, and delivery date. The subject line and body indicate that this is a follow-up on an order."
+      },
+      "entities": {
+        "customer_name": "Gerhard Kleinferchner",
+        "company_name": "Stenqvist Austria GmbH",
+        "email": "Gerhard.Kleinferchner@stenqvist.at",
+        "phone": "",
+        "address": "3G Gewerbepark 1, 8755 St. Peter ob Judenburg, Österreich",
+        "product_names": [
+          "3M Cushion Mount Plus E1520 457mm x 23m",
+          "3M 9353R Splicetape 50mm x 33m Sample",
+          "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm",
+          "Longlife2 Doctor Blade 35x0.20x125x1.7mm"
+        ],
+        "product_codes": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "quantities": [
+          24,
+          1,
+          5,
+          10
+        ],
+        "prices": [
+          156.9,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "order_number": "PON036.027675/001",
+        "order_date": "29.10.2020",
+        "delivery_date": "06.11.2020",
+        "urgency": "",
+        "payment_terms": "Zahlbar innerhalb von 30 Tagen ohne Abzug",
+        "shipping_terms": "Lieferung frei Haus",
+        "notes": "Zukünftige Bestellungen bitte an order@sds-print.com versenden.",
+        "structured": {
+          "customer": {
+            "name": "Gerhard Kleinferchner",
+            "company": "Stenqvist Austria GmbH",
+            "email": "Gerhard.Kleinferchner@stenqvist.at",
+            "phone": "",
+            "address": "3G Gewerbepark 1, 8755 St. Peter ob Judenburg, Österreich"
+          },
+          "products": [
+            {
+              "code": "",
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "quantity": 24,
+              "unit_price": 156.9,
+              "specifications": ""
+            },
+            {
+              "code": "",
+              "name": "3M 9353R Splicetape 50mm x 33m Sample",
+              "quantity": 1,
+              "unit_price": 0.0,
+              "specifications": ""
+            },
+            {
+              "code": "",
+              "name": "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm",
+              "quantity": 5,
+              "unit_price": 0.0,
+              "specifications": "100 Meters per Box"
+            },
+            {
+              "code": "",
+              "name": "Longlife2 Doctor Blade 35x0.20x125x1.7mm",
+              "quantity": 10,
+              "unit_price": 0.0,
+              "specifications": "100 Meters per Box"
+            }
+          ],
+          "order": {
+            "order_number": "PON036.027675/001",
+            "date": "29.10.2020",
+            "delivery_date": "06.11.2020",
+            "urgency": "",
+            "payment_terms": "Zahlbar innerhalb von 30 Tagen ohne Abzug",
+            "shipping_terms": "Lieferung frei Haus",
+            "notes": "Zukünftige Bestellungen bitte an order@sds-print.com versenden."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3153,
+          "name": "Stenqvist Austria GmbH",
+          "ref": "1337",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "3G Gewerbepark 1",
+            "street2": "",
+            "city": "St. Peter ob Judenburg",
+            "zip": "8755",
+            "country": "Austria",
+            "state": ""
+          },
+          "vat": "ATU39281905",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8647,
+              "name": "3M 9353R Splicetape 50mm x 33m",
+              "default_code": "9353R",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.275,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.275
+            },
+            {
+              "id": 9630,
+              "name": "Doctor Blade Gold 35x0,20 mm / RPE / L1335 mm",
+              "default_code": "G-35-20-RPE-L1335",
+              "list_price": 0.0,
+              "standard_price": 3.72,
+              "type": "consu",
+              "category": "Rakelmesser",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7923076923076924,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7923076923076924
+            },
+            {
+              "id": 9523,
+              "name": "Doctor Blade Carbon 35x0,20x125x1,7 mm",
+              "default_code": "C-35-20-125-17",
+              "list_price": 0.0,
+              "standard_price": 0.75,
+              "type": "consu",
+              "category": "Rakelmesser",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 2.4000000000000004,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 2.4000000000000004
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "matched_odoo_id": 8651,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "3M 9353R Splicetape 50mm x 33m Sample",
+              "matched_odoo_id": 8647,
+              "confidence": 1.275,
+              "reasoning": "Auto-matched (high confidence: 127%)"
+            },
+            {
+              "requested": "Doctor Blade Stainless Steel Gold 35x0.20 RPE Length 1335mm",
+              "matched_odoo_id": 9630,
+              "confidence": 1.7923076923076924,
+              "reasoning": "Auto-matched (high confidence: 179%)"
+            },
+            {
+              "requested": "Longlife2 Doctor Blade 35x0.20x125x1.7mm",
+              "matched_odoo_id": 9523,
+              "confidence": 2.4000000000000004,
+              "reasoning": "Auto-matched (high confidence: 240%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 4,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3153,
+          "name": "Stenqvist Austria GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [
+          {
+            "found": true,
+            "id": 8651,
+            "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+            "code": "E1520-457-23",
+            "match_method": "json_id_verified",
+            "json_match_score": 1.7
+          },
+          {
+            "found": true,
+            "id": 8647,
+            "name": "3M 9353R Splicetape 50mm x 33m",
+            "code": "9353R",
+            "match_method": "json_id_verified",
+            "json_match_score": 1.275
+          },
+          {
+            "found": true,
+            "id": 9630,
+            "name": "Doctor Blade Gold 35x0,20 mm / RPE / L1335 mm",
+            "code": "G-35-20-RPE-L1335",
+            "match_method": "json_id_verified",
+            "json_match_score": 1.7923076923076924
+          },
+          {
+            "found": true,
+            "id": 9523,
+            "name": "Doctor Blade Carbon 35x0,20x125x1,7 mm",
+            "code": "C-35-20-125-17",
+            "match_method": "json_id_verified",
+            "json_match_score": 2.4000000000000004
+          }
+        ],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 4,
+          "products_total": 4
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 8,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_004103",
+    "timestamp": "2025-10-12T00:41:03.797875",
+    "email": {
+      "subject": "[Testing] 24203104_4_20201001_142946.pdf",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: \"Ebert, Silke\" <Silke.Ebert@ppg-wegoflex.de>\nDate: Thu, 1 Oct 2020 12:33:32 +0000\nSubject: 24203104_4_20201001_142946.pdf\n\n------------------------\nOriginal Message:\n------------------------\nSehr geehrte Damen und Herren,\n\nanbei unsere Bestellung.\n\nMit freundlichen Gren\nKind Regards\n\ni. A. Silke Ebert\nLeiterin Einkauf Flexibles / head of purchasing flexibles",
+      "message_id": "<68e6579f.170a0220.9a56d.9b3e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.9,
+        "urgency": "medium",
+        "reasoning": "The email contains a PDF attachment labeled as an order and the body mentions \"anbei unsere Bestellung\" which translates to \"attached is our order\" in English. This indicates that the email is related to a new order."
+      },
+      "entities": {
+        "customer_name": "Silke Ebert",
+        "company_name": "PPG WegoFlex",
+        "email": "Silke.Ebert@ppg-wegoflex.de",
+        "phone": "",
+        "address": "",
+        "product_names": [],
+        "product_codes": [],
+        "quantities": [],
+        "prices": [],
+        "order_number": "",
+        "order_date": "2020-10-01",
+        "delivery_date": "",
+        "urgency": "",
+        "payment_terms": "",
+        "shipping_terms": "",
+        "notes": "",
+        "structured": {
+          "customer": {
+            "name": "Silke Ebert",
+            "company": "PPG WegoFlex",
+            "email": "Silke.Ebert@ppg-wegoflex.de",
+            "phone": "",
+            "address": ""
+          },
+          "products": [],
+          "order": {
+            "order_number": "",
+            "date": "2020-10-01",
+            "delivery_date": "",
+            "urgency": "",
+            "payment_terms": "",
+            "shipping_terms": "",
+            "notes": ""
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "1271",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Bohldamm 9",
+            "street2": "",
+            "city": "Trebbin",
+            "zip": "14959",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE150118419",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.8275862068965517
+        },
+        "json_data": {
+          "products": []
+        },
+        "confirmed_matches": {
+          "matched_products": [],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 0,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 0,
+          "products_total": 0
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 9,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_005728",
+    "timestamp": "2025-10-12T00:57:28.969800",
+    "email": {
+      "subject": "[Testing] 24203104_4_20201001_142946.pdf",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: \"Ebert, Silke\" <Silke.Ebert@ppg-wegoflex.de>\nDate: Thu, 1 Oct 2020 12:33:32 +0000\nSubject: 24203104_4_20201001_142946.pdf\n\n------------------------\nOriginal Message:\n------------------------\nSehr geehrte Damen und Herren,\n\nanbei unsere Bestellung.\n\nMit freundlichen Gren\nKind Regards\n\ni. A. Silke Ebert\nLeiterin Einkauf Flexibles / head of purchasing flexibles",
+      "message_id": "<68e6579f.170a0220.9a56d.9b3e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.9,
+        "urgency": "medium",
+        "reasoning": "The email contains a PDF attachment labeled as an order and the body mentions \"anbei unsere Bestellung\" which translates to \"attached is our order\" in English. This indicates that the email is related to a new order."
+      },
+      "entities": {
+        "customer_name": "Silke Ebert",
+        "company_name": "PPG WegoFlex",
+        "email": "Silke.Ebert@ppg-wegoflex.de",
+        "phone": "",
+        "address": "",
+        "product_names": [],
+        "product_codes": [],
+        "quantities": [],
+        "prices": [],
+        "order_number": "",
+        "order_date": "2020-10-01",
+        "delivery_date": "",
+        "urgency": "",
+        "payment_terms": "",
+        "shipping_terms": "",
+        "notes": "",
+        "structured": {
+          "customer": {
+            "name": "Silke Ebert",
+            "company": "PPG WegoFlex",
+            "email": "Silke.Ebert@ppg-wegoflex.de",
+            "phone": "",
+            "address": ""
+          },
+          "products": [],
+          "order": {
+            "order_number": "",
+            "date": "2020-10-01",
+            "delivery_date": "",
+            "urgency": "",
+            "payment_terms": "",
+            "shipping_terms": "",
+            "notes": ""
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "1271",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Bohldamm 9",
+            "street2": "",
+            "city": "Trebbin",
+            "zip": "14959",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE150118419",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.8275862068965517
+        },
+        "json_data": {
+          "products": []
+        },
+        "confirmed_matches": {
+          "matched_products": [],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 0,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 0,
+          "products_total": 0
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 10,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_005809",
+    "timestamp": "2025-10-12T00:58:10.479376",
+    "email": {
+      "subject": "[Testing] 24203104_4_20201001_142946.pdf",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: \"Ebert, Silke\" <Silke.Ebert@ppg-wegoflex.de>\nDate: Thu, 1 Oct 2020 12:33:32 +0000\nSubject: 24203104_4_20201001_142946.pdf\n\n------------------------\nOriginal Message:\n------------------------\nSehr geehrte Damen und Herren,\n\nanbei unsere Bestellung.\n\nMit freundlichen Gren\nKind Regards\n\ni. A. Silke Ebert\nLeiterin Einkauf Flexibles / head of purchasing flexibles",
+      "message_id": "<68e6579f.170a0220.9a56d.9b3e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.9,
+        "urgency": "medium",
+        "reasoning": "The email contains a PDF attachment labeled as an order and the body mentions \"anbei unsere Bestellung\" which translates to \"attached is our order\" in English. This indicates that the email is related to a new order."
+      },
+      "entities": {
+        "customer_name": "Silke Ebert",
+        "company_name": "PPG WegoFlex",
+        "email": "Silke.Ebert@ppg-wegoflex.de",
+        "phone": "",
+        "address": "",
+        "product_names": [],
+        "product_codes": [],
+        "quantities": [],
+        "prices": [],
+        "order_number": "",
+        "order_date": "2020-10-01",
+        "delivery_date": "",
+        "urgency": "",
+        "payment_terms": "",
+        "shipping_terms": "",
+        "notes": "",
+        "structured": {
+          "customer": {
+            "name": "Silke Ebert",
+            "company": "PPG WegoFlex",
+            "email": "Silke.Ebert@ppg-wegoflex.de",
+            "phone": "",
+            "address": ""
+          },
+          "products": [],
+          "order": {
+            "order_number": "",
+            "date": "2020-10-01",
+            "delivery_date": "",
+            "urgency": "",
+            "payment_terms": "",
+            "shipping_terms": "",
+            "notes": ""
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "1271",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Bohldamm 9",
+            "street2": "",
+            "city": "Trebbin",
+            "zip": "14959",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE150118419",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.8275862068965517
+        },
+        "json_data": {
+          "products": []
+        },
+        "confirmed_matches": {
+          "matched_products": [],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 0,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 0,
+          "products_total": 0
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 11,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_010252",
+    "timestamp": "2025-10-12T01:02:52.835784",
+    "email": {
+      "subject": "[Testing] 24203104_4_20201001_142946.pdf",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: \"Ebert, Silke\" <Silke.Ebert@ppg-wegoflex.de>\nDate: Thu, 1 Oct 2020 12:33:32 +0000\nSubject: 24203104_4_20201001_142946.pdf\n\n------------------------\nOriginal Message:\n------------------------\nSehr geehrte Damen und Herren,\n\nanbei unsere Bestellung.\n\nMit freundlichen Gren\nKind Regards\n\ni. A. Silke Ebert\nLeiterin Einkauf Flexibles / head of purchasing flexibles\n________________________________\n[cid:image001.png@01D697FF.D596E8E0]\nppg > wegoflex GmbH\nAm Bohldamm 9\n14959 Trebbin\n\nT +49 (0) 33731 / 824 - 38\nF +49 (0) 33731 / 824 - 638\nE Silke.Ebert@ppg-wegoflex.de<mailto:Silke.Ebert@ppg-wegoflex.de>\nI www.prepacgroup.de<http://www.prepacgroup.de>\n\nAmtsgericht Potsdam, Reg.-Nr. HRB 12586\nUSt.IdNr. DE 150 11 84 19\nGeschftsfhrung: Dipl.-Ing. Thomas Hake, Dipl.-Wirt. jur. Nilo Reichenbach\n________________________________\n\n\n\n=== ATTACHMENT: image001.png ===\nppg\n\n=== ATTACHMENT: 24203104_4_20201001_142946.pdf ===\n\n--- Page 1 ---\nppg > wegoflex GmbH > Am Bohldamm 9 > 14959 Trebbin\nSDS GmbH\nHerr Elouahabi\nKruppstrasse 122\nD-60388 Frankfurt Bearbeiter : Silke Ebert\nTelefon : +49 (0)33731/824-38\nFax : +49 (0)33731/824-638\nE-Mail : silke.ebert@ppg-wegoflex.de\nFax: 044 520 53 24 Datum : 01.10.2020\nBestellung Nr. 24203104\nSehr geehrter Herr Elouahabi,\nwir bestellen hiermit nachfolgend aufgeführte Positionen:\nPos. Menge ME Beschreibung E-Preis per ME Gesamt\n1 14 Rolle 3 M Cushion Mount 457mm x 23 m 164 EUR / Rolle 2.296,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617625\nLiefertermin: 08.10.2020 / KW 41 / 2020\n2 14 Rolle 3 M Cushion Mount 600mm x 23m 220 EUR / Rolle 3.080,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617626\nLiefertermin: 08.10.2020 / KW 41 / 2020\n3 2 Rolle 3 M Cushion Mount 457mm x 23 m 184 EUR / Rolle 368,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619379\nLiefertermin: 08.10.2020 / KW 41 / 2020\n4 2 Rolle 3 M Cushion Mount 600mm x 23m 244 EUR / Rolle 488,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619378\nLiefertermin: 08.10.2020 / KW 41 / 2020\nZahlungskonditionen : 30 Tage nach Rechnungsdatum netto\nLieferbedingungen : frei Haus, einschl. Verpackung und Versicherung\nLieferanschrift : ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin\nWir bitten Sie, Ihre Rechnung ausschließlich per E-Mail an:\nrechnungseingang@ppg-wegoflex.de\nzu versenden (pro E-Mail eine Rechnung, vorzugsweise im pdf-Format).\nWir bitten um schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und\nAbnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung\nnachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittel-\nhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet.\nSeite 1 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN DE91 2802 0050 4402 0881 00\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC OLBODEH2XXX\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de\n\n--- Page 2 ---\nMit freundlichen Grüßen\nppg > wegoflex GmbH\nDieses Schreiben wurde maschinell erstellt und hat auch ohne Unterschrift Gültigkeit.\nSeite 2 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN OLBODEH2XXX\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC DE91 2802 0050 4402 0881 00\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de",
+      "message_id": "<68e6579f.170a0220.9a56d.9b3e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email contains a PDF attachment labeled as a purchase order and the body text explicitly mentions \"anbei unsere Bestellung,\" which translates to \"attached is our order.\" This indicates that the email is related to a new order."
+      },
+      "entities": {
+        "customer_name": "Silke Ebert",
+        "company_name": "ppg > wegoflex GmbH",
+        "email": "Silke.Ebert@ppg-wegoflex.de",
+        "phone": "+49 (0) 33731 / 824 - 38",
+        "address": "Am Bohldamm 9, 14959 Trebbin",
+        "product_names": [
+          "Cushion Mount 457mm x 23m",
+          "Cushion Mount 600mm x 23m",
+          "Cushion Mount 457mm x 23m",
+          "Cushion Mount 600mm x 23m"
+        ],
+        "product_codes": [
+          "E1520",
+          "E1520",
+          "E1820",
+          "E1820"
+        ],
+        "quantities": [
+          14,
+          14,
+          2,
+          2
+        ],
+        "prices": [
+          164.0,
+          220.0,
+          184.0,
+          244.0
+        ],
+        "order_number": "24203104",
+        "order_date": "01.10.2020",
+        "delivery_date": "08.10.2020",
+        "urgency": "",
+        "payment_terms": "30 Tage nach Rechnungsdatum netto",
+        "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+        "notes": "Lieferanschrift: ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin. Rechnungen per E-Mail an rechnungseingang@ppg-wegoflex.de. Schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Speditionsfahrzeuge zur Anlieferung hygienisch einwandfreier Waren geeignet.",
+        "structured": {
+          "customer": {
+            "name": "Silke Ebert",
+            "company": "ppg > wegoflex GmbH",
+            "email": "Silke.Ebert@ppg-wegoflex.de",
+            "phone": "+49 (0) 33731 / 824 - 38",
+            "address": "Am Bohldamm 9, 14959 Trebbin"
+          },
+          "products": [
+            {
+              "code": "E1520",
+              "name": "Cushion Mount 457mm x 23m",
+              "quantity": 14,
+              "unit_price": 164.0,
+              "specifications": "Rolle 3 M"
+            },
+            {
+              "code": "E1520",
+              "name": "Cushion Mount 600mm x 23m",
+              "quantity": 14,
+              "unit_price": 220.0,
+              "specifications": "Rolle 3 M"
+            },
+            {
+              "code": "E1820",
+              "name": "Cushion Mount 457mm x 23m",
+              "quantity": 2,
+              "unit_price": 184.0,
+              "specifications": "Rolle 3 M"
+            },
+            {
+              "code": "E1820",
+              "name": "Cushion Mount 600mm x 23m",
+              "quantity": 2,
+              "unit_price": 244.0,
+              "specifications": "Rolle 3 M"
+            }
+          ],
+          "order": {
+            "order_number": "24203104",
+            "date": "01.10.2020",
+            "delivery_date": "08.10.2020",
+            "urgency": "",
+            "payment_terms": "30 Tage nach Rechnungsdatum netto",
+            "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+            "notes": "Lieferanschrift: ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin. Rechnungen per E-Mail an rechnungseingang@ppg-wegoflex.de. Schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Speditionsfahrzeuge zur Anlieferung hygienisch einwandfreier Waren geeignet."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "1271",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Bohldamm 9",
+            "street2": "",
+            "city": "Trebbin",
+            "zip": "14959",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE150118419",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.9444444444444444
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.557142857142857,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.557142857142857
+            },
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.557142857142857,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.557142857142857
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Cushion Mount 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "Cushion Mount 600mm x 23m",
+              "matched_odoo_id": 8798,
+              "confidence": 1.557142857142857,
+              "reasoning": "Auto-matched (high confidence: 156%)"
+            },
+            {
+              "requested": "Cushion Mount 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "Cushion Mount 600mm x 23m",
+              "matched_odoo_id": 8798,
+              "confidence": 1.557142857142857,
+              "reasoning": "Auto-matched (high confidence: 156%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 4,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": false
+        },
+        "products": [
+          {
+            "json_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8653,
+                "[E1820-457-23] 3M Cushion Mount Plus E1820 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1820 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.557142857142857,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.557142857142857
+            },
+            "odoo_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8798,
+                "[E1820-600] 3MCushion Mount Plus E1820 600mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1820 600mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8653,
+                "[E1820-457-23] 3M Cushion Mount Plus E1820 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1820 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.557142857142857,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.557142857142857
+            },
+            "odoo_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8798,
+                "[E1820-600] 3MCushion Mount Plus E1820 600mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1820 600mm x 23m"
+          }
+        ],
+        "match_summary": {
+          "customer_matched": false,
+          "products_matched": 4,
+          "products_total": 4
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 12,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_011914",
+    "timestamp": "2025-10-12T01:19:14.747515",
+    "email": {
+      "subject": "[Testing] 24203104_4_20201001_142946.pdf",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: \"Ebert, Silke\" <Silke.Ebert@ppg-wegoflex.de>\nDate: Thu, 1 Oct 2020 12:33:32 +0000\nSubject: 24203104_4_20201001_142946.pdf\n\n------------------------\nOriginal Message:\n------------------------\nSehr geehrte Damen und Herren,\n\nanbei unsere Bestellung.\n\nMit freundlichen Gren\nKind Regards\n\ni. A. Silke Ebert\nLeiterin Einkauf Flexibles / head of purchasing flexibles\n________________________________\n[cid:image001.png@01D697FF.D596E8E0]\nppg > wegoflex GmbH\nAm Bohldamm 9\n14959 Trebbin\n\nT +49 (0) 33731 / 824 - 38\nF +49 (0) 33731 / 824 - 638\nE Silke.Ebert@ppg-wegoflex.de<mailto:Silke.Ebert@ppg-wegoflex.de>\nI www.prepacgroup.de<http://www.prepacgroup.de>\n\nAmtsgericht Potsdam, Reg.-Nr. HRB 12586\nUSt.IdNr. DE 150 11 84 19\nGeschftsfhrung: Dipl.-Ing. Thomas Hake, Dipl.-Wirt. jur. Nilo Reichenbach\n________________________________\n\n\n\n=== ATTACHMENT: image001.png ===\nppg\n\n=== ATTACHMENT: 24203104_4_20201001_142946.pdf ===\n\n--- Page 1 ---\nppg > wegoflex GmbH > Am Bohldamm 9 > 14959 Trebbin\nSDS GmbH\nHerr Elouahabi\nKruppstrasse 122\nD-60388 Frankfurt Bearbeiter : Silke Ebert\nTelefon : +49 (0)33731/824-38\nFax : +49 (0)33731/824-638\nE-Mail : silke.ebert@ppg-wegoflex.de\nFax: 044 520 53 24 Datum : 01.10.2020\nBestellung Nr. 24203104\nSehr geehrter Herr Elouahabi,\nwir bestellen hiermit nachfolgend aufgeführte Positionen:\nPos. Menge ME Beschreibung E-Preis per ME Gesamt\n1 14 Rolle 3 M Cushion Mount 457mm x 23 m 164 EUR / Rolle 2.296,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617625\nLiefertermin: 08.10.2020 / KW 41 / 2020\n2 14 Rolle 3 M Cushion Mount 600mm x 23m 220 EUR / Rolle 3.080,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617626\nLiefertermin: 08.10.2020 / KW 41 / 2020\n3 2 Rolle 3 M Cushion Mount 457mm x 23 m 184 EUR / Rolle 368,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619379\nLiefertermin: 08.10.2020 / KW 41 / 2020\n4 2 Rolle 3 M Cushion Mount 600mm x 23m 244 EUR / Rolle 488,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619378\nLiefertermin: 08.10.2020 / KW 41 / 2020\nZahlungskonditionen : 30 Tage nach Rechnungsdatum netto\nLieferbedingungen : frei Haus, einschl. Verpackung und Versicherung\nLieferanschrift : ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin\nWir bitten Sie, Ihre Rechnung ausschließlich per E-Mail an:\nrechnungseingang@ppg-wegoflex.de\nzu versenden (pro E-Mail eine Rechnung, vorzugsweise im pdf-Format).\nWir bitten um schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und\nAbnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung\nnachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittel-\nhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet.\nSeite 1 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN DE91 2802 0050 4402 0881 00\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC OLBODEH2XXX\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de\n\n--- Page 2 ---\nMit freundlichen Grüßen\nppg > wegoflex GmbH\nDieses Schreiben wurde maschinell erstellt und hat auch ohne Unterschrift Gültigkeit.\nSeite 2 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN OLBODEH2XXX\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC DE91 2802 0050 4402 0881 00\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de",
+      "message_id": "<68e6579f.170a0220.9a56d.9b3e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email contains a PDF attachment labeled as a purchase order and the body text explicitly mentions \"anbei unsere Bestellung,\" which translates to \"attached is our order.\" This indicates that the email is related to a new order."
+      },
+      "entities": {
+        "customer_name": "Silke Ebert",
+        "company_name": "ppg > wegoflex GmbH",
+        "email": "Silke.Ebert@ppg-wegoflex.de",
+        "phone": "+49 (0) 33731 / 824 - 38",
+        "address": "Am Bohldamm 9, 14959 Trebbin",
+        "product_names": [
+          "Cushion Mount 457mm x 23m",
+          "Cushion Mount 600mm x 23m",
+          "Cushion Mount 457mm x 23m",
+          "Cushion Mount 600mm x 23m"
+        ],
+        "product_codes": [
+          "E1520",
+          "E1520",
+          "E1820",
+          "E1820"
+        ],
+        "quantities": [
+          14,
+          14,
+          2,
+          2
+        ],
+        "prices": [
+          164.0,
+          220.0,
+          184.0,
+          244.0
+        ],
+        "order_number": "24203104",
+        "order_date": "01.10.2020",
+        "delivery_date": "08.10.2020",
+        "urgency": "",
+        "payment_terms": "30 Tage nach Rechnungsdatum netto",
+        "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+        "notes": "Lieferanschrift: ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin. Rechnungen per E-Mail an rechnungseingang@ppg-wegoflex.de. Schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Speditionsfahrzeuge zur Anlieferung hygienisch einwandfreier Waren geeignet.",
+        "structured": {
+          "customer": {
+            "name": "Silke Ebert",
+            "company": "ppg > wegoflex GmbH",
+            "email": "Silke.Ebert@ppg-wegoflex.de",
+            "phone": "+49 (0) 33731 / 824 - 38",
+            "address": "Am Bohldamm 9, 14959 Trebbin"
+          },
+          "products": [
+            {
+              "code": "E1520",
+              "name": "Cushion Mount 457mm x 23m",
+              "quantity": 14,
+              "unit_price": 164.0,
+              "specifications": "Rolle 3 M"
+            },
+            {
+              "code": "E1520",
+              "name": "Cushion Mount 600mm x 23m",
+              "quantity": 14,
+              "unit_price": 220.0,
+              "specifications": "Rolle 3 M"
+            },
+            {
+              "code": "E1820",
+              "name": "Cushion Mount 457mm x 23m",
+              "quantity": 2,
+              "unit_price": 184.0,
+              "specifications": "Rolle 3 M"
+            },
+            {
+              "code": "E1820",
+              "name": "Cushion Mount 600mm x 23m",
+              "quantity": 2,
+              "unit_price": 244.0,
+              "specifications": "Rolle 3 M"
+            }
+          ],
+          "order": {
+            "order_number": "24203104",
+            "date": "01.10.2020",
+            "delivery_date": "08.10.2020",
+            "urgency": "",
+            "payment_terms": "30 Tage nach Rechnungsdatum netto",
+            "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+            "notes": "Lieferanschrift: ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin. Rechnungen per E-Mail an rechnungseingang@ppg-wegoflex.de. Schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Speditionsfahrzeuge zur Anlieferung hygienisch einwandfreier Waren geeignet."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "1271",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Bohldamm 9",
+            "street2": "",
+            "city": "Trebbin",
+            "zip": "14959",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE150118419",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.9444444444444444
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.557142857142857,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.557142857142857
+            },
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.557142857142857,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.557142857142857
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Cushion Mount 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "Cushion Mount 600mm x 23m",
+              "matched_odoo_id": 8798,
+              "confidence": 1.557142857142857,
+              "reasoning": "Auto-matched (high confidence: 156%)"
+            },
+            {
+              "requested": "Cushion Mount 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "Cushion Mount 600mm x 23m",
+              "matched_odoo_id": 8798,
+              "confidence": 1.557142857142857,
+              "reasoning": "Auto-matched (high confidence: 156%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 4,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [
+          {
+            "json_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8653,
+                "[E1820-457-23] 3M Cushion Mount Plus E1820 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1820 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.557142857142857,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.557142857142857
+            },
+            "odoo_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8798,
+                "[E1820-600] 3MCushion Mount Plus E1820 600mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1820 600mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8653,
+                "[E1820-457-23] 3M Cushion Mount Plus E1820 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1820 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.557142857142857,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.557142857142857
+            },
+            "odoo_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8798,
+                "[E1820-600] 3MCushion Mount Plus E1820 600mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1820 600mm x 23m"
+          }
+        ],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 4,
+          "products_total": 4
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 13,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_012603",
+    "timestamp": "2025-10-12T01:26:03.985474",
+    "email": {
+      "subject": "[Testing] 24203104_4_20201001_142946.pdf",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: \"Ebert, Silke\" <Silke.Ebert@ppg-wegoflex.de>\nDate: Thu, 1 Oct 2020 12:33:32 +0000\nSubject: 24203104_4_20201001_142946.pdf\n\n------------------------\nOriginal Message:\n------------------------\nSehr geehrte Damen und Herren,\n\nanbei unsere Bestellung.\n\nMit freundlichen Gren\nKind Regards\n\ni. A. Silke Ebert\nLeiterin Einkauf Flexibles / head of purchasing flexibles\n________________________________\n[cid:image001.png@01D697FF.D596E8E0]\nppg > wegoflex GmbH\nAm Bohldamm 9\n14959 Trebbin\n\nT +49 (0) 33731 / 824 - 38\nF +49 (0) 33731 / 824 - 638\nE Silke.Ebert@ppg-wegoflex.de<mailto:Silke.Ebert@ppg-wegoflex.de>\nI www.prepacgroup.de<http://www.prepacgroup.de>\n\nAmtsgericht Potsdam, Reg.-Nr. HRB 12586\nUSt.IdNr. DE 150 11 84 19\nGeschftsfhrung: Dipl.-Ing. Thomas Hake, Dipl.-Wirt. jur. Nilo Reichenbach\n________________________________\n\n\n\n=== ATTACHMENT: image001.png ===\nppg\n\n=== ATTACHMENT: 24203104_4_20201001_142946.pdf ===\n\n--- Page 1 ---\nppg > wegoflex GmbH > Am Bohldamm 9 > 14959 Trebbin\nSDS GmbH\nHerr Elouahabi\nKruppstrasse 122\nD-60388 Frankfurt Bearbeiter : Silke Ebert\nTelefon : +49 (0)33731/824-38\nFax : +49 (0)33731/824-638\nE-Mail : silke.ebert@ppg-wegoflex.de\nFax: 044 520 53 24 Datum : 01.10.2020\nBestellung Nr. 24203104\nSehr geehrter Herr Elouahabi,\nwir bestellen hiermit nachfolgend aufgeführte Positionen:\nPos. Menge ME Beschreibung E-Preis per ME Gesamt\n1 14 Rolle 3 M Cushion Mount 457mm x 23 m 164 EUR / Rolle 2.296,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617625\nLiefertermin: 08.10.2020 / KW 41 / 2020\n2 14 Rolle 3 M Cushion Mount 600mm x 23m 220 EUR / Rolle 3.080,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617626\nLiefertermin: 08.10.2020 / KW 41 / 2020\n3 2 Rolle 3 M Cushion Mount 457mm x 23 m 184 EUR / Rolle 368,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619379\nLiefertermin: 08.10.2020 / KW 41 / 2020\n4 2 Rolle 3 M Cushion Mount 600mm x 23m 244 EUR / Rolle 488,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619378\nLiefertermin: 08.10.2020 / KW 41 / 2020\nZahlungskonditionen : 30 Tage nach Rechnungsdatum netto\nLieferbedingungen : frei Haus, einschl. Verpackung und Versicherung\nLieferanschrift : ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin\nWir bitten Sie, Ihre Rechnung ausschließlich per E-Mail an:\nrechnungseingang@ppg-wegoflex.de\nzu versenden (pro E-Mail eine Rechnung, vorzugsweise im pdf-Format).\nWir bitten um schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und\nAbnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung\nnachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittel-\nhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet.\nSeite 1 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN DE91 2802 0050 4402 0881 00\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC OLBODEH2XXX\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de\n\n--- Page 2 ---\nMit freundlichen Grüßen\nppg > wegoflex GmbH\nDieses Schreiben wurde maschinell erstellt und hat auch ohne Unterschrift Gültigkeit.\nSeite 2 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN OLBODEH2XXX\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC DE91 2802 0050 4402 0881 00\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de",
+      "message_id": "<68e6579f.170a0220.9a56d.9b3e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email contains a PDF attachment labeled as a purchase order and the body text explicitly mentions \"anbei unsere Bestellung,\" which translates to \"attached is our order.\" This indicates that the email is related to a new order."
+      },
+      "entities": {
+        "customer_name": "Silke Ebert",
+        "company_name": "ppg > wegoflex GmbH",
+        "email": "Silke.Ebert@ppg-wegoflex.de",
+        "phone": "+49 (0) 33731 / 824 - 38",
+        "address": "Am Bohldamm 9, 14959 Trebbin",
+        "product_names": [
+          "3M Cushion Mount E1520 457mm x 23m",
+          "3M Cushion Mount E1520 600mm x 23m",
+          "3M Cushion Mount E1820 457mm x 23m",
+          "3M Cushion Mount E1820 600mm x 23m"
+        ],
+        "product_codes": [
+          "E1520",
+          "E1520",
+          "E1820",
+          "E1820"
+        ],
+        "quantities": [
+          14,
+          14,
+          2,
+          2
+        ],
+        "prices": [
+          164.0,
+          220.0,
+          184.0,
+          244.0
+        ],
+        "order_number": "24203104",
+        "order_date": "01.10.2020",
+        "delivery_date": "08.10.2020",
+        "urgency": "",
+        "payment_terms": "30 Tage nach Rechnungsdatum netto",
+        "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+        "notes": "Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung nachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittelhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet.",
+        "structured": {
+          "customer": {
+            "name": "Silke Ebert",
+            "company": "ppg > wegoflex GmbH",
+            "email": "Silke.Ebert@ppg-wegoflex.de",
+            "phone": "+49 (0) 33731 / 824 - 38",
+            "address": "Am Bohldamm 9, 14959 Trebbin"
+          },
+          "products": [
+            {
+              "code": "E1520",
+              "name": "3M Cushion Mount E1520 457mm x 23m",
+              "quantity": 14,
+              "unit_price": 164.0,
+              "specifications": "Material Number: 617625, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1520",
+              "name": "3M Cushion Mount E1520 600mm x 23m",
+              "quantity": 14,
+              "unit_price": 220.0,
+              "specifications": "Material Number: 617626, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1820",
+              "name": "3M Cushion Mount E1820 457mm x 23m",
+              "quantity": 2,
+              "unit_price": 184.0,
+              "specifications": "Material Number: 619379, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1820",
+              "name": "3M Cushion Mount E1820 600mm x 23m",
+              "quantity": 2,
+              "unit_price": 244.0,
+              "specifications": "Material Number: 619378, Delivery Date: 08.10.2020"
+            }
+          ],
+          "order": {
+            "order_number": "24203104",
+            "date": "01.10.2020",
+            "delivery_date": "08.10.2020",
+            "urgency": "",
+            "payment_terms": "30 Tage nach Rechnungsdatum netto",
+            "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+            "notes": "Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung nachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittelhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "1271",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Bohldamm 9",
+            "street2": "",
+            "city": "Trebbin",
+            "zip": "14959",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE150118419",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.9444444444444444
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount E1520 457mm x 23m",
+              "matched_odoo_id": 8651,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1520 600mm x 23m",
+              "matched_odoo_id": 8746,
+              "confidence": 1.4777777777777779,
+              "reasoning": "Auto-matched (high confidence: 148%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1820 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1820 600mm x 23m",
+              "matched_odoo_id": 8798,
+              "confidence": 1.4777777777777779,
+              "reasoning": "Auto-matched (high confidence: 148%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 4,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [
+          {
+            "json_product": {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8651,
+                "[E1520-457-23] 3M Cushion Mount Plus E1520 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1520 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            "odoo_product": {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8746,
+                "[E1520-600] 3MCushion Mount Plus E1520 600mm x 23M"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1520 600mm x 23M"
+          },
+          {
+            "json_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8653,
+                "[E1820-457-23] 3M Cushion Mount Plus E1820 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1820 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            "odoo_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8798,
+                "[E1820-600] 3MCushion Mount Plus E1820 600mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1820 600mm x 23m"
+          }
+        ],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 4,
+          "products_total": 4
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 14,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_013941",
+    "timestamp": "2025-10-12T01:39:42.264769",
+    "email": {
+      "subject": "[Testing] 24203104_4_20201001_142946.pdf",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: \"Ebert, Silke\" <Silke.Ebert@ppg-wegoflex.de>\nDate: Thu, 1 Oct 2020 12:33:32 +0000\nSubject: 24203104_4_20201001_142946.pdf\n\n------------------------\nOriginal Message:\n------------------------\nSehr geehrte Damen und Herren,\n\nanbei unsere Bestellung.\n\nMit freundlichen Gren\nKind Regards\n\ni. A. Silke Ebert\nLeiterin Einkauf Flexibles / head of purchasing flexibles\n________________________________\n[cid:image001.png@01D697FF.D596E8E0]\nppg > wegoflex GmbH\nAm Bohldamm 9\n14959 Trebbin\n\nT +49 (0) 33731 / 824 - 38\nF +49 (0) 33731 / 824 - 638\nE Silke.Ebert@ppg-wegoflex.de<mailto:Silke.Ebert@ppg-wegoflex.de>\nI www.prepacgroup.de<http://www.prepacgroup.de>\n\nAmtsgericht Potsdam, Reg.-Nr. HRB 12586\nUSt.IdNr. DE 150 11 84 19\nGeschftsfhrung: Dipl.-Ing. Thomas Hake, Dipl.-Wirt. jur. Nilo Reichenbach\n________________________________\n\n\n\n=== ATTACHMENT: image001.png ===\nppg\n\n=== ATTACHMENT: 24203104_4_20201001_142946.pdf ===\n\n--- Page 1 ---\nppg > wegoflex GmbH > Am Bohldamm 9 > 14959 Trebbin\nSDS GmbH\nHerr Elouahabi\nKruppstrasse 122\nD-60388 Frankfurt Bearbeiter : Silke Ebert\nTelefon : +49 (0)33731/824-38\nFax : +49 (0)33731/824-638\nE-Mail : silke.ebert@ppg-wegoflex.de\nFax: 044 520 53 24 Datum : 01.10.2020\nBestellung Nr. 24203104\nSehr geehrter Herr Elouahabi,\nwir bestellen hiermit nachfolgend aufgeführte Positionen:\nPos. Menge ME Beschreibung E-Preis per ME Gesamt\n1 14 Rolle 3 M Cushion Mount 457mm x 23 m 164 EUR / Rolle 2.296,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617625\nLiefertermin: 08.10.2020 / KW 41 / 2020\n2 14 Rolle 3 M Cushion Mount 600mm x 23m 220 EUR / Rolle 3.080,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617626\nLiefertermin: 08.10.2020 / KW 41 / 2020\n3 2 Rolle 3 M Cushion Mount 457mm x 23 m 184 EUR / Rolle 368,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619379\nLiefertermin: 08.10.2020 / KW 41 / 2020\n4 2 Rolle 3 M Cushion Mount 600mm x 23m 244 EUR / Rolle 488,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619378\nLiefertermin: 08.10.2020 / KW 41 / 2020\nZahlungskonditionen : 30 Tage nach Rechnungsdatum netto\nLieferbedingungen : frei Haus, einschl. Verpackung und Versicherung\nLieferanschrift : ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin\nWir bitten Sie, Ihre Rechnung ausschließlich per E-Mail an:\nrechnungseingang@ppg-wegoflex.de\nzu versenden (pro E-Mail eine Rechnung, vorzugsweise im pdf-Format).\nWir bitten um schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und\nAbnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung\nnachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittel-\nhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet.\nSeite 1 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN DE91 2802 0050 4402 0881 00\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC OLBODEH2XXX\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de\n\n--- Page 2 ---\nMit freundlichen Grüßen\nppg > wegoflex GmbH\nDieses Schreiben wurde maschinell erstellt und hat auch ohne Unterschrift Gültigkeit.\nSeite 2 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN OLBODEH2XXX\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC DE91 2802 0050 4402 0881 00\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de",
+      "message_id": "<68e6579f.170a0220.9a56d.9b3e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email contains a PDF attachment labeled as a purchase order and the body text explicitly mentions \"anbei unsere Bestellung,\" which translates to \"attached is our order.\" This indicates that the email is related to a new order."
+      },
+      "entities": {
+        "customer_name": "Silke Ebert",
+        "company_name": "ppg > wegoflex GmbH",
+        "email": "Silke.Ebert@ppg-wegoflex.de",
+        "phone": "+49 (0) 33731 / 824 - 38",
+        "address": "Am Bohldamm 9, 14959 Trebbin",
+        "product_names": [
+          "3M Cushion Mount E1520 457mm x 23m",
+          "3M Cushion Mount E1520 600mm x 23m",
+          "3M Cushion Mount E1820 457mm x 23m",
+          "3M Cushion Mount E1820 600mm x 23m"
+        ],
+        "product_codes": [
+          "E1520",
+          "E1520",
+          "E1820",
+          "E1820"
+        ],
+        "quantities": [
+          14,
+          14,
+          2,
+          2
+        ],
+        "prices": [
+          164.0,
+          220.0,
+          184.0,
+          244.0
+        ],
+        "order_number": "24203104",
+        "order_date": "01.10.2020",
+        "delivery_date": "08.10.2020",
+        "urgency": "",
+        "payment_terms": "30 Tage nach Rechnungsdatum netto",
+        "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+        "notes": "Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung nachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittelhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet.",
+        "structured": {
+          "customer": {
+            "name": "Silke Ebert",
+            "company": "ppg > wegoflex GmbH",
+            "email": "Silke.Ebert@ppg-wegoflex.de",
+            "phone": "+49 (0) 33731 / 824 - 38",
+            "address": "Am Bohldamm 9, 14959 Trebbin"
+          },
+          "products": [
+            {
+              "code": "E1520",
+              "name": "3M Cushion Mount E1520 457mm x 23m",
+              "quantity": 14,
+              "unit_price": 164.0,
+              "specifications": "Material Number: 617625, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1520",
+              "name": "3M Cushion Mount E1520 600mm x 23m",
+              "quantity": 14,
+              "unit_price": 220.0,
+              "specifications": "Material Number: 617626, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1820",
+              "name": "3M Cushion Mount E1820 457mm x 23m",
+              "quantity": 2,
+              "unit_price": 184.0,
+              "specifications": "Material Number: 619379, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1820",
+              "name": "3M Cushion Mount E1820 600mm x 23m",
+              "quantity": 2,
+              "unit_price": 244.0,
+              "specifications": "Material Number: 619378, Delivery Date: 08.10.2020"
+            }
+          ],
+          "order": {
+            "order_number": "24203104",
+            "date": "01.10.2020",
+            "delivery_date": "08.10.2020",
+            "urgency": "",
+            "payment_terms": "30 Tage nach Rechnungsdatum netto",
+            "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+            "notes": "Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung nachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittelhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "1271",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Bohldamm 9",
+            "street2": "",
+            "city": "Trebbin",
+            "zip": "14959",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE150118419",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.9444444444444444
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount E1520 457mm x 23m",
+              "matched_odoo_id": 8651,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1520 600mm x 23m",
+              "matched_odoo_id": 8746,
+              "confidence": 1.4777777777777779,
+              "reasoning": "Auto-matched (high confidence: 148%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1820 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1820 600mm x 23m",
+              "matched_odoo_id": 8798,
+              "confidence": 1.4777777777777779,
+              "reasoning": "Auto-matched (high confidence: 148%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 4,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [
+          {
+            "json_product": {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8651,
+                "[E1520-457-23] 3M Cushion Mount Plus E1520 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1520 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            "odoo_product": {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8746,
+                "[E1520-600] 3MCushion Mount Plus E1520 600mm x 23M"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1520 600mm x 23M"
+          },
+          {
+            "json_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8653,
+                "[E1820-457-23] 3M Cushion Mount Plus E1820 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1820 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            "odoo_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8798,
+                "[E1820-600] 3MCushion Mount Plus E1820 600mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1820 600mm x 23m"
+          }
+        ],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 4,
+          "products_total": 4
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 16,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_1_20251012_015116",
+    "timestamp": "2025-10-12T01:51:17.124416",
+    "email": {
+      "subject": "[Testing] 24203104_4_20201001_142946.pdf",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: \"Ebert, Silke\" <Silke.Ebert@ppg-wegoflex.de>\nDate: Thu, 1 Oct 2020 12:33:32 +0000\nSubject: 24203104_4_20201001_142946.pdf\n\n------------------------\nOriginal Message:\n------------------------\nSehr geehrte Damen und Herren,\n\nanbei unsere Bestellung.\n\nMit freundlichen Gren\nKind Regards\n\ni. A. Silke Ebert\nLeiterin Einkauf Flexibles / head of purchasing flexibles\n________________________________\n[cid:image001.png@01D697FF.D596E8E0]\nppg > wegoflex GmbH\nAm Bohldamm 9\n14959 Trebbin\n\nT +49 (0) 33731 / 824 - 38\nF +49 (0) 33731 / 824 - 638\nE Silke.Ebert@ppg-wegoflex.de<mailto:Silke.Ebert@ppg-wegoflex.de>\nI www.prepacgroup.de<http://www.prepacgroup.de>\n\nAmtsgericht Potsdam, Reg.-Nr. HRB 12586\nUSt.IdNr. DE 150 11 84 19\nGeschftsfhrung: Dipl.-Ing. Thomas Hake, Dipl.-Wirt. jur. Nilo Reichenbach\n________________________________\n\n\n\n=== ATTACHMENT: image001.png ===\nppg\n\n=== ATTACHMENT: 24203104_4_20201001_142946.pdf ===\n\n--- Page 1 ---\nppg > wegoflex GmbH > Am Bohldamm 9 > 14959 Trebbin\nSDS GmbH\nHerr Elouahabi\nKruppstrasse 122\nD-60388 Frankfurt Bearbeiter : Silke Ebert\nTelefon : +49 (0)33731/824-38\nFax : +49 (0)33731/824-638\nE-Mail : silke.ebert@ppg-wegoflex.de\nFax: 044 520 53 24 Datum : 01.10.2020\nBestellung Nr. 24203104\nSehr geehrter Herr Elouahabi,\nwir bestellen hiermit nachfolgend aufgeführte Positionen:\nPos. Menge ME Beschreibung E-Preis per ME Gesamt\n1 14 Rolle 3 M Cushion Mount 457mm x 23 m 164 EUR / Rolle 2.296,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617625\nLiefertermin: 08.10.2020 / KW 41 / 2020\n2 14 Rolle 3 M Cushion Mount 600mm x 23m 220 EUR / Rolle 3.080,00 EUR\nArt.Nr.: E1520\nMat.-Nr. ppg > wf: 617626\nLiefertermin: 08.10.2020 / KW 41 / 2020\n3 2 Rolle 3 M Cushion Mount 457mm x 23 m 184 EUR / Rolle 368,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619379\nLiefertermin: 08.10.2020 / KW 41 / 2020\n4 2 Rolle 3 M Cushion Mount 600mm x 23m 244 EUR / Rolle 488,00 EUR\nArt.Nr.: E1820\nMat.-Nr. ppg > wf: 619378\nLiefertermin: 08.10.2020 / KW 41 / 2020\nZahlungskonditionen : 30 Tage nach Rechnungsdatum netto\nLieferbedingungen : frei Haus, einschl. Verpackung und Versicherung\nLieferanschrift : ppg > wegoflex GmbH, Am Bohldamm 9, D-14959 Trebbin\nWir bitten Sie, Ihre Rechnung ausschließlich per E-Mail an:\nrechnungseingang@ppg-wegoflex.de\nzu versenden (pro E-Mail eine Rechnung, vorzugsweise im pdf-Format).\nWir bitten um schriftliche Auftrags- und Lieferterminbestätigung mit Preisangabe. Aktuelle Werks- und\nAbnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung\nnachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittel-\nhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet.\nSeite 1 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN DE91 2802 0050 4402 0881 00\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC OLBODEH2XXX\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de\n\n--- Page 2 ---\nMit freundlichen Grüßen\nppg > wegoflex GmbH\nDieses Schreiben wurde maschinell erstellt und hat auch ohne Unterschrift Gültigkeit.\nSeite 2 von 2\nppg > wegoflex GmbH Amtsgericht Potsdam Bankverbindung\nAm Bohldamm 9 HRB 12586\n14959 Trebbin Ust.-IdNr. DE 150 11 84 19 Oldenburgische Landesbank AG\nIBAN OLBODEH2XXX\nT +49(0)3 37 31 / 824 0 Geschäftsführung BIC DE91 2802 0050 4402 0881 00\nF +49(0)3 37 31 / 824 12 Dipl.-Ing. Thomas Hake\nDipl.-Wirt.jur. Nilo Reichenbach\nE info@prepacgroup.de\nI www.prepacgroup.de",
+      "message_id": "<68e6579f.170a0220.9a56d.9b3e@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "new_order",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email contains a PDF attachment labeled as a purchase order and the body text explicitly mentions \"anbei unsere Bestellung,\" which translates to \"attached is our order.\" This indicates that the email is related to a new order."
+      },
+      "entities": {
+        "customer_name": "Silke Ebert",
+        "company_name": "ppg > wegoflex GmbH",
+        "email": "Silke.Ebert@ppg-wegoflex.de",
+        "phone": "+49 (0) 33731 / 824 - 38",
+        "address": "Am Bohldamm 9, 14959 Trebbin",
+        "product_names": [
+          "3M Cushion Mount E1520 457mm x 23m",
+          "3M Cushion Mount E1520 600mm x 23m",
+          "3M Cushion Mount E1820 457mm x 23m",
+          "3M Cushion Mount E1820 600mm x 23m"
+        ],
+        "product_codes": [
+          "E1520",
+          "E1520",
+          "E1820",
+          "E1820"
+        ],
+        "quantities": [
+          14,
+          14,
+          2,
+          2
+        ],
+        "prices": [
+          164.0,
+          220.0,
+          184.0,
+          244.0
+        ],
+        "order_number": "24203104",
+        "order_date": "01.10.2020",
+        "delivery_date": "08.10.2020",
+        "urgency": "",
+        "payment_terms": "30 Tage nach Rechnungsdatum netto",
+        "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+        "notes": "Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung nachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittelhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet.",
+        "structured": {
+          "customer": {
+            "name": "Silke Ebert",
+            "company": "ppg > wegoflex GmbH",
+            "email": "Silke.Ebert@ppg-wegoflex.de",
+            "phone": "+49 (0) 33731 / 824 - 38",
+            "address": "Am Bohldamm 9, 14959 Trebbin"
+          },
+          "products": [
+            {
+              "code": "E1520",
+              "name": "3M Cushion Mount E1520 457mm x 23m",
+              "quantity": 14,
+              "unit_price": 164.0,
+              "specifications": "Material Number: 617625, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1520",
+              "name": "3M Cushion Mount E1520 600mm x 23m",
+              "quantity": 14,
+              "unit_price": 220.0,
+              "specifications": "Material Number: 617626, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1820",
+              "name": "3M Cushion Mount E1820 457mm x 23m",
+              "quantity": 2,
+              "unit_price": 184.0,
+              "specifications": "Material Number: 619379, Delivery Date: 08.10.2020"
+            },
+            {
+              "code": "E1820",
+              "name": "3M Cushion Mount E1820 600mm x 23m",
+              "quantity": 2,
+              "unit_price": 244.0,
+              "specifications": "Material Number: 619378, Delivery Date: 08.10.2020"
+            }
+          ],
+          "order": {
+            "order_number": "24203104",
+            "date": "01.10.2020",
+            "delivery_date": "08.10.2020",
+            "urgency": "",
+            "payment_terms": "30 Tage nach Rechnungsdatum netto",
+            "shipping_terms": "frei Haus, einschl. Verpackung und Versicherung",
+            "notes": "Aktuelle Werks- und Abnahmeprüfzeugnisse liegen jeder Lieferung bei. Die Speditionsfahrzeuge sind zur Vermeidung nachteiliger Beeinflussung des Transportgutes im Sinne der deutschen Verordnung über Lebensmittelhygiene zur Anlieferung hygienisch einwandfreier Waren geeignet."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "1271",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Bohldamm 9",
+            "street2": "",
+            "city": "Trebbin",
+            "zip": "14959",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE150118419",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.9444444444444444
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount E1520 457mm x 23m",
+              "matched_odoo_id": 8651,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1520 600mm x 23m",
+              "matched_odoo_id": 8746,
+              "confidence": 1.4777777777777779,
+              "reasoning": "Auto-matched (high confidence: 148%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1820 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.7,
+              "reasoning": "Auto-matched (high confidence: 170%)"
+            },
+            {
+              "requested": "3M Cushion Mount E1820 600mm x 23m",
+              "matched_odoo_id": 8798,
+              "confidence": 1.4777777777777779,
+              "reasoning": "Auto-matched (high confidence: 148%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 4,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": true,
+          "id": 3104,
+          "name": "PPG Wegoflex GmbH",
+          "ref": "",
+          "email": false,
+          "phone": false
+        },
+        "products": [
+          {
+            "json_product": {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8651,
+                "[E1520-457-23] 3M Cushion Mount Plus E1520 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1520 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            "odoo_product": {
+              "id": 8746,
+              "name": "3MCushion Mount Plus E1520 600mm x 23M",
+              "default_code": "E1520-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8746,
+                "[E1520-600] 3MCushion Mount Plus E1520 600mm x 23M"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1520 600mm x 23M"
+          },
+          {
+            "json_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.7,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.7
+            },
+            "odoo_product": {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8653,
+                "[E1820-457-23] 3M Cushion Mount Plus E1820 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1820 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4777777777777779,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4777777777777779
+            },
+            "odoo_product": {
+              "id": 8798,
+              "name": "3MCushion Mount Plus E1820 600mm x 23m",
+              "default_code": "E1820-600",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8798,
+                "[E1820-600] 3MCushion Mount Plus E1820 600mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1820 600mm x 23m"
+          }
+        ],
+        "match_summary": {
+          "customer_matched": true,
+          "products_matched": 4,
+          "products_total": 4
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 17,
+    "feedback_received": false,
+    "feedback_count": 0
+  },
+  {
+    "order_id": "ORDER_2_20251012_015152",
+    "timestamp": "2025-10-12T01:51:52.988398",
+    "email": {
+      "subject": "[Testing] 524557052",
+      "from": "moaz.radwan@ai2go.vip",
+      "body": "Original Email Details:\n------------------------\nFrom: Anja Wicknig <anw@schur.com>\nDate: Thu, 1 Oct 2020 11:04:05 +0000\nSubject: 524557052\n\n------------------------\nOriginal Message:\n------------------------\nThis information is automatically generated from the ERP system.\n\n\nBest regards,\nAnja Wicknig\nSchur Star Systems GmbH\nDirect:\nMail:\nWeb:\n+49 461 9975 231\nanw@schur.com\nwww.schur.com\n\nRead our Privacy policy.\n\n\n\n=== ATTACHMENT: image942299.png ===\nSchur’\n\n=== ATTACHMENT: 526848-524557052-(0)-(0).pdf ===\n\n--- Page 1 ---\nSchur Star Systems GmbH\nLiebigstraße 7\nD-24941 Flensburg\nPostfach 28 36\nD-24918 Flensburg\nTel.+49 461 9975-0\nFax+49 461 98191\nZertifiziert nach\nDIN ISO 9001\nSchur Star Systems GmbH Postfach 28 36, D-24918 Flensburg Lieferadresse\nSDS GmbH Schur Star Systems GmbH\nKarim Elouahabi Liebigstraße 7\nBachtelstrasse 51 24941 Flensburg\n8810 Horgen\nSwitzerland\nBestellung 524557052 Datum 01.10.20\nIhre Referenz Karim Elouahabi\nIhre Lieferantennummer bei uns 526848 Währung EUR\nKontaktperson Anja Wicknig ANW\nZahlungsbedingungen 30 Tage netto\nLiefer-\nMat.-Nr. Beschreibung Menge Preis Betrag Datum\nRPR-123965 Cushion Mount Plus E1320 gelb 6 Stück 165,00 / Stück 990,00 05.10.20\n457x23 mm\nDelivery to:\nLokation -Printing plates-\nRPR-123968 Cushion Mount Plus E1520 viol. 6 Stück 165,00 / Stück 990,00 05.10.20\n457x23 mm\nDelivery to:\nLokation -Printing plates-\nRPR-123969 Cushion Mount Plus E1520 viol. 2 Stück 275,00 / Stück 550,00 05.10.20\n760x23 mm\nDelivery to:\nLokation -Printing plates-\nRPR-123970 Cushion Mount Plus E1520 viol. 2 Stück 220,00 / Stück 440,00 05.10.20\n612x23 mm\nDelivery to:\nLokation -Printing plates-\nRPR-123980 Cushion Mount Plus E1520 viol. 4 Stück 255,00 / Stück 1.020,00 05.10.20\n686x23 mm\nDelivery to:\nLokation -Printing plates-\nTotal 3.990,00\nWir bitten um Angabe unserer Bestell- und Material-Nummer auf Auftragsbestätigung, Lieferschein und Rechnung.\nwww.schur.com\nBanken: EUR: Jyske Bank, Hamburg IBAN: DE50 2002 0500 0156 8585 01 Swiftcode: JYBADEHH\nGBP: Jyske Bank, Hamburg IBAN: DE79 2002 0500 0156 8585 61 Swift/BIC JYBADEHH\nSt-Nr: 079 133 08233 / IDNr.: DE 134 642 242 Handelsr.: Amtsgericht Flensburg HRB 1, Geschäftsführer: Hans Schur, Klaus Madsen\nUK VAT registration no. GB 894 5638 66",
+      "message_id": "<68e657a3.170a0220.9a56d.9b43@mx.google.com>"
+    },
+    "result": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.9,
+        "urgency": "low",
+        "reasoning": "The email contains an order number and appears to be an automated confirmation or notification from an ERP system. The attachments include an image and a PDF document, which likely contain order details. The subject line and body suggest that this is related to an order."
+      },
+      "entities": {
+        "customer_name": "Karim Elouahabi",
+        "company_name": "SDS GmbH",
+        "email": "",
+        "phone": "",
+        "address": "Bachtelstrasse 51, 8810 Horgen, Switzerland",
+        "product_names": [
+          "Cushion Mount Plus E1320 Yellow 457x23 mm",
+          "Cushion Mount Plus E1520 Violet 457x23 mm",
+          "Cushion Mount Plus E1520 Violet 760x23 mm",
+          "Cushion Mount Plus E1520 Violet 612x23 mm",
+          "Cushion Mount Plus E1520 Violet 686x23 mm"
+        ],
+        "product_codes": [
+          "RPR-123965",
+          "RPR-123968",
+          "RPR-123969",
+          "RPR-123970",
+          "RPR-123980"
+        ],
+        "quantities": [
+          6,
+          6,
+          2,
+          2,
+          4
+        ],
+        "prices": [
+          165.0,
+          165.0,
+          275.0,
+          220.0,
+          255.0
+        ],
+        "order_number": "524557052",
+        "order_date": "01.10.20",
+        "delivery_date": "05.10.20",
+        "urgency": "",
+        "payment_terms": "30 Tage netto",
+        "shipping_terms": "",
+        "notes": "Delivery to: Lokation -Printing plates-",
+        "structured": {
+          "customer": {
+            "name": "Karim Elouahabi",
+            "company": "SDS GmbH",
+            "email": "",
+            "phone": "",
+            "address": "Bachtelstrasse 51, 8810 Horgen, Switzerland"
+          },
+          "products": [
+            {
+              "code": "RPR-123965",
+              "name": "Cushion Mount Plus E1320 Yellow 457x23 mm",
+              "quantity": 6,
+              "unit_price": 165.0,
+              "specifications": ""
+            },
+            {
+              "code": "RPR-123968",
+              "name": "Cushion Mount Plus E1520 Violet 457x23 mm",
+              "quantity": 6,
+              "unit_price": 165.0,
+              "specifications": ""
+            },
+            {
+              "code": "RPR-123969",
+              "name": "Cushion Mount Plus E1520 Violet 760x23 mm",
+              "quantity": 2,
+              "unit_price": 275.0,
+              "specifications": ""
+            },
+            {
+              "code": "RPR-123970",
+              "name": "Cushion Mount Plus E1520 Violet 612x23 mm",
+              "quantity": 2,
+              "unit_price": 220.0,
+              "specifications": ""
+            },
+            {
+              "code": "RPR-123980",
+              "name": "Cushion Mount Plus E1520 Violet 686x23 mm",
+              "quantity": 4,
+              "unit_price": 255.0,
+              "specifications": ""
+            }
+          ],
+          "order": {
+            "order_number": "524557052",
+            "date": "01.10.20",
+            "delivery_date": "05.10.20",
+            "urgency": "",
+            "payment_terms": "30 Tage netto",
+            "shipping_terms": "",
+            "notes": "Delivery to: Lokation -Printing plates-"
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 1,
+          "name": "SDS GmbH",
+          "ref": "",
+          "email": "order@sds-print.com",
+          "phone": "+49 (0) 69 4080 29 7-5",
+          "address": {
+            "street": "Kruppstraße 122",
+            "street2": "",
+            "city": "Frankfurt am Main",
+            "zip": "60388",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE284216833",
+          "website": "https://sds-print.com/",
+          "create_date": "2025-10-09 09:53:26",
+          "write_date": "2025-10-09 14:32:31",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8650,
+              "name": "3M Cushion Mount Plus E1320 457mm x 23m",
+              "default_code": "E1320-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.8,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 0.8
+            },
+            {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.8,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 0.8
+            },
+            {
+              "id": 8754,
+              "name": "3MCushion Mount Plus E1520 760mm x 23m",
+              "default_code": "E1520-760",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.6333333333333333,
+              "match_method": "token_matching",
+              "confidence": 0.76,
+              "match_score": 0.6333333333333333
+            },
+            {
+              "id": 8750,
+              "name": "3MCushion Mount Plus E1520 612mm x 23m",
+              "default_code": "E1520-612",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.6333333333333333,
+              "match_method": "token_matching",
+              "confidence": 0.76,
+              "match_score": 0.6333333333333333
+            },
+            {
+              "id": 8752,
+              "name": "3MCushion Mount Plus E1520 686mm x 23m",
+              "default_code": "E1520-686",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.6333333333333333,
+              "match_method": "token_matching",
+              "confidence": 0.76,
+              "match_score": 0.6333333333333333
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Cushion Mount Plus E1320 Yellow 457x23 mm",
+              "matched_odoo_id": 8650,
+              "confidence": 0.8,
+              "reasoning": "Auto-matched (high confidence: 80%)"
+            },
+            {
+              "requested": "Cushion Mount Plus E1520 Violet 457x23 mm",
+              "matched_odoo_id": 8651,
+              "confidence": 0.8,
+              "reasoning": "Auto-matched (high confidence: 80%)"
+            },
+            {
+              "requested": "Cushion Mount Plus E1520 Violet 760x23 mm",
+              "matched_odoo_id": 8754,
+              "confidence": 0.95,
+              "reasoning": "Exact match for dimensions and product line E1520"
+            },
+            {
+              "requested": "Cushion Mount Plus E1520 Violet 612x23 mm",
+              "matched_odoo_id": 8750,
+              "confidence": 0.95,
+              "reasoning": "Exact match for dimensions and product line E1520"
+            },
+            {
+              "requested": "Cushion Mount Plus E1520 Violet 686x23 mm",
+              "matched_odoo_id": 8752,
+              "confidence": 0.95,
+              "reasoning": "Exact match for dimensions and product line E1520"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 2,
+            "ai_confirmed": 3,
+            "failed": 0
+          }
+        }
+      },
+      "odoo_matches": {
+        "customer": {
+          "found": false,
+          "reason": "SDS company excluded"
+        },
+        "products": [
+          {
+            "json_product": {
+              "id": 8650,
+              "name": "3M Cushion Mount Plus E1320 457mm x 23m",
+              "default_code": "E1320-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.8,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 0.8
+            },
+            "odoo_product": {
+              "id": 8650,
+              "name": "3M Cushion Mount Plus E1320 457mm x 23m",
+              "default_code": "E1320-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8650,
+                "[E1320-457-23] 3M Cushion Mount Plus E1320 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1320 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.8,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 0.8
+            },
+            "odoo_product": {
+              "id": 8651,
+              "name": "3M Cushion Mount Plus E1520 457mm x 23m",
+              "default_code": "E1520-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8651,
+                "[E1520-457-23] 3M Cushion Mount Plus E1520 457mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3M Cushion Mount Plus E1520 457mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8754,
+              "name": "3MCushion Mount Plus E1520 760mm x 23m",
+              "default_code": "E1520-760",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.6333333333333333,
+              "match_method": "token_matching",
+              "confidence": 0.76,
+              "match_score": 0.6333333333333333
+            },
+            "odoo_product": {
+              "id": 8754,
+              "name": "3MCushion Mount Plus E1520 760mm x 23m",
+              "default_code": "E1520-760",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8754,
+                "[E1520-760] 3MCushion Mount Plus E1520 760mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1520 760mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8750,
+              "name": "3MCushion Mount Plus E1520 612mm x 23m",
+              "default_code": "E1520-612",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.6333333333333333,
+              "match_method": "token_matching",
+              "confidence": 0.76,
+              "match_score": 0.6333333333333333
+            },
+            "odoo_product": {
+              "id": 8750,
+              "name": "3MCushion Mount Plus E1520 612mm x 23m",
+              "default_code": "E1520-612",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8750,
+                "[E1520-612] 3MCushion Mount Plus E1520 612mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1520 612mm x 23m"
+          },
+          {
+            "json_product": {
+              "id": 8752,
+              "name": "3MCushion Mount Plus E1520 686mm x 23m",
+              "default_code": "E1520-686",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.6333333333333333,
+              "match_method": "token_matching",
+              "confidence": 0.76,
+              "match_score": 0.6333333333333333
+            },
+            "odoo_product": {
+              "id": 8752,
+              "name": "3MCushion Mount Plus E1520 686mm x 23m",
+              "default_code": "E1520-686",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "product_variant_id": [
+                8752,
+                "[E1520-686] 3MCushion Mount Plus E1520 686mm x 23m"
+              ]
+            },
+            "match_method": "json_id_verified",
+            "extracted_name": "3MCushion Mount Plus E1520 686mm x 23m"
+          }
+        ],
+        "match_summary": {
+          "customer_matched": false,
+          "products_matched": 5,
+          "products_total": 5
+        }
+      },
+      "order_created": {
+        "created": false,
+        "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+      }
+    },
+    "telegram_message_id": 18,
+    "feedback_received": false,
+    "feedback_count": 0
+  }
+]

@@ -83,6 +83,7 @@ def clean_email_content(text: str) -> str:
     has_pdf_content = '=== ATTACHMENT:' in text and '.pdf ===' in text
 
     # 1. Remove email threads - everything after "Original Message"
+    # BUT: Do NOT remove if PDF content appears after the thread marker
     thread_markers = [
         r'-----\s*Original Message\s*-----',
         r'-----\s*Ursprüngliche Nachricht\s*-----',
@@ -93,8 +94,15 @@ def clean_email_content(text: str) -> str:
     for marker in thread_markers:
         match = re.search(marker, text, flags=re.IGNORECASE | re.DOTALL)
         if match:
-            text = text[:match.start()]
-            break
+            # Check if PDF marker appears AFTER this thread marker
+            pdf_marker_pos = text.find('=== ATTACHMENT:')
+            thread_marker_pos = match.start()
+
+            # Only remove thread if NO PDF content comes after it
+            if pdf_marker_pos == -1 or pdf_marker_pos < thread_marker_pos:
+                text = text[:match.start()]
+                break
+            # Otherwise, keep the content (PDF is after this marker)
 
     # 2. Remove "On [date]... wrote:" patterns
     text = re.sub(r'On .{10,100} wrote:', '', text, flags=re.IGNORECASE)

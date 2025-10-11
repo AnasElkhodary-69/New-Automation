@@ -1,0 +1,10 @@
+PRODUCT ORGANIZATION SUMMARY
+==================================================
+
+Total Products: 2075
+Total Entries (including variants): 2075
+
+Products by Category:
+  Uncategorized: 2075
+
+Attribute Types Found: 

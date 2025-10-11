@@ -1,0 +1,2061 @@
+[
+  {
+    "index": 1,
+    "filename": "email_100_Proforma Invoice_Kiro Dandaro - 11.09.2025.pdf",
+    "pdf_path": "attachments\\email_100_Proforma Invoice_Kiro Dandaro - 11.09.2025.pdf",
+    "timestamp": "2025-10-08T16:00:21.671008",
+    "success": true,
+    "error": null,
+    "parsed_text": "SDS GmbH - Kruppstraße 122 - 60388 Frankfurt am Main\nKiro Dandaro\nIlcho Petkovski\nBanica 3\n7000 Bitola\nNorth Macedonia\nCustomer No.: 10647\nProcessed by: Herr Kaddouri\nOrder No.: 426\nDelivery date: 30.09.2025\nDate: 11.09.2025\nProforma Invoice No. 5726\nI. Qty.Unit Art.-No. Description Unit price Discount Value\nEUR % EUR\n1 2.340,00 Stk. SDS016E 166-367-ORG-SX-STE / 2,32 5.428,80\nDuro Seal Bobst 20SIX\n234 Pcs./ Box\nHS Code 40169300\nplus Transport costs 90,00\nNet amount 5.518,80\ntax free (tax free export consignment ) 5.518,80\nTotal value 5.518,80\nAdvance payment\nEx Works\nCountry of Origin: Germany\nSDS GmbH Tel +49 6940802970 Ust-ID.-Nr. DE284216833 Frankfurter Sparkasse\nKruppstraße 122 Fax +49 6940802973 Amstgericht Konstanz Konto 200524984 BLZ50050201\n60388 Frankfurt am Main info@sds-print.com Managing Director Karim El Ouahabi IBAN DE57 5005 0201 0200 5249 84\nDeutschland www.sds-print.com EORI-NR. DE250627839236080 BIC-Code HELADEF1822",
+    "text_length": 947,
+    "ocr_used": true,
+    "intent": {
+      "type": "invoice_request",
+      "confidence": 0.95,
+      "sub_type": "proforma_invoice",
+      "reasoning": "The email contains a proforma invoice with order details, indicating the customer is requesting or confirming invoice-related information for an order.\",\n  \"key_indicators\": [\"Proforma Invoice\", \"Orde"
+    },
+    "entities": {
+      "customer_name": "Kiro Dandaro",
+      "company_name": "Ilcho Petkovski",
+      "customer_emails": [],
+      "phone_numbers": [],
+      "addresses": [
+        "Banica 3, 7000 Bitola, North Macedonia"
+      ],
+      "order_numbers": [
+        "426"
+      ],
+      "dates": [
+        "2025-09-11"
+      ],
+      "urgency_level": "medium",
+      "sentiment": "neutral",
+      "product_names": [
+        "Duro Seal Bobst 20SIX"
+      ],
+      "product_codes": [
+        "SDS016E"
+      ],
+      "product_quantities": [
+        2340
+      ],
+      "product_prices": [
+        2340.0
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "Duro Seal Bobst 20SIX",
+          "code": "SDS016E",
+          "quantity": 2340,
+          "unit_price": 2340.0,
+          "specifications": "234 Pcs./ Box, HS Code 40169300"
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 4147,
+        "name": "Ilcho Petkovski",
+        "ref": false,
+        "email": false,
+        "phone": false,
+        "address": {
+          "street": "Banica 3 ",
+          "street2": false,
+          "city": "Bitola",
+          "zip": "7000",
+          "country": "",
+          "state": ""
+        },
+        "vat": false,
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {}
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 4147,
+        "name": "Ilcho Petkovski",
+        "ref": "",
+        "email": false,
+        "phone": false
+      },
+      "products": [],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 0,
+        "products_total": 0
+      }
+    },
+    "token_usage": {
+      "total_tokens": 2664,
+      "input_tokens": 2336,
+      "output_tokens": 328
+    },
+    "customer": {
+      "extracted_name": "Ilcho Petkovski",
+      "extracted_contact": "Kiro Dandaro",
+      "extracted_email": "N/A",
+      "json_match": "Ilcho Petkovski",
+      "json_match_score": 1.0,
+      "odoo_match": "Ilcho Petkovski",
+      "odoo_ref": "",
+      "odoo_id": 4147
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "Duro Seal Bobst 20SIX",
+        "extracted_code": "SDS016E",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": null,
+        "json_match_score": 0,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 2336,
+      "output_tokens": 328,
+      "total_tokens": 2664,
+      "input_cost_usd": 0.009344,
+      "output_cost_usd": 0.001312,
+      "total_cost_usd": 0.010656
+    }
+  },
+  {
+    "index": 2,
+    "filename": "email_102_Bestellung_2500257.pdf",
+    "pdf_path": "attachments\\email_102_Bestellung_2500257.pdf",
+    "timestamp": "2025-10-08T16:00:27.225058",
+    "success": true,
+    "error": null,
+    "parsed_text": "Heyne & Penke Verpackungen GmbH · Am Burgberg 10 · D-37586 Dassel\nSDS GmbH\nKruppstraße 122 Telefon (0 55 64) 96 19 0\n60388 Frankfurt am Main Telefax (0 55 64) 96 19 500\nDeutschland eMail: info@heynepenke.com\nInternet: www.heynepenke.eu\nSachbearb.: Denise Wirths\nTelefon: 05564 9619 139\nFax: 05564 9619 520\nE-Mail: d.wirths@heynepenke.com\nDatum: 11.09.2025\nBestellung\nUnsere Bestellnummer: 2500257\nUnsere Kundennummer: 1267\nAnsprechpartner: Herr Spitzer\nTelefon: 069 40802970\nE-Mail: order@sds-print.com\nHiermit bestellen wir folgende Positionen:\nPreis in\nPos. Artikelnummer Artikelbeschreibung Menge VE\n€/ VE\n1 SDS Anilox Cleaner M SDS Anilox Cleaner M 4 Flasche 68,37\nLiefertermin: schnellstmöglich\nLieferbedingungen: Frei Haus\nZahlungsbedingungen: 14 Tage 2%, 30 Tage netto\nLieferanschrift: Heyne & Penke Verpackungen GmbH\nTeamleiter\nAm Burgberg 10\n37586 Dassel\nDeutschland\nAnlieferzeiten: Mo.-Do. 7:00 bis 16:00 Uhr\nFr. 7:00 bis 12:00 Uhr\nMit freundlichen Grüßen\nHEYNE & PENKE Verpackungen GmbH\ni.A. Denise Wirths\nSeite 1 von 1\nHeyne & Penke Verpackungen GmbH · Am Burgberg 10 · D-37586 Dassel\nGeschäftsführer: Handelsregister: Bankverbindungen:\nPeter Penke-Wevelhoff Göttingen HRB 13 10 76 Postbank Hannover VR-Bank in Südniedersachsen eG\nChristoph Penke-Wevelhoff UST-Id-Nr. DE 116009044 IBAN: DE20 2501 0030 0002 4613 06 IBAN: DE70 2606 2433 0008 1064 60\nBIC: PBNKDEFF250 BIC: GENODEF1DRA",
+    "text_length": 1394,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "confidence": 0.98,
+      "sub_type": "new_order",
+      "reasoning": "The email contains a formal purchase order with details such as order number, product specifications, delivery terms, and payment conditions, indicating a new order placement.\",\n  \"key_indicators\": [\""
+    },
+    "entities": {
+      "customer_name": "Denise Wirths",
+      "company_name": "Heyne & Penke Verpackungen GmbH",
+      "customer_emails": [
+        "d.wirths@heynepenke.com"
+      ],
+      "phone_numbers": [
+        "05564 9619 139"
+      ],
+      "addresses": [
+        "Am Burgberg 10, 37586 Dassel, Deutschland"
+      ],
+      "order_numbers": [
+        "2500257"
+      ],
+      "dates": [
+        "2025-09-11"
+      ],
+      "urgency_level": "high",
+      "sentiment": "neutral",
+      "product_names": [
+        "SDS Anilox Cleaner M"
+      ],
+      "product_codes": [
+        ""
+      ],
+      "product_quantities": [
+        4
+      ],
+      "product_prices": [
+        68.37
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "SDS Anilox Cleaner M",
+          "code": "",
+          "quantity": 4,
+          "unit_price": 68.37,
+          "specifications": "Flasche"
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 3378,
+        "name": "Heyne & Penke Verpackungen GmbH",
+        "ref": "1267",
+        "email": false,
+        "phone": false,
+        "address": {
+          "street": "Am Burgberg 10",
+          "street2": false,
+          "city": "Dassel",
+          "zip": "37586",
+          "country": "Germany",
+          "state": ""
+        },
+        "vat": " DE 116009044",
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 4037,
+            "name": "SDS Anilox Cleaner M",
+            "code": "SDS Anilox Cleaner M",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 1.0,
+            "match_method": "token_matching",
+            "match_score": 1.0,
+            "extracted_product_name": "SDS Anilox Cleaner M",
+            "requires_review": false
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3378,
+        "name": "Heyne & Penke Verpackungen GmbH",
+        "ref": "",
+        "email": false,
+        "phone": false
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 4037,
+            "name": "SDS Anilox Cleaner M",
+            "code": "SDS Anilox Cleaner M",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 1.0,
+            "match_method": "token_matching",
+            "match_score": 1.0,
+            "extracted_product_name": "SDS Anilox Cleaner M",
+            "requires_review": false
+          },
+          "odoo_product": {
+            "id": 4037,
+            "name": "SDS Anilox Cleaner M",
+            "default_code": "SDS Anilox Cleaner M",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 1,
+        "products_total": 1
+      }
+    },
+    "token_usage": {
+      "total_tokens": 5733,
+      "input_tokens": 5005,
+      "output_tokens": 728
+    },
+    "customer": {
+      "extracted_name": "Heyne & Penke Verpackungen GmbH",
+      "extracted_contact": "Denise Wirths",
+      "extracted_email": "N/A",
+      "json_match": "Heyne & Penke Verpackungen GmbH",
+      "json_match_score": 1.0,
+      "odoo_match": "Heyne & Penke Verpackungen GmbH",
+      "odoo_ref": "",
+      "odoo_id": 3378
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "SDS Anilox Cleaner M",
+        "extracted_code": "",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "SDS Anilox Cleaner M",
+        "json_match_score": 1.0,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 5005,
+      "output_tokens": 728,
+      "total_tokens": 5733,
+      "input_cost_usd": 0.02002,
+      "output_cost_usd": 0.002912,
+      "total_cost_usd": 0.022932
+    }
+  },
+  {
+    "index": 3,
+    "filename": "email_103_best_118091.pdf",
+    "pdf_path": "attachments\\email_103_best_118091.pdf",
+    "timestamp": "2025-10-08T16:00:33.475289",
+    "success": true,
+    "error": null,
+    "parsed_text": "SDS GmbH Sachbearbeiter Lars Marunde\nSicherheitsdruck Service Telefon +49 5271 689 365\nKruppstrasse. 122 farblager@trioworld.com\nDE-60388 Frankfurt\nDatum 11.09.2025\nLieferant-Nr 118126\nLieferanschrift\nTrioworld Höxter GmbH\nEugen-Diesel-Str. 12\nIhre Faxnummer +49 (0) 6940802973\nD-37671 Höxter Unsere Kundennr 10130\nBESTELLUNG Nr. 118091\nBlatt 1 / 1\nPos ArtikelNr/-Bezeichnung Menge Preis PE Summe\nSehr geehrte Damen und Herren,\nhiermit erteilen wir den nachstehenden Auftrag und bitten um Bestätigung.\nBitte geben Sie unsere Bestell- und Artikel-Nummer auf allen Schriftstücken an, da ansonsten keine Bearbeitung erfolgen kann.\n1 DR1-000300\nKammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black\nBestellmenge 246 3,85 per 1 Stück EUR 947,10\nKostenstelle: 6200 Druckerei allgemein\nLLiieeffeerrtteerrmmiinn KKWW:: 3388..22002255\nSSuummmmee NNeettttoo == EEUURR 994477,,1100\n1199,,0000 %% MMeehhrrwweerrttsstteeuueerr ++ EEUURR 117799,,9955\nSSuummmmee BBrruuttttoo == EEUURR 11..112277,,0055\nLLiieeffeerrbbeeddiinngguunngg :: AAbb WWeerrkk,, vveerrppaacckktt\nZZaahhlluunnggssbbeeddiinngguunngg :: 3300 TTaaggee NNeettttoo\nWir bitten um verbindliche Anlieferung in KW 38\n==================================\nMMiitt ffrreeuunnddlliicchheenn GGrrüüßßeenn\nTTrriioowwoorrlldd HHööxxtteerr GGmmbbHH",
+    "text_length": 1292,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "confidence": 0.98,
+      "sub_type": "new_order",
+      "reasoning": "The email contains a formal purchase order with details such as order number, product specifications, quantities, and pricing. The customer is explicitly placing a new order and requesting confirmatio"
+    },
+    "entities": {
+      "customer_name": "Trioworld Höxter GmbH",
+      "company_name": "Trioworld Höxter GmbH",
+      "customer_emails": [
+        "farblager@trioworld.com"
+      ],
+      "phone_numbers": [
+        "+49 (0) 6940802973"
+      ],
+      "addresses": [
+        "Eugen-Diesel-Str. 12, D-37671 Höxter"
+      ],
+      "order_numbers": [
+        "118091"
+      ],
+      "dates": [
+        "2025-09-11"
+      ],
+      "urgency_level": "high",
+      "sentiment": "neutral",
+      "product_names": [
+        "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black"
+      ],
+      "product_codes": [
+        "DR1-000300"
+      ],
+      "product_quantities": [
+        246
+      ],
+      "product_prices": [
+        3.85
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black",
+          "code": "DR1-000300",
+          "quantity": 246,
+          "unit_price": 3.85,
+          "specifications": "Bobst Grey 16S Black"
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 3538,
+        "name": "Trioworld Höxter GmbH",
+        "ref": "10130",
+        "email": false,
+        "phone": false,
+        "address": {
+          "street": "Eugen-Diesel-Strasse 12",
+          "street2": false,
+          "city": "Höxter",
+          "zip": "37671",
+          "country": "Germany",
+          "state": ""
+        },
+        "vat": "DE186113056",
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 2280,
+            "name": "105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco",
+            "code": "SDS1832",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5,
+            "match_method": "token_matching",
+            "match_score": 0.5,
+            "extracted_product_name": "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black",
+            "requires_review": true
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3538,
+        "name": "Trioworld Höxter GmbH",
+        "ref": "",
+        "email": false,
+        "phone": false
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 2280,
+            "name": "105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco",
+            "code": "SDS1832",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5,
+            "match_method": "token_matching",
+            "match_score": 0.5,
+            "extracted_product_name": "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 2280,
+            "name": "105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco",
+            "default_code": "SDS1832",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 1,
+        "products_total": 1
+      }
+    },
+    "token_usage": {
+      "total_tokens": 8702,
+      "input_tokens": 7566,
+      "output_tokens": 1136
+    },
+    "customer": {
+      "extracted_name": "Trioworld Höxter GmbH",
+      "extracted_contact": "Trioworld Höxter GmbH",
+      "extracted_email": "N/A",
+      "json_match": "Trioworld Höxter GmbH",
+      "json_match_score": 1.0,
+      "odoo_match": "Trioworld Höxter GmbH",
+      "odoo_ref": "",
+      "odoo_id": 3538
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "Kammerrakeldichtungen SDS178-Duro Seal Bobst Grey 16S Black",
+        "extracted_code": "DR1-000300",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "105713-545-200-MG-BLK / Duro Seal Bobst 16S Sonoco",
+        "json_match_score": 0.5,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 7566,
+      "output_tokens": 1136,
+      "total_tokens": 8702,
+      "input_cost_usd": 0.030264,
+      "output_cost_usd": 0.004544,
+      "total_cost_usd": 0.034808
+    }
+  },
+  {
+    "index": 4,
+    "filename": "email_104_Order confirmation 36421.pdf",
+    "pdf_path": "attachments\\email_104_Order confirmation 36421.pdf",
+    "timestamp": "2025-10-08T16:00:38.694909",
+    "success": true,
+    "error": null,
+    "parsed_text": "Order confirmation\nOrder number Customer code Page\n36421 259 1/1\nOrder date Date\n2025-09-11 2025-09-11\nYour VAT no. Your order no. Our reference Your reference\nDE284216833 285 Eric Burell Saad El Ouaamari\nDelivery address Mailing address\nSDS GmbH SDS GmbH\nKrupp strasse 122 Schindellegistrasse 73\nDE-60388 Frankfurt am Main CH-8808 Pfäffikon SZ\nGERMANY SWITZERLAND\nTerms of delivery Terms of payment\nDAP - to be invoiced, Incoterm 2020 30 days net\nDelivery method\n.\nPlace for delivery term\nFrankfurt am Main\nDel. date = shipped our warehouse\nPos. Part no. Name Del. date Qty Price % Amount\n10 15264 650 30x0,25 1,7/0,125 2025-10-10 500,00m 0,8000 400,00\nNet weight: 29,02 kg\nTotal excl. VAT (EUR) 400,00\nMailing address Visiting address Corp.no: 556778-6297\nPrimeBlade Sweden PrimeBlade Sweden VAT no: SE556778629701\nAB AB\nDom.: Sunne\nPO Box 70 Smidesvägen 7 BIC SWEDSESS\nPhone: +46 565 101 09\n68622 SUNNE 68633 SUNNE\nSWEDEN SWEDEN IBAN: SE5780000833602376702532\nsales@primeblade.se www.primeblade.se Approved for F-tax Fryksdalens Sparbank",
+    "text_length": 1040,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "confidence": 0.95,
+      "sub_type": "order_confirmation",
+      "reasoning": "The email contains an order confirmation with details such as order number, delivery address, and product information, indicating the customer is acknowledging or reviewing their order.\",\n  \"key_indic"
+    },
+    "entities": {
+      "customer_name": "Eric Burell Saad El Ouaamari",
+      "company_name": "PrimeBlade Sweden AB",
+      "customer_emails": [
+        "sales@primeblade.se"
+      ],
+      "phone_numbers": [
+        "+46 565 101 09"
+      ],
+      "addresses": [
+        "Smidesvägen 7 B, 68633 SUNNE, SWEDEN"
+      ],
+      "order_numbers": [
+        "36421"
+      ],
+      "dates": [
+        "2025-09-11"
+      ],
+      "urgency_level": "medium",
+      "sentiment": "neutral",
+      "product_names": [
+        "650 30x0,25 1,7/0,125"
+      ],
+      "product_codes": [
+        "15264 650"
+      ],
+      "product_quantities": [
+        500.0
+      ],
+      "product_prices": [
+        0.8
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "650 30x0,25 1,7/0,125",
+          "code": "15264 650",
+          "quantity": 500.0,
+          "unit_price": 0.8,
+          "specifications": ""
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 3469,
+        "name": "PrimeBlade Sweden AB",
+        "ref": "70008",
+        "email": "sales@primeblade.se",
+        "phone": "46 565 101 09",
+        "address": {
+          "street": "Smidesvägen 7",
+          "street2": false,
+          "city": "Sunne",
+          "zip": "68633",
+          "country": "Sweden",
+          "state": ""
+        },
+        "vat": "SE556778629701",
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": []
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3469,
+        "name": "PrimeBlade Sweden AB",
+        "ref": "",
+        "email": "sales@primeblade.se",
+        "phone": "46 565 101 09"
+      },
+      "products": [],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 0,
+        "products_total": 0
+      }
+    },
+    "token_usage": {
+      "total_tokens": 11391,
+      "input_tokens": 9910,
+      "output_tokens": 1481
+    },
+    "customer": {
+      "extracted_name": "PrimeBlade Sweden AB",
+      "extracted_contact": "Eric Burell Saad El Ouaamari",
+      "extracted_email": "N/A",
+      "json_match": "PrimeBlade Sweden AB",
+      "json_match_score": 1.0,
+      "odoo_match": "PrimeBlade Sweden AB",
+      "odoo_ref": "",
+      "odoo_id": 3469
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "650 30x0,25 1,7/0,125",
+        "extracted_code": "15264 650",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": null,
+        "json_match_score": 0,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 9910,
+      "output_tokens": 1481,
+      "total_tokens": 11391,
+      "input_cost_usd": 0.03964,
+      "output_cost_usd": 0.005924,
+      "total_cost_usd": 0.045564
+    }
+  },
+  {
+    "index": 5,
+    "filename": "email_105_Order confirmation 36422.pdf",
+    "pdf_path": "attachments\\email_105_Order confirmation 36422.pdf",
+    "timestamp": "2025-10-08T16:00:43.375120",
+    "success": true,
+    "error": null,
+    "parsed_text": "Order confirmation\nOrder number Customer code Page\n36422 259 1/1\nOrder date Date\n2025-09-11 2025-09-11\nYour VAT no. Your order no. Our reference Your reference\nDE284216833 284 Eric Burell Saad El Ouaamari\nDelivery address Mailing address\nSDS GmbH SDS GmbH\nKrupp strasse 122 Schindellegistrasse 73\nDE-60388 Frankfurt am Main CH-8808 Pfäffikon SZ\nGERMANY SWITZERLAND\nTerms of delivery Terms of payment\nDAP - to be invoiced, Incoterm 2020 30 days net\nDelivery method\n.\nPlace for delivery term\nFrankfurt am Main\nDel. date = shipped our warehouse\nPos. Part no. Name Del. date Qty Price % Amount\n10 15267 625 40x0,25 1664mm 2025-10-10 100,00pcs 1,6350 163,50\nNet weight: 12,88 kg\n20 15268 625 25x0,20 1194mm 2025-10-10 100,00pcs 0,8800 88,00\nNet weight: 4,62 kg\n30 14894 825 40x0,20 1069mm 2025-10-10 100,00pcs 3,4200 342,00\nNet weight: 6,64 kg\n40 15102 825 40x0,20 1567mm 2025-10-10 50,00pcs 4,9100 245,50\nNet weight: 4,87 kg\nTotal excl. VAT (EUR) 839,00\nMailing address Visiting address Corp.no: 556778-6297\nPrimeBlade Sweden PrimeBlade Sweden VAT no: SE556778629701\nAB AB\nDom.: Sunne\nPO Box 70 Smidesvägen 7 BIC SWEDSESS\nPhone: +46 565 101 09\n68622 SUNNE 68633 SUNNE\nSWEDEN SWEDEN IBAN: SE5780000833602376702532\nsales@primeblade.se www.primeblade.se Approved for F-tax Fryksdalens Sparbank",
+    "text_length": 1286,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "confidence": 0.98,
+      "sub_type": "order_confirmation",
+      "reasoning": "The email contains an order confirmation with details such as order number, delivery address, and product specifications, indicating the customer is acknowledging or reviewing their order.\",\n  \"key_in"
+    },
+    "entities": {
+      "customer_name": "Eric Burell Saad El Ouaamari",
+      "company_name": "PrimeBlade Sweden AB",
+      "customer_emails": [
+        "sales@primeblade.se"
+      ],
+      "phone_numbers": [
+        "+46 565 101 09"
+      ],
+      "addresses": [
+        "Smidesvägen 7 B, 68633 SUNNE, SWEDEN"
+      ],
+      "order_numbers": [
+        "36422"
+      ],
+      "dates": [
+        "2025-09-11"
+      ],
+      "urgency_level": "medium",
+      "sentiment": "neutral",
+      "product_names": [
+        "625 40x0,25 1664mm",
+        "625 25x0,20 1194mm",
+        "825 40x0,20 1069mm",
+        "825 40x0,20 1567mm"
+      ],
+      "product_codes": [
+        "15267 625",
+        "15268 625",
+        "14894 825",
+        "15102 825"
+      ],
+      "product_quantities": [
+        100,
+        100,
+        100,
+        50
+      ],
+      "product_prices": [
+        1.635,
+        0.88,
+        3.42,
+        4.91
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "625 40x0,25 1664mm",
+          "code": "15267 625",
+          "quantity": 100,
+          "unit_price": 1.635,
+          "specifications": "40x0.25, 1664mm"
+        },
+        {
+          "name": "625 25x0,20 1194mm",
+          "code": "15268 625",
+          "quantity": 100,
+          "unit_price": 0.88,
+          "specifications": "25x0.20, 1194mm"
+        },
+        {
+          "name": "825 40x0,20 1069mm",
+          "code": "14894 825",
+          "quantity": 100,
+          "unit_price": 3.42,
+          "specifications": "40x0.20, 1069mm"
+        },
+        {
+          "name": "825 40x0,20 1567mm",
+          "code": "15102 825",
+          "quantity": 50,
+          "unit_price": 4.91,
+          "specifications": "40x0.20, 1567mm"
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 3469,
+        "name": "PrimeBlade Sweden AB",
+        "ref": "70008",
+        "email": "sales@primeblade.se",
+        "phone": "46 565 101 09",
+        "address": {
+          "street": "Smidesvägen 7",
+          "street2": false,
+          "city": "Sunne",
+          "zip": "68633",
+          "country": "Sweden",
+          "state": ""
+        },
+        "vat": "SE556778629701",
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": []
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3469,
+        "name": "PrimeBlade Sweden AB",
+        "ref": "",
+        "email": "sales@primeblade.se",
+        "phone": "46 565 101 09"
+      },
+      "products": [],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 0,
+        "products_total": 0
+      }
+    },
+    "token_usage": {
+      "total_tokens": 14776,
+      "input_tokens": 12670,
+      "output_tokens": 2106
+    },
+    "customer": {
+      "extracted_name": "PrimeBlade Sweden AB",
+      "extracted_contact": "Eric Burell Saad El Ouaamari",
+      "extracted_email": "N/A",
+      "json_match": "PrimeBlade Sweden AB",
+      "json_match_score": 1.0,
+      "odoo_match": "PrimeBlade Sweden AB",
+      "odoo_ref": "",
+      "odoo_id": 3469
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "625 40x0,25 1664mm",
+        "extracted_code": "15267 625",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": null,
+        "json_match_score": 0,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 2,
+        "extracted_name": "625 25x0,20 1194mm",
+        "extracted_code": "15268 625",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": null,
+        "json_match_score": 0,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 3,
+        "extracted_name": "825 40x0,20 1069mm",
+        "extracted_code": "14894 825",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": null,
+        "json_match_score": 0,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 4,
+        "extracted_name": "825 40x0,20 1567mm",
+        "extracted_code": "15102 825",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": null,
+        "json_match_score": 0,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 12670,
+      "output_tokens": 2106,
+      "total_tokens": 14776,
+      "input_cost_usd": 0.05068,
+      "output_cost_usd": 0.008424,
+      "total_cost_usd": 0.059104
+    }
+  },
+  {
+    "index": 6,
+    "filename": "email_106_167 PC25-1109167 SDS.pdf",
+    "pdf_path": "attachments\\email_106_167 PC25-1109167 SDS.pdf",
+    "timestamp": "2025-10-08T16:00:51.830680",
+    "success": true,
+    "error": null,
+    "parsed_text": "Niltor Grup, S.L.U\nC/Alcalde Josep Abril, nº 30\n08302 – MATARO (Barcelona)\nEn Mataró a 11 de septiembre de 2025\nRef. Descripción Quantity Unit Amount\nPrice\nL1520-457 3M Cushion Mount Plus L1520 457mm 7 Roll\nx 33m\nL1020-457 3M Cushion Mount Plus L1020 457mm 3 Roll\nx 33m\nL1320-457 3M Cushion Mount Plus L1320 1 Roll\n457mm x 33m\nL1720-457 3M Cushion Mount Plus L1720 3 Rolle\n457mm x 33m\nPayment Terms: 30 days net\nShip-to Address:\nNiltor Grup, S.L.U\nC/Alcalde Josep Abril, nº 3\n08302 – MATARO, Barcelona\nEspaña\nBest regards,\nNiltor Grup, S.L.U\ncompras@niltor.es\nTel. 93 799 54 00 – 634 596 384\nNILTOR GRUP SLU C/ Alcalde Josep Abril nº30, 08302 Mataró (Barcelona)\nT: 937995400 e-mail: compras@niltor.es",
+    "text_length": 700,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "confidence": 0.9,
+      "sub_type": "order_placement",
+      "reasoning": "The email contains a detailed order with product descriptions, quantities, and payment terms, indicating the customer is placing a new order.\",\n  \"key_indicators\": [\"Order from\", \"Ref. Descripción\", \""
+    },
+    "entities": {
+      "customer_name": "",
+      "company_name": "Niltor Grup, S.L.U",
+      "customer_emails": [
+        "compras@niltor.es"
+      ],
+      "phone_numbers": [
+        "93 799 54 00 – 634 596 384"
+      ],
+      "addresses": [
+        "C/Alcalde Josep Abril, nº 30, 08302 – MATARO (Barcelona), España"
+      ],
+      "order_numbers": [],
+      "dates": [
+        "2025-09-11"
+      ],
+      "urgency_level": "medium",
+      "sentiment": "neutral",
+      "product_names": [
+        "3M Cushion Mount Plus L1520 457mm",
+        "3M Cushion Mount Plus L1020 457mm",
+        "3M Cushion Mount Plus L1320 457mm",
+        "3M Cushion Mount Plus L1720 457mm"
+      ],
+      "product_codes": [
+        "L1520-457",
+        "L1020-457",
+        "L1320-457",
+        "L1720-457"
+      ],
+      "product_quantities": [
+        7,
+        3,
+        1,
+        3
+      ],
+      "product_prices": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "3M Cushion Mount Plus L1520 457mm",
+          "code": "L1520-457",
+          "quantity": 7,
+          "unit_price": 0,
+          "specifications": "457mm x 33m"
+        },
+        {
+          "name": "3M Cushion Mount Plus L1020 457mm",
+          "code": "L1020-457",
+          "quantity": 3,
+          "unit_price": 0,
+          "specifications": "457mm x 33m"
+        },
+        {
+          "name": "3M Cushion Mount Plus L1320 457mm",
+          "code": "L1320-457",
+          "quantity": 1,
+          "unit_price": 0,
+          "specifications": "457mm x 33m"
+        },
+        {
+          "name": "3M Cushion Mount Plus L1720 457mm",
+          "code": "L1720-457",
+          "quantity": 3,
+          "unit_price": 0,
+          "specifications": "457mm x 33m"
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 3440,
+        "name": "Niltor Grup S.L.U",
+        "ref": "70052",
+        "email": "gestion@niltor.es   ",
+        "phone": "93 799 54 00  634 5",
+        "address": {
+          "street": "C/ Alcalde Josep Abril, 30 ",
+          "street2": false,
+          "city": "Mataró (Barcelona)",
+          "zip": "8302",
+          "country": "Spain",
+          "state": ""
+        },
+        "vat": false,
+        "website": false,
+        "match_score": 0.9714285714285714
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 2945,
+            "name": "3MCushion Mount Plus L1520 457mm x 23m",
+            "code": "L1520-457",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5714285714285714,
+            "match_method": "token_matching",
+            "match_score": 0.5714285714285714,
+            "extracted_product_name": "3M Cushion Mount Plus L1520 457mm",
+            "requires_review": true
+          },
+          {
+            "id": 2927,
+            "name": "3MCushion Mount Plus L1020 457mm x 23m",
+            "code": "L1020-457",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5714285714285714,
+            "match_method": "token_matching",
+            "match_score": 0.5714285714285714,
+            "extracted_product_name": "3M Cushion Mount Plus L1020 457mm",
+            "requires_review": true
+          },
+          {
+            "id": 2937,
+            "name": "3MCushion Mount Plus L1320 457mm x 23m",
+            "code": "L1320-457",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5714285714285714,
+            "match_method": "token_matching",
+            "match_score": 0.5714285714285714,
+            "extracted_product_name": "3M Cushion Mount Plus L1320 457mm",
+            "requires_review": true
+          },
+          {
+            "id": 2956,
+            "name": "3MCushion Mount Plus L1720 457mm x 23m",
+            "code": "L1720-457",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5714285714285714,
+            "match_method": "token_matching",
+            "match_score": 0.5714285714285714,
+            "extracted_product_name": "3M Cushion Mount Plus L1720 457mm",
+            "requires_review": true
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3440,
+        "name": "Niltor Grup S.L.U",
+        "ref": "",
+        "email": "gestion@niltor.es   ",
+        "phone": "93 799 54 00  634 5"
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 2945,
+            "name": "3MCushion Mount Plus L1520 457mm x 23m",
+            "code": "L1520-457",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5714285714285714,
+            "match_method": "token_matching",
+            "match_score": 0.5714285714285714,
+            "extracted_product_name": "3M Cushion Mount Plus L1520 457mm",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 2945,
+            "name": "3MCushion Mount Plus L1520 457mm x 23m",
+            "default_code": "L1520-457",
+            "list_price": 1.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        },
+        {
+          "json_product": {
+            "id": 2927,
+            "name": "3MCushion Mount Plus L1020 457mm x 23m",
+            "code": "L1020-457",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5714285714285714,
+            "match_method": "token_matching",
+            "match_score": 0.5714285714285714,
+            "extracted_product_name": "3M Cushion Mount Plus L1020 457mm",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 2927,
+            "name": "3MCushion Mount Plus L1020 457mm x 23m",
+            "default_code": "L1020-457",
+            "list_price": 1.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        },
+        {
+          "json_product": {
+            "id": 2937,
+            "name": "3MCushion Mount Plus L1320 457mm x 23m",
+            "code": "L1320-457",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5714285714285714,
+            "match_method": "token_matching",
+            "match_score": 0.5714285714285714,
+            "extracted_product_name": "3M Cushion Mount Plus L1320 457mm",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 2937,
+            "name": "3MCushion Mount Plus L1320 457mm x 23m",
+            "default_code": "L1320-457",
+            "list_price": 1.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        },
+        {
+          "json_product": {
+            "id": 2956,
+            "name": "3MCushion Mount Plus L1720 457mm x 23m",
+            "code": "L1720-457",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5714285714285714,
+            "match_method": "token_matching",
+            "match_score": 0.5714285714285714,
+            "extracted_product_name": "3M Cushion Mount Plus L1720 457mm",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 2956,
+            "name": "3MCushion Mount Plus L1720 457mm x 23m",
+            "default_code": "L1720-457",
+            "list_price": 1.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 4,
+        "products_total": 4
+      }
+    },
+    "token_usage": {
+      "total_tokens": 17455,
+      "input_tokens": 14783,
+      "output_tokens": 2672
+    },
+    "customer": {
+      "extracted_name": "Niltor Grup, S.L.U",
+      "extracted_contact": "",
+      "extracted_email": "N/A",
+      "json_match": "Niltor Grup S.L.U",
+      "json_match_score": 0.9714285714285714,
+      "odoo_match": "Niltor Grup S.L.U",
+      "odoo_ref": "",
+      "odoo_id": 3440
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "3M Cushion Mount Plus L1520 457mm",
+        "extracted_code": "L1520-457",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "3MCushion Mount Plus L1520 457mm x 23m",
+        "json_match_score": 0.5714285714285714,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 2,
+        "extracted_name": "3M Cushion Mount Plus L1020 457mm",
+        "extracted_code": "L1020-457",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "3MCushion Mount Plus L1020 457mm x 23m",
+        "json_match_score": 0.5714285714285714,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 3,
+        "extracted_name": "3M Cushion Mount Plus L1320 457mm",
+        "extracted_code": "L1320-457",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "3MCushion Mount Plus L1320 457mm x 23m",
+        "json_match_score": 0.5714285714285714,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 4,
+        "extracted_name": "3M Cushion Mount Plus L1720 457mm",
+        "extracted_code": "L1720-457",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "3MCushion Mount Plus L1720 457mm x 23m",
+        "json_match_score": 0.5714285714285714,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 14783,
+      "output_tokens": 2672,
+      "total_tokens": 17455,
+      "input_cost_usd": 0.059132,
+      "output_cost_usd": 0.010688,
+      "total_cost_usd": 0.06982
+    }
+  },
+  {
+    "index": 7,
+    "filename": "email_107_MO108886469_1109.pdf",
+    "pdf_path": "attachments\\email_107_MO108886469_1109.pdf",
+    "timestamp": "2025-10-08T16:01:01.292090",
+    "success": true,
+    "error": null,
+    "parsed_text": "MT 103 Single Customer Credit Transfer Date:11.09.2025\nCorrespondent Output Reference :250911INSBMK22AXXX0129239396\nSender : INSBMK22\nSPARKASSE BANK AD SKOPJE\nul.Vasil Iljoski br. 14\nSKOPJE NORTH MACEDONIA\nReceiver : GIBAATWG\nERSTE GROUP BANK AG\nAM BELVEDERE 1\nVIENNA AUSTRIA\n-------------------------------------------------------------------------------------------\n:119: :\nSTP\n:121: UETR:\nea0f7527-a96e-4be1-974e-b569c24814a0\n:20: Sender's Reference:\n1450070244317\n:23B: Bank Operation Code:\nCRED\n:32A: Value Date/Currency/Interbank Settled Amount\nDate : 11.09.2025\nCurrency : EUR\nAmount : 5518,80\n:50F: Ordering Customer:\n/MK07250701000150974\n1/KIRO DANDARO DOO BITOLA\n2/Banica br.3 Bitola\n3/MK/BITOLA/NORTH MACEDONIA\n:57A: Account With Institution:\nHELADEF1822\n:59F: Beneficiary Customer:\n/DE57500502010200524984\n1/SDS GMBH\n2/KRUPPSTRASSE 122\n3/DE/60388 FRANKFURT AM MAIN\n:70: Remittance Information:\n/INV/PRO5726\n:71A: Details of Charges:\nSHA",
+    "text_length": 948,
+    "ocr_used": true,
+    "intent": {
+      "type": "invoice_request",
+      "confidence": 0.9,
+      "sub_type": "payment_confirmation",
+      "reasoning": "The email contains a bank transfer document (MT 103) with details of a payment, indicating the customer is likely requesting confirmation or documentation of a completed transaction.\",\n  \"key_indicato"
+    },
+    "entities": {
+      "customer_name": "",
+      "company_name": "1/KIRO DANDARO DOO BITOLA",
+      "customer_emails": [],
+      "phone_numbers": [],
+      "addresses": [
+        "2/Banica br.3 Bitola, 3/MK/BITOLA/NORTH MACEDONIA"
+      ],
+      "order_numbers": [
+        "PRO5726"
+      ],
+      "dates": [
+        "2025-09-11"
+      ],
+      "urgency_level": "low",
+      "sentiment": "neutral",
+      "product_names": [],
+      "product_codes": [],
+      "product_quantities": [],
+      "product_prices": [],
+      "references": [],
+      "products_structured": []
+    },
+    "context": {
+      "customer_info": null,
+      "json_data": {}
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": false
+      },
+      "products": [],
+      "match_summary": {
+        "customer_matched": false,
+        "products_matched": 0,
+        "products_total": 0
+      }
+    },
+    "token_usage": {
+      "total_tokens": 20000,
+      "input_tokens": 17072,
+      "output_tokens": 2928
+    },
+    "customer": {
+      "extracted_name": "1/KIRO DANDARO DOO BITOLA",
+      "extracted_contact": "",
+      "extracted_email": "N/A",
+      "json_match": null,
+      "json_match_score": 0,
+      "odoo_match": null,
+      "odoo_ref": null,
+      "odoo_id": null
+    },
+    "products": [],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 17072,
+      "output_tokens": 2928,
+      "total_tokens": 20000,
+      "input_cost_usd": 0.068288,
+      "output_cost_usd": 0.011712,
+      "total_cost_usd": 0.08
+    }
+  },
+  {
+    "index": 8,
+    "filename": "email_108_Order confirmatiom_blades - 12.09.2025.pdf",
+    "pdf_path": "attachments\\email_108_Order confirmatiom_blades - 12.09.2025.pdf",
+    "timestamp": "2025-10-08T16:01:05.796315",
+    "success": true,
+    "error": null,
+    "parsed_text": "SDS GmbH - Kruppstraße 122 - 60388 Frankfurt am Main\nMachine Knives Inc.\nMark Surujbali\n72 Reynolds Rd\nL0L 2T0 Tiny\nKanada\nCustomer No.: 10629\nProcessed by: Herr Kaddouri\nOrder No.: 5473\nDelivery date: 15.10.2025\nDate: 10.09.2025\nP.O. Confirmation No. 5715\nDelivery date = day of dispatch\nI. Qty.Unit Art.-No. Description Unit price Discount Value\nEUR % EUR\n1 100,00 Meter C-40-25-RPE-L1664 Doctor Blade Carbon 3,30 330,00\n40x0,25 mm / RPE L1664\n100m/Box Professionally\nprecut / Taped together in\ndispenser\nHS Code 84439199\n2 100,00 Stk. C-25-20-RPE-L1194 Doctor Blade Carbon 1,66 166,00\n25x0,20 mm / RPE / L1194\nmm\n50 Pcs./Box Professionally\nprecut / Taped together in\ndispenser\nHS Code 84439199\n3 100,00 Stk. G-40-20-RPE-L1069 Doctor Blade Gold 40x0,20 6,81 681,00\nmm / RPE / L1069 mm\n50 Pcs./Box Professionally\nprecut / Taped together in\ndispenser\nHS Code 84439199\n4 100,00 Stk. G-40-20-RPE-L1567 Doctor Blade Gold 40x0,20 10,05 1.005,00\nmm / RPE / L1567 mm\n50 Pcs./Box Professionally\nprecut / Taped together in\ndispenser\nHS Code 84439199\nplus Transport costs\nNet amount 2.182,00\ntax free (tax free export consignment ) 2.182,00\nTotal value 2.182,00\nPayment within 30 days net\nEx Works\nSDS GmbH Tel +49 6940802970 Ust-ID.-Nr. DE284216833 Frankfurter Sparkasse\nKruppstraße 122 Fax +49 6940802973 Amstgericht Konstanz Konto 200524984 BLZ50050201\n60388 Frankfurt am Main info@sds-print.com Managing Director Karim El Ouahabi IBAN DE57 5005 0201 0200 5249 84\nDeutschland www.sds-print.com EORI-NR. DE250627839236080 BIC-Code HELADEF1822",
+    "text_length": 1535,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "confidence": 0.98,
+      "sub_type": "order_confirmation",
+      "reasoning": "The email contains detailed order information, including order number, delivery date, and itemized list of products, indicating a confirmation of an order.\",\n  \"key_indicators\": [\"Order No.\", \"Deliver"
+    },
+    "entities": {
+      "customer_name": "Mark Surujbali",
+      "company_name": "Machine Knives Inc.",
+      "customer_emails": [],
+      "phone_numbers": [],
+      "addresses": [
+        "72 Reynolds Rd, L0L 2T0 Tiny, Kanada"
+      ],
+      "order_numbers": [
+        "5473"
+      ],
+      "dates": [
+        "15.10.2025"
+      ],
+      "urgency_level": "medium",
+      "sentiment": "neutral",
+      "product_names": [
+        "Doctor Blade Carbon 40x0.25 mm / RPE L1664",
+        "Doctor Blade Carbon 25x0.20 mm / RPE / L1194",
+        "Doctor Blade Gold 40x0.20 mm / RPE / L1069",
+        "Doctor Blade Gold 40x0.20 mm / RPE / L1567"
+      ],
+      "product_codes": [
+        "C-40-25-RPE-L1664",
+        "C-25-20-RPE-L1194",
+        "G-40-20-RPE-L1069",
+        "G-40-20-RPE-L1567"
+      ],
+      "product_quantities": [
+        100,
+        100,
+        100,
+        100
+      ],
+      "product_prices": [
+        3.3,
+        1.66,
+        6.81,
+        10.05
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "Doctor Blade Carbon 40x0.25 mm / RPE L1664",
+          "code": "C-40-25-RPE-L1664",
+          "quantity": 100,
+          "unit_price": 3.3,
+          "specifications": "100m/Box Professionally precut / Taped together in dispenser"
+        },
+        {
+          "name": "Doctor Blade Carbon 25x0.20 mm / RPE / L1194",
+          "code": "C-25-20-RPE-L1194",
+          "quantity": 100,
+          "unit_price": 1.66,
+          "specifications": "50 Pcs./Box Professionally precut / Taped together in dispenser"
+        },
+        {
+          "name": "Doctor Blade Gold 40x0.20 mm / RPE / L1069",
+          "code": "G-40-20-RPE-L1069",
+          "quantity": 100,
+          "unit_price": 6.81,
+          "specifications": "50 Pcs./Box Professionally precut / Taped together in dispenser"
+        },
+        {
+          "name": "Doctor Blade Gold 40x0.20 mm / RPE / L1567",
+          "code": "G-40-20-RPE-L1567",
+          "quantity": 100,
+          "unit_price": 10.05,
+          "specifications": "50 Pcs./Box Professionally precut / Taped together in dispenser"
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 3417,
+        "name": "Machine Knives Inc.",
+        "ref": "10629",
+        "email": "mark@m4machineknives.com",
+        "phone": "519-306-0577",
+        "address": {
+          "street": "72 Reynolds Rd ",
+          "street2": false,
+          "city": "Tiny",
+          "zip": "L0L 2T0",
+          "country": "Canada",
+          "state": ""
+        },
+        "vat": false,
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 4137,
+            "name": "[C-40-20-RPE-L1335] Docotr Blade Carbon 40x0,20 mm / RPE / L1335 mm",
+            "code": false,
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.7,
+            "match_method": "token_matching",
+            "match_score": 0.7,
+            "extracted_product_name": "Doctor Blade Carbon 40x0.25 mm / RPE L1664",
+            "requires_review": true
+          },
+          {
+            "id": 3572,
+            "name": "Doctor Blade Carbon 25x0,20 mm / RPE / L1194 mm ",
+            "code": "C-25-20-RPE-L1194",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.8,
+            "match_method": "token_matching",
+            "match_score": 0.8,
+            "extracted_product_name": "Doctor Blade Carbon 25x0.20 mm / RPE / L1194",
+            "requires_review": false
+          },
+          {
+            "id": 3748,
+            "name": "Doctor Blade Gold 40x0,20 mm / RPE / L1069 mm",
+            "code": "G-40-20-RPE-L1069",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.8,
+            "match_method": "token_matching",
+            "match_score": 0.8,
+            "extracted_product_name": "Doctor Blade Gold 40x0.20 mm / RPE / L1069",
+            "requires_review": false
+          },
+          {
+            "id": 3750,
+            "name": "Doctor Blade Gold 40x0,20 mm / RPE / L1567 mm",
+            "code": "G-40-20-RPE-L1567",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.8,
+            "match_method": "token_matching",
+            "match_score": 0.8,
+            "extracted_product_name": "Doctor Blade Gold 40x0.20 mm / RPE / L1567",
+            "requires_review": false
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3417,
+        "name": "Machine Knives Inc.",
+        "ref": "",
+        "email": "mark@m4machineknives.com",
+        "phone": "519-306-0577"
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 4137,
+            "name": "[C-40-20-RPE-L1335] Docotr Blade Carbon 40x0,20 mm / RPE / L1335 mm",
+            "code": false,
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.7,
+            "match_method": "token_matching",
+            "match_score": 0.7,
+            "extracted_product_name": "Doctor Blade Carbon 40x0.25 mm / RPE L1664",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 4137,
+            "name": "[C-40-20-RPE-L1335] Docotr Blade Carbon 40x0,20 mm / RPE / L1335 mm",
+            "default_code": false,
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": [
+              2,
+              "[C-40-20-RPE-L1335] Docotr Blade Carbon 40x0,20 mm / RPE / L1335 mm"
+            ]
+          },
+          "match_method": "name"
+        },
+        {
+          "json_product": {
+            "id": 3572,
+            "name": "Doctor Blade Carbon 25x0,20 mm / RPE / L1194 mm ",
+            "code": "C-25-20-RPE-L1194",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.8,
+            "match_method": "token_matching",
+            "match_score": 0.8,
+            "extracted_product_name": "Doctor Blade Carbon 25x0.20 mm / RPE / L1194",
+            "requires_review": false
+          },
+          "odoo_product": {
+            "id": 3572,
+            "name": "Doctor Blade Carbon 25x0,20 mm / RPE / L1194 mm ",
+            "default_code": "C-25-20-RPE-L1194",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        },
+        {
+          "json_product": {
+            "id": 3748,
+            "name": "Doctor Blade Gold 40x0,20 mm / RPE / L1069 mm",
+            "code": "G-40-20-RPE-L1069",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.8,
+            "match_method": "token_matching",
+            "match_score": 0.8,
+            "extracted_product_name": "Doctor Blade Gold 40x0.20 mm / RPE / L1069",
+            "requires_review": false
+          },
+          "odoo_product": {
+            "id": 3748,
+            "name": "Doctor Blade Gold 40x0,20 mm / RPE / L1069 mm",
+            "default_code": "G-40-20-RPE-L1069",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        },
+        {
+          "json_product": {
+            "id": 3750,
+            "name": "Doctor Blade Gold 40x0,20 mm / RPE / L1567 mm",
+            "code": "G-40-20-RPE-L1567",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.8,
+            "match_method": "token_matching",
+            "match_score": 0.8,
+            "extracted_product_name": "Doctor Blade Gold 40x0.20 mm / RPE / L1567",
+            "requires_review": false
+          },
+          "odoo_product": {
+            "id": 3750,
+            "name": "Doctor Blade Gold 40x0,20 mm / RPE / L1567 mm",
+            "default_code": "G-40-20-RPE-L1567",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 4,
+        "products_total": 4
+      }
+    },
+    "token_usage": {
+      "total_tokens": 23540,
+      "input_tokens": 19996,
+      "output_tokens": 3544
+    },
+    "customer": {
+      "extracted_name": "Machine Knives Inc.",
+      "extracted_contact": "Mark Surujbali",
+      "extracted_email": "N/A",
+      "json_match": "Machine Knives Inc.",
+      "json_match_score": 1.0,
+      "odoo_match": "Machine Knives Inc.",
+      "odoo_ref": "",
+      "odoo_id": 3417
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "Doctor Blade Carbon 40x0.25 mm / RPE L1664",
+        "extracted_code": "C-40-25-RPE-L1664",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "[C-40-20-RPE-L1335] Docotr Blade Carbon 40x0,20 mm / RPE / L1335 mm",
+        "json_match_score": 0.7,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 2,
+        "extracted_name": "Doctor Blade Carbon 25x0.20 mm / RPE / L1194",
+        "extracted_code": "C-25-20-RPE-L1194",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "Doctor Blade Carbon 25x0,20 mm / RPE / L1194 mm ",
+        "json_match_score": 0.8,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 3,
+        "extracted_name": "Doctor Blade Gold 40x0.20 mm / RPE / L1069",
+        "extracted_code": "G-40-20-RPE-L1069",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "Doctor Blade Gold 40x0,20 mm / RPE / L1069 mm",
+        "json_match_score": 0.8,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      },
+      {
+        "index": 4,
+        "extracted_name": "Doctor Blade Gold 40x0.20 mm / RPE / L1567",
+        "extracted_code": "G-40-20-RPE-L1567",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "Doctor Blade Gold 40x0,20 mm / RPE / L1567 mm",
+        "json_match_score": 0.8,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 19996,
+      "output_tokens": 3544,
+      "total_tokens": 23540,
+      "input_cost_usd": 0.079984,
+      "output_cost_usd": 0.014176,
+      "total_cost_usd": 0.09416
+    }
+  },
+  {
+    "index": 9,
+    "filename": "email_109_Order confirmation_Niltor_blades- 12.09.2025.pdf",
+    "pdf_path": "attachments\\email_109_Order confirmation_Niltor_blades- 12.09.2025.pdf",
+    "timestamp": "2025-10-08T16:01:15.493342",
+    "success": true,
+    "error": null,
+    "parsed_text": "SDS GmbH - Kruppstraße 122 - 60388 Frankfurt am Main\nNiltor Grup S.L\nMs. Maribel Cabrera\nC/ Alcalde Josep Abril, 30\n08302 Mataró (Barcelona)\nSpain\nCustomer No.: 10441\nProcessed by: Herr Kaddouri\nOrder No.: PC25/1009164\nDelivery date: 17.10.2025\nDate: 10.09.2025\nP.O. Confirmation No. 5718\nDelivery date = day of dispatch\nI. Qty.Unit Art.-No. Description Unit price Discount Value\nEUR % EUR\n1 200,00 Meter C-30-25-125-17 Doctor Blade Carbon 1,90 380,00\n30x0,25x0,125x1,7 mm\n100m/Box\nHS Code 84439199\nplus Transport costs\nNet amount 380,00\ntax free (tax free export consignment ) 380,00\nTotal value 380,00\nPayment within 60 days net\nEx Works\nSDS GmbH Tel +49 6940802970 Ust-ID.-Nr. DE284216833 Frankfurter Sparkasse\nKruppstraße 122 Fax +49 6940802973 Amstgericht Konstanz Konto 200524984 BLZ50050201\n60388 Frankfurt am Main info@sds-print.com Managing Director Karim El Ouahabi IBAN DE57 5005 0201 0200 5249 84\nDeutschland www.sds-print.com EORI-NR. DE250627839236080 BIC-Code HELADEF1822",
+    "text_length": 986,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "confidence": 0.95,
+      "sub_type": "order_confirmation",
+      "reasoning": "The email subject and body contain order details, confirmation information, and delivery date, indicating the customer is either confirming an order or inquiring about an order status.\",\n  \"key_indica"
+    },
+    "entities": {
+      "customer_name": "Ms. Maribel Cabrera",
+      "company_name": "Niltor Grup S.L",
+      "customer_emails": [],
+      "phone_numbers": [],
+      "addresses": [
+        "C/ Alcalde Josep Abril, 30, 08302 Mataró (Barcelona), Spain"
+      ],
+      "order_numbers": [
+        "PC25/1009164"
+      ],
+      "dates": [
+        "2025-10-17"
+      ],
+      "urgency_level": "medium",
+      "sentiment": "neutral",
+      "product_names": [
+        "Doctor Blade Carbon 1,90 30x0,25x0,125x1,7 mm"
+      ],
+      "product_codes": [
+        "C-30-25-125-17"
+      ],
+      "product_quantities": [
+        200
+      ],
+      "product_prices": [
+        1.9
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "Doctor Blade Carbon 1,90 30x0,25x0,125x1,7 mm",
+          "code": "C-30-25-125-17",
+          "quantity": 200,
+          "unit_price": 1.9,
+          "specifications": "30x0,25x0,125x1,7 mm, 100m/Box, HS Code 84439199"
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 3439,
+        "name": "Niltor Grup S.L",
+        "ref": "10441",
+        "email": false,
+        "phone": false,
+        "address": {
+          "street": "C/ Alcalde Josep Abril, 30  ",
+          "street2": false,
+          "city": "Mataró (Barcelona)",
+          "zip": "08302",
+          "country": "Spain",
+          "state": ""
+        },
+        "vat": "ESB66137225",
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 3598,
+            "name": "Doctor Blade Carbon 30x0,25x0,125x1,7 mm",
+            "code": "C-30-25-125-17",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5333333333333333,
+            "match_method": "token_matching",
+            "match_score": 0.5333333333333333,
+            "extracted_product_name": "Doctor Blade Carbon 1,90 30x0,25x0,125x1,7 mm",
+            "requires_review": true
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3439,
+        "name": "Niltor Grup S.L",
+        "ref": "",
+        "email": false,
+        "phone": false
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 3598,
+            "name": "Doctor Blade Carbon 30x0,25x0,125x1,7 mm",
+            "code": "C-30-25-125-17",
+            "list_price": 0.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5333333333333333,
+            "match_method": "token_matching",
+            "match_score": 0.5333333333333333,
+            "extracted_product_name": "Doctor Blade Carbon 1,90 30x0,25x0,125x1,7 mm",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 3598,
+            "name": "Doctor Blade Carbon 30x0,25x0,125x1,7 mm",
+            "default_code": "C-30-25-125-17",
+            "list_price": 0.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 1,
+        "products_total": 1
+      }
+    },
+    "token_usage": {
+      "total_tokens": 26286,
+      "input_tokens": 22347,
+      "output_tokens": 3939
+    },
+    "customer": {
+      "extracted_name": "Niltor Grup S.L",
+      "extracted_contact": "Ms. Maribel Cabrera",
+      "extracted_email": "N/A",
+      "json_match": "Niltor Grup S.L",
+      "json_match_score": 1.0,
+      "odoo_match": "Niltor Grup S.L",
+      "odoo_ref": "",
+      "odoo_id": 3439
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "Doctor Blade Carbon 1,90 30x0,25x0,125x1,7 mm",
+        "extracted_code": "C-30-25-125-17",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "Doctor Blade Carbon 30x0,25x0,125x1,7 mm",
+        "json_match_score": 0.5333333333333333,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 22347,
+      "output_tokens": 3939,
+      "total_tokens": 26286,
+      "input_cost_usd": 0.089388,
+      "output_cost_usd": 0.015756,
+      "total_cost_usd": 0.105144
+    }
+  },
+  {
+    "index": 10,
+    "filename": "email_10_AB Update 1118376 Bestellung Bestellung Nr. 251.PDF",
+    "pdf_path": "attachments\\email_10_AB Update 1118376 Bestellung Bestellung Nr. 251.PDF",
+    "timestamp": "2025-10-08T16:01:20.068846",
+    "success": true,
+    "error": null,
+    "parsed_text": "ORAFOL Europe GmbH Graphic Solutions\nOrafolstraße 1 Reflective Solutions\n16515 Oranienburg Adhesive Tape Systems\nORAFOL Europe GmbH - Orafolstraße 1 - 16515 Oranienburg - Germany\nSDS Print Services GmbH Belegnummer 1118376\nNiederlassung DE\nKruppstraße 122 Belegdatum 14.07.2025\nBestellung Bestellung Nr. 251\nBestelldatum 14.07.2025\n60388 FRANKFURT AM MAIN\nAuftraggeber 4001819\nDEUTSCHLAND Ansprechpartner Silvio Kluge, AT\nE-Mail S.Kluge@orafol.de\nWarenempfänger\nSDS Print Services GmbH\nNiederlassung DE\nKruppstraße 122\n60388 FRANKFURT AM MAIN\nDEUTSCHLAND\nAuftragsbestätigung 1118376\nPos Material Menge Preis Preiseinheit Betrag\n1 30073284 75ROL 123,750 M2 25,25EUR 1ROL 1.893,75 EUR\n1256QS, 999 undefiniert, 33/50, neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt\nAuslieferung voraussichtlich am: 12.09.2025 *\nPositionen gesamt 1.893,75 EUR\nFracht 45,00 EUR\nMwSt. 19 % 368,36 EUR\nEndbetrag 2.307,11 EUR\nZahlungsbedingungen: 30 Tage ohne Abzug\nLieferbedingungen: CIP Frankfurt am Main\nFrei Haus ab Euro 10.000 netto Warenwert\nVielen Dank für Ihren Auftrag, den wir hiermit gern bestätigen.\nBitte prüfen Sie die Auftragsbestätigung sorgfältig und teilen uns eventuelle Änderungen schnellstmöglich mit.\nFehlende Liefertermine werden später bekanntgegeben.\n* Lieferterminverschiebung\nNachträgliche Entgeltminderungen erfolgen auf Basis aktueller Vereinbarungen. Es gelten ausschließlich unsere\nallgemeinen Verkaufs- und Lieferbedingungen, Stand 01.01.2021. Anderslautende Bedingungen bedürfen der\nschriftlichen Bestätigung durch ORAFOL. Ansprüche aus Nutzungsausfall, insbesondere aus Betriebsunterbrechung\nund entgangenem Gewinn, sind ausgeschlossen.\nHeadquarters: Managing Directors: Bank Details:\nORAFOL Europe GmbH Dr. Holger Loclair Berliner Sparkasse, BIC BELADEBEXXX\nOrafolstraße 1 Klaus Schmidbaur IBAN DE07 1005 0000 6750 0035 30\n16515 Oranienburg, Germany Commercial Register: Acc. 675 000 35 30\nTel: +49 3301 864-0 District Court Neuruppin, HRB 47NP Deutsche Bank AG, BIC DEUTDEBB160\nFax: +49 3301 864-100 VAT ID No. DE 138 704 469 IBAN DE13 1207 0000 0360 4642 00\nInternet: www.orafol.com Tax No. 053/115/00203 Acc. 360 464 200\nSeite 1von1",
+    "text_length": 2162,
+    "ocr_used": true,
+    "intent": {
+      "type": "order_inquiry",
+      "confidence": 0.95,
+      "sub_type": "order_confirmation",
+      "reasoning": "The email contains an order confirmation with details such as order number, delivery date, and pricing, indicating the customer is either placing a new order or inquiring about an existing order.\",\n  "
+    },
+    "entities": {
+      "customer_name": "Silvio Kluge",
+      "company_name": "ORAFOL Europe GmbH",
+      "customer_emails": [
+        "S.Kluge@orafol.de"
+      ],
+      "phone_numbers": [
+        "+49 3301 864-0"
+      ],
+      "addresses": [
+        "Orafolstraße 1, 16515 Oranienburg, Germany"
+      ],
+      "order_numbers": [
+        "251"
+      ],
+      "dates": [
+        "2025-07-14"
+      ],
+      "urgency_level": "medium",
+      "sentiment": "neutral",
+      "product_names": [
+        "1256QS, 999 undefiniert, 33/50, neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt"
+      ],
+      "product_codes": [
+        "30073284"
+      ],
+      "product_quantities": [
+        75
+      ],
+      "product_prices": [
+        25.25
+      ],
+      "references": [],
+      "products_structured": [
+        {
+          "name": "1256QS, 999 undefiniert, 33/50, neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt",
+          "code": "30073284",
+          "quantity": 75,
+          "unit_price": 25.25,
+          "specifications": "Rolle"
+        }
+      ]
+    },
+    "context": {
+      "customer_info": {
+        "id": 3443,
+        "name": "ORAFOL Europe GmbH",
+        "ref": "70043",
+        "email": "S.Kluge@orafol.de",
+        "phone": "49 3301 864351",
+        "address": {
+          "street": "Orafolstr.",
+          "street2": false,
+          "city": "Oranienburg",
+          "zip": "16515",
+          "country": "Germany",
+          "state": ""
+        },
+        "vat": "DE138704469",
+        "website": false,
+        "match_score": 1.0
+      },
+      "json_data": {
+        "products": [
+          {
+            "id": 4007,
+            "name": "ORAFIX® 1256QS / neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt / 50mm x 33m",
+            "code": "ORAFIX® 1256QS",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5833333333333334,
+            "match_method": "token_matching",
+            "match_score": 0.5833333333333334,
+            "extracted_product_name": "1256QS, 999 undefiniert, 33/50, neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt",
+            "requires_review": true
+          }
+        ]
+      }
+    },
+    "odoo_matches": {
+      "customer": {
+        "found": true,
+        "id": 3443,
+        "name": "ORAFOL Europe GmbH",
+        "ref": "",
+        "email": "S.Kluge@orafol.de",
+        "phone": "49 3301 864351"
+      },
+      "products": [
+        {
+          "json_product": {
+            "id": 4007,
+            "name": "ORAFIX® 1256QS / neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt / 50mm x 33m",
+            "code": "ORAFIX® 1256QS",
+            "list_price": 1.0,
+            "cost_price": 0.0,
+            "category": "Goods",
+            "uom": "Units",
+            "description": false,
+            "barcode": false,
+            "type": "consu",
+            "similarity_score": 0.5833333333333334,
+            "match_method": "token_matching",
+            "match_score": 0.5833333333333334,
+            "extracted_product_name": "1256QS, 999 undefiniert, 33/50, neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt",
+            "requires_review": true
+          },
+          "odoo_product": {
+            "id": 4007,
+            "name": "ORAFIX® 1256QS / neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt / 50mm x 33m",
+            "default_code": "ORAFIX® 1256QS",
+            "list_price": 1.0,
+            "standard_price": 0.0,
+            "product_variant_id": false
+          },
+          "match_method": "name"
+        }
+      ],
+      "match_summary": {
+        "customer_matched": true,
+        "products_matched": 1,
+        "products_total": 1
+      }
+    },
+    "token_usage": {
+      "total_tokens": 29845,
+      "input_tokens": 25506,
+      "output_tokens": 4339
+    },
+    "customer": {
+      "extracted_name": "ORAFOL Europe GmbH",
+      "extracted_contact": "Silvio Kluge",
+      "extracted_email": "N/A",
+      "json_match": "ORAFOL Europe GmbH",
+      "json_match_score": 1.0,
+      "odoo_match": "ORAFOL Europe GmbH",
+      "odoo_ref": "",
+      "odoo_id": 3443
+    },
+    "products": [
+      {
+        "index": 1,
+        "extracted_name": "1256QS, 999 undefiniert, 33/50, neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt",
+        "extracted_code": "30073284",
+        "quantity": 0,
+        "price": 0.0,
+        "json_match": "ORAFIX® 1256QS / neutrale Rückseite, Randbeschnitt beidseitig, Rolle endverklebt / 50mm x 33m",
+        "json_match_score": 0.5833333333333334,
+        "odoo_match": null,
+        "odoo_id": null,
+        "odoo_code": null
+      }
+    ],
+    "cost_analysis": {
+      "model_used": "mistral-large-latest",
+      "input_tokens": 25506,
+      "output_tokens": 4339,
+      "total_tokens": 29845,
+      "input_cost_usd": 0.102024,
+      "output_cost_usd": 0.017356,
+      "total_cost_usd": 0.11938
+    }
+  }
+]

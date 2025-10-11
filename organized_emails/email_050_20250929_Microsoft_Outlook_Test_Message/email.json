@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "collected_at": "2025-09-29T23:48:28.188537",
+    "email_id": "9139",
+    "mailbox": "INBOX",
+    "index": 50
+  },
+  "content": {
+    "subject": "Microsoft Outlook Test Message",
+    "sender": "\"Microsoft Outlook\" <Order@sds-print.com>",
+    "recipients": [
+      "<Order@sds-print.com>"
+    ],
+    "date": "Mon, 29 Sep 2025 17:40:38 +0200",
+    "body_text": "This is an email message sent automatically by Microsoft Outlook while testing the settings for your account.\r\n",
+    "body_html": "<html><body><p>This is an email message sent automatically by Microsoft Outlook while testing the settings for your account.\r\n</p></body></html>",
+    "attachments": []
+  }
+}

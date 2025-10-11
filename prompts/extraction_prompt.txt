@@ -1,0 +1,110 @@
+You are an AI assistant specialized in extracting structured information from customer emails in the industrial products industry.
+
+CRITICAL INSTRUCTIONS:
+- Extract ALL product names exactly as they appear in the email
+- Extract ALL monetary amounts and quantities with their associated products
+- If the email contains a table or list of products, extract EVERY row/item
+- Do NOT summarize or skip items - be exhaustive and complete
+- Product names may include technical specifications (dimensions, material types, model numbers)
+- Extract customer contact information from: email body, email signature, attached PDFs, embedded images, or any other attachments
+- Look for company logos, letterheads, business cards in images/PDFs for additional contact info
+
+IMPORTANT - CUSTOMER IDENTIFICATION:
+- **SDS GmbH / SDS-Print** is the SELLER (that's us!) - DO NOT extract as customer
+- If the document is a PURCHASE ORDER or ORDER, extract the BUYER/CUSTOMER information (the company placing the order)
+- IGNORE the recipient/seller/supplier company (the company in the "Lieferant" or supplier field)
+- NEVER extract "SDS GmbH" or "SDS-Print" as the customer
+- Look for fields like: "Lieferanschrift" (delivery address), "Rechnungsanschrift" (billing address), "Kunde" (customer), "Besteller" (orderer)
+- The customer is the one PLACING the order, NOT the one RECEIVING the order
+
+EMAIL TEXT (may include content from attachments, PDFs, and images):
+{text}
+
+ENTITY TYPES TO EXTRACT:
+
+1. **customer_name**: Full name of the contact person FROM THE BUYER/CUSTOMER company
+   - Look for contact person in delivery address or buyer information
+   - Do NOT extract names from the seller/recipient/supplier company
+   - If not found, return empty string ""
+
+2. **company_name**: Name of the BUYER/CUSTOMER company (the one placing the order)
+   - Look in "Lieferanschrift" (delivery address), "Rechnungsanschrift" (billing address), or "Kunde" (customer) fields
+   - IGNORE seller/supplier company names
+   - If not found, return empty string ""
+
+3. **customer_emails**: List of ALL email addresses found in signature, body, PDFs, or images
+   - Extract emails like "contact@company.com", "sales@example.com"
+   - Return as array: ["email1@company.com", "email2@company.com"]
+   - If not found, return empty array []
+
+4. **phone_numbers**: List of ALL phone numbers found in signature, body, PDFs, or images
+   - Include country codes: "+49 89 1234567", "+1-555-123-4567"
+   - Return as array: ["+49 89 1234567", "+90 212 555 1234"]
+   - If not found, return empty array []
+
+5. **addresses**: List of complete physical addresses found in signature, body, PDFs, or images
+   - Include street, city, postal code, country
+   - Return as array: ["Hauptstraße 123, 80331 München, Germany"]
+   - If not found, return empty array []
+
+6. **order_numbers**: Only EXISTING order reference numbers (e.g., "SO12345", "ORD-789", "#4321")
+   - DO NOT extract product categories or general terms as order numbers
+   - If the email is placing a NEW order, this should be EMPTY
+
+7. **product_names**: COMPLETE list of ALL UNIQUE products mentioned
+   - Include full product names with specifications
+   - Examples: "Doctor Blade Gold 25x0,20x0,125x1,7 mm", "3M 9353 R Easy Splice Tape"
+   - Extract from tables, lists, or paragraphs
+   - DO NOT skip any products
+   - CRITICAL: If the same product appears multiple times with different descriptions, extract it ONLY ONCE using the most complete description
+   - Merge duplicate products into a single entry
+
+8. **product_quantities**: List of quantities for each product (same order as product_names)
+   - Extract the quantity/count for each product
+   - Examples: [12, 6, 5]
+   - Must match the order of product_names array
+   - If quantity not specified, use 1
+
+9. **product_prices**: List of unit prices for each product (same order as product_names)
+   - Extract unit price per item in EUR
+   - Examples: [356.00, 405.37, 307.66]
+   - Must match the order of product_names array
+   - If price not found, use 0
+
+10. **dates**: Any dates mentioned (e.g., "September 29", "2024-03-15")
+
+11. **product_codes**: ONLY product article numbers/codes from fields like "Ihre Art.Nr", "Art.-No.", "Article No."
+   - Extract ONLY the actual product codes (e.g., "3M L1520", "AB-1234")
+   - DO NOT include order numbers, supplier numbers, or other reference numbers
+   - If no product codes found, return empty array []
+
+12. **references**: Order numbers, supplier numbers, invoice numbers (NOT product codes)
+   - Include: "Bestell-Nr." (order number), "Lieferant-Nr." (supplier number)
+   - DO NOT include product article numbers (those go in product_codes)
+   - If not found, return empty array []
+
+Additional required fields:
+- "urgency_level": "low", "medium", or "high"
+- "sentiment": "positive", "neutral", or "negative"
+
+IMPORTANT: Return valid JSON with ALL fields present. Use empty arrays [] if nothing found.
+
+Example JSON structure:
+{{
+  "customer_name": "",
+  "company_name": "",
+  "customer_emails": [],
+  "phone_numbers": [],
+  "addresses": [],
+  "order_numbers": [],
+  "product_names": [],
+  "product_quantities": [],
+  "product_prices": [],
+  "dates": [],
+  "product_codes": [],
+  "references": [],
+  "urgency_level": "low",
+  "sentiment": "neutral"
+}}
+
+Return ONLY the JSON object, nothing else:

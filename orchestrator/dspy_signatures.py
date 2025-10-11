@@ -238,7 +238,50 @@ Example 3 (Multi-line format):
 ```
 Extract: "DuroSeal W&H End Seals Miraflex 007 CR Gray"
 
+Example 4 (3-line product from real orders):
+```
+40000947 KL-Klebeband 640mmx23mx0,5mm
+3M Cushion Mount Plus E1020
+E1020, Weiß, 64mm x 23 m, 0.5 mm     <-- ALL 3 LINES = 1 PRODUCT!
+```
+Extract: Code="40000947", Name="3M Cushion Mount Plus E1020 White 640mm x 23m x 0.5mm"
+
+Example 5 (Swiss format):
+```
+P1-18890 Schaumklebeband 3M L1720 grün
+457 mm x 33 m / Dicke 0.55 mm
+```
+Extract: Code="P1-18890", Name="3M Foam Tape L1720 Green 457mm x 33m / Thickness 0.55mm"
+
+Example 6 (Flxon multi-line format):
+```
+101964
+Vendor code: [SDS115] 444-AK-CR-GRY
+Seal Class: All Foam Seal
+Thickness: 12 mm
+Anilox Diameter: 220 mm
+```
+Extract: Code="101964", Name="Seal 444-AK-CR-GRY All Foam 12mm Thickness Anilox 220mm"
+
+Example 7 (Code AFTER description - German format):
+```
+14 Rolle 3 M Cushion Mount 457mm x 23 m
+Art.Nr.: E1520
+Mat.-Nr. ppg > wf: 617625
+Liefertermin: 08.10.2020 / KW 41 / 2020
+```
+Extract: Code="E1520", Name="3M Cushion Mount E1520 457mm x 23m", Quantity=14
+
+Example 8 (Another code-after format):
+```
+2 Rolle 3 M Cushion Mount 600mm x 23m
+Art.Nr.: E1820
+Mat.-Nr. ppg > wf: 619378
+```
+Extract: Code="E1820", Name="3M Cushion Mount E1820 600mm x 23m", Quantity=2
+
 **[CRITICAL]: Treat consecutive lines without a new product code as continuation of the previous product!**
+**[IMPORTANT]: Product code can appear BEFORE or AFTER the description - check for "Art.Nr.:", "Artikel-Nr.:", "Part #"**
 ================================================================================
 
 EXTRACTION RULES:
@@ -248,16 +291,34 @@ EXTRACTION RULES:
 4. **Include dimensions in name**: Put dimensions directly in the product name field
 5. **Don't skip details**: Every specification helps identify the correct product
 
-WHAT TO CAPTURE:
-- Product codes (customer's code and supplier's code if both present)
-- Complete product name with ALL specifications
-- Dimensions (457mm, 35x0.20, 600mm x 23m, etc.)
-- Colors (Yellow, Gray, Blue, Violet, etc.)
-- Materials (Stainless Steel, Gold, Carbon, PET, etc.)
-- Model numbers (E1320, L1020, SDS 007, RPR-123965, etc.)
-- Technical specs (RPE, 3 degrees, B100, Miraflex, etc.)
-- Machine types (W&H, Bobst, KBA, etc.)
-- Any other identifying details
+WHAT TO CAPTURE (Priority order):
+1. **Product Code** (CRITICAL - database key)
+   - Look for: "Art.Nr.", "Artikel-Nr.", "Part #", "Vendor code:", "Ihre Artikel-Nr."
+   - Can appear BEFORE or AFTER product description
+   - Examples: E1520, P1-18890, 9000841, 101964, 3M-E1520HW457
+
+2. **Dimensions** (CRITICAL for matching)
+   - Width x Length: "457mm x 23m", "600mm x 23m", "1372mm x 33m"
+   - Width x Thickness: "35x0,20", "35x0.20" (comma OR dot separator)
+   - Full: "640mmx23mx0,5mm" (width x length x thickness)
+   - With labels: "Dicke 0.55mm" (Thickness), "Länge 1335mm" (Length)
+   - Diameter: "Anilox Diameter: 220mm", "178mm"
+
+3. **Color** (Required for product variants)
+   - Translate German: gelb→Yellow, grün→Green, violett→Violet, Grau→Gray, weiß→White
+   - Examples: Yellow, Blue, Gray, Beige, Orange, Black, Green, Violet
+
+4. **Material** (When present)
+   - Translate: Edelstahl→Stainless Steel, Schaumklebeband→Foam Tape
+   - Examples: Stainless Steel, Gold, Carbon, All Foam, Duroseal
+
+5. **Model/Series** (Product family)
+   - Examples: E1320, E1520, E1820, L1720, L1520, DuroSeal, Miraflex, Cushion Mount Plus
+
+6. **Technical specs and other details**
+   - Machine types (W&H, Bobst, KBA, etc.)
+   - Technical specs (RPE, B100, etc.)
+   - Any other identifying information
 
 Format: [{"code": "", "name": "", "quantity": 0, "unit_price": 0.0, "specifications": ""}]
 

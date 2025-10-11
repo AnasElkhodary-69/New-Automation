@@ -1,0 +1,106 @@
+# RAG Email System - Python Dependencies
+# Last Updated: October 8, 2025
+
+# ============================================================
+# Core AI/ML Libraries
+# ============================================================
+# DSPy - Stanford NLP framework for LM programming
+dspy-ai>=2.4.0
+
+# Mistral AI API client
+mistralai>=0.1.0
+
+# LiteLLM - Unified LLM API (used by DSPy)
+litellm>=1.0.0
+
+# ============================================================
+# Database & Storage
+# ============================================================
+# Vector storage and embeddings (optional - not currently used)
+# faiss-cpu>=1.7.4
+# sentence-transformers>=2.2.2
+
+# ============================================================
+# Document Processing
+# ============================================================
+# PDF text extraction
+pdfplumber>=0.10.0
+
+# Image processing
+Pillow>=10.0.0
+
+# PDF to image conversion
+pdf2image>=1.16.3
+
+# OCR for images
+pytesseract>=0.3.10
+
+# ============================================================
+# Email Processing
+# ============================================================
+# Email parsing (built-in: imaplib, smtplib, email)
+# No additional packages needed
+
+# ============================================================
+# Data Processing
+# ============================================================
+# JSON/Data manipulation
+python-dotenv>=1.0.0
+
+# String matching and fuzzy search
+python-Levenshtein>=0.21.0
+fuzzywuzzy>=0.18.0
+
+# ============================================================
+# Utilities
+# ============================================================
+# HTTP requests
+requests>=2.31.0
+
+# Progress bars
+tqdm>=4.66.0
+
+# ============================================================
+# Telegram Bot Integration
+# ============================================================
+# Telegram bot API (requests already included above)
+# No additional packages needed - uses requests library
+
+# ============================================================
+# Testing (Optional)
+# ============================================================
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# ============================================================
+# Development Tools (Optional)
+# ============================================================
+# Code formatting
+black>=23.0.0
+
+# Linting
+flake8>=6.0.0
+
+# Type checking
+mypy>=1.5.0
+
+# ============================================================
+# System Requirements
+# ============================================================
+# Tesseract OCR must be installed separately:
+# Windows: https://github.com/UB-Mannheim/tesseract/wiki
+# Linux: apt-get install tesseract-ocr
+# Mac: brew install tesseract
+
+# Poppler (for pdf2image) must be installed separately:
+# Windows: Download from https://github.com/oschwartz10612/poppler-windows/releases/
+# Linux: apt-get install poppler-utils
+# Mac: brew install poppler
+
+# ============================================================
+# Notes
+# ============================================================
+# 1. Install with: pip install -r requirements.txt
+# 2. For GPU support (optional): pip install faiss-gpu (instead of faiss-cpu)
+# 3. Tesseract and Poppler paths must be configured in .env file
+# 4. Minimum Python version: 3.9+

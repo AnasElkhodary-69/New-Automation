@@ -1,0 +1,26 @@
+```json
+{
+  "customer_info": {
+    "name": "Michael Grünau",
+    "company": "folian gmbh",
+    "email": "gruenau@folian.com",
+    "phone": "+49 3831 4828-15",
+    "address": "Feldstraße 30, 18442 Groß Lüdershagen (Stralsund)"
+  },
+  "products": [
+    {
+      "name": "Klebeband",
+      "code": "",
+      "quantity": 1,
+      "unit_price": 0,
+      "specifications": "1 Palette (80x160cm), 146 kg"
+    }
+  ],
+  "order_info": {
+    "order_number": "20203609",
+    "date": "2020-12-08",
+    "urgency": "medium",
+    "notes": "Abholung am 8.12.2020"
+  }
+}
+```
