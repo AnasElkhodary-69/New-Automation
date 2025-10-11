@@ -62,6 +62,9 @@ class ExtractCustomerInfo(dspy.Signature):
     Extract customer contact information from email text.
 
     This includes company name, contact person, email, phone, and address.
+
+    IMPORTANT: Never extract "SDS", "SDS GmbH", "SDS Print Services" as the customer.
+    This is our company, not the buyer. Look for the actual buyer/ordering company.
     """
 
     email_text: str = dspy.InputField(
@@ -72,7 +75,7 @@ class ExtractCustomerInfo(dspy.Signature):
         desc="Contact person's full name (empty string if not found)"
     )
     company: str = dspy.OutputField(
-        desc="Company or organization name (empty string if not found)"
+        desc="Company or organization name - NEVER 'SDS' or 'SDS GmbH' (empty string if not found)"
     )
     email: str = dspy.OutputField(
         desc="Email address (empty string if not found)"
@@ -200,9 +203,11 @@ class ExtractOrderEntities(dspy.Signature):
 
 Rules:
 - Extract the company that is BUYING/ORDERING the products
-- If you see "SDS" as the seller/recipient, ignore it and find the actual buyer
-- Look for sender information, billing/delivery addresses, customer details
+- **NEVER extract "SDS", "SDS GmbH", "SDS Print Services" as the customer - this is OUR company, not the buyer**
+- If you see SDS in signatures/footers/headers, ignore it and find the ACTUAL buyer/customer
+- Look for sender information, billing/delivery addresses, customer details in order header
 - Extract EXACTLY what is written - do not invent names
+- If no customer found, return empty strings
 
 Format: {"name": "", "company": "", "email": "", "phone": "", "address": ""}"""
     )
