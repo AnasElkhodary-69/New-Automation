@@ -274,9 +274,7 @@ SMTP_SERVER=smtp.gmail.com
 
 # Odoo Connection
 ODOO_URL=https://whlvm14063.wawihost.de
-ODOO_DB_NAME=Test1
-ODOO_USERNAME=k.el@sds-print.com
-ODOO_PASSWORD=McoAFES3#JAJQr
+
 
 # Mistral AI
 MISTRAL_API_KEY=your-api-key
