@@ -308,21 +308,26 @@ class ContextRetriever:
                 ...
             }
         """
-        logger.info(f"   Retrieving top {top_n} candidates per product...")
+        logger.info(f"[CANDIDATE RETRIEVAL] Starting candidate search for {len(products)} products")
+        logger.info(f"[CANDIDATE RETRIEVAL] Configuration: Top {top_n} candidates per product")
 
         candidates_dict = {}
 
-        for product in products:
+        for idx, product in enumerate(products, 1):
             product_name = product.get('name', '')
             product_code = product.get('code', '')
 
             if not product_name:
+                logger.warning(f"[CANDIDATE RETRIEVAL] Product {idx}: Skipping - no product name provided")
                 continue
 
             # Build query
             query = product_name
             if product_code:
                 query = f"{product_code} {product_name}"
+                logger.info(f"[CANDIDATE RETRIEVAL] Product {idx}/{len(products)}: Searching for '{product_code}' - {product_name[:50]}")
+            else:
+                logger.info(f"[CANDIDATE RETRIEVAL] Product {idx}/{len(products)}: Searching for {product_name[:50]} (no code)")
 
             # Get top N candidates using token matcher
             candidates = []
@@ -330,24 +335,40 @@ class ContextRetriever:
             if self.use_token_matching:
                 # Try exact code match first
                 if product_code:
+                    logger.info(f"[CANDIDATE RETRIEVAL]   Step 1: Attempting exact code match for '{product_code}'")
                     exact_match = self.token_matcher.search_by_code(product_code)
                     if exact_match:
                         exact_match['match_score'] = exact_match.get('similarity_score', 1.0)
+                        exact_match['confidence'] = 1.0  # 100% confidence for exact code match
                         candidates.append(exact_match)
+                        logger.info(f"[CANDIDATE RETRIEVAL]   Exact code match found: {exact_match.get('default_code')} - {exact_match.get('name', '')[:40]}")
+                    else:
+                        logger.info(f"[CANDIDATE RETRIEVAL]   No exact code match found")
 
                 # Get top N token matches
+                logger.info(f"[CANDIDATE RETRIEVAL]   Step 2: Token-based fuzzy matching (searching top {top_n})")
                 token_matches = self.token_matcher.find_top_matches(query, top_n=top_n)
 
                 # Add to candidates if not already there
                 existing_codes = {c.get('default_code') for c in candidates}
+                added_count = 0
                 for match in token_matches:
                     if match.get('default_code') not in existing_codes:
                         match['match_score'] = match.get('similarity_score', 0.0)
+                        match['confidence'] = match.get('similarity_score', 0.0)  # Add confidence field
                         candidates.append(match)
+                        added_count += 1
+
+                logger.info(f"[CANDIDATE RETRIEVAL]   Added {added_count} fuzzy matches from token matching")
 
             # Store candidates for this product
             candidates_dict[product_name] = candidates[:top_n]  # Limit to top_n
 
-            logger.info(f"   Found {len(candidates_dict[product_name])} candidates for: {product_name}")
+            final_count = len(candidates_dict[product_name])
+            if final_count > 0:
+                top_score = candidates_dict[product_name][0].get('confidence', 0) * 100
+                logger.info(f"[CANDIDATE RETRIEVAL]   Result: {final_count} candidates found (top confidence: {top_score:.1f}%)")
+            else:
+                logger.warning(f"[CANDIDATE RETRIEVAL]   Result: NO candidates found for this product")
 
         return candidates_dict

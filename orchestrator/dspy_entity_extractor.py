@@ -45,14 +45,14 @@ class EntityExtractor:
                 try:
                     self.extractor = dspy.ChainOfThought(ExtractOrderEntities)
                     self.extractor.load(str(extractor_trained_path))
-                    logger.info("✓ Loaded TRAINED entity extractor model (ExtractOrderEntities)")
+                    logger.info("[DSPY] Loaded TRAINED entity extractor model (ExtractOrderEntities)")
                 except Exception as e:
                     logger.warning(f"Failed to load trained extractor, using default: {e}")
                     self.extractor = dspy.ChainOfThought(ExtractOrderEntities)
-                    logger.info("Entity extractor initialized with ChainOfThought (default)")
+                    logger.info("[DSPY] Entity extractor initialized with ChainOfThought (default)")
             else:
                 self.extractor = dspy.ChainOfThought(ExtractOrderEntities)
-                logger.info("Entity extractor initialized with ChainOfThought (default)")
+                logger.info("[DSPY] Entity extractor initialized with ChainOfThought (default)")
 
             # Always use default for intent classifier (no training data yet)
             self.intent_classifier = dspy.ChainOfThought(ClassifyEmailIntent)
@@ -62,14 +62,14 @@ class EntityExtractor:
                 try:
                     self.product_matcher = dspy.ChainOfThought(ConfirmAllProducts)
                     self.product_matcher.load(str(product_matcher_trained_path))
-                    logger.info("✓ Loaded TRAINED product matcher model (ConfirmAllProducts)")
+                    logger.info("[DSPY] Loaded TRAINED product matcher model (ConfirmAllProducts)")
                 except Exception as e:
                     logger.warning(f"Failed to load trained product matcher, using default: {e}")
                     self.product_matcher = dspy.ChainOfThought(ConfirmAllProducts)
-                    logger.info("Product matcher initialized with ChainOfThought (default)")
+                    logger.info("[DSPY] Product matcher initialized with ChainOfThought (default)")
             else:
                 self.product_matcher = dspy.ChainOfThought(ConfirmAllProducts)
-                logger.info("Product matcher initialized with ChainOfThought (default)")
+                logger.info("[DSPY] Product matcher initialized with ChainOfThought (default)")
         else:
             # Basic Predict mode (no trained models)
             self.extractor = dspy.Predict(ExtractOrderEntities)
@@ -439,21 +439,30 @@ class EntityExtractor:
             }
         """
         try:
-            logger.info("Complete extraction started (intent + entities in 1 call)")
+            logger.info("[DSPY EXTRACTION] Starting complete extraction (intent + entities in 1 AI call)")
+            logger.info(f"[DSPY EXTRACTION] Input: Email text length = {len(email_text)} characters")
 
             # Call 1: Extract everything (already includes intent info via urgency)
+            logger.info("[DSPY EXTRACTION] Calling DSPy model to extract customer info, products, and order details")
             result = self.extractor(email_text=email_text)
 
             # Parse outputs
+            logger.info("[DSPY EXTRACTION] Parsing DSPy JSON outputs")
             customer_info = self._parse_json(result.customer_json, {})
             products = self._parse_json(result.products_json, [])
             order_info = self._parse_json(result.order_info_json, {})
 
+            logger.info(f"[DSPY EXTRACTION] Parsed {len(products)} products from DSPy output")
+
             # Convert to legacy format
+            logger.info("[DSPY EXTRACTION] Converting DSPy output to legacy format")
             entities = self._convert_to_legacy_format(customer_info, products, order_info)
+
+            logger.info("[DSPY EXTRACTION] Post-processing: Adding dimensions from multi-line PDF format")
             entities = self._post_process_add_dimensions(entities, email_text)
 
             # POST-PROCESSING: Fix SDS being extracted as customer (should be sender instead)
+            logger.info("[DSPY EXTRACTION] Post-processing: Checking if SDS was incorrectly extracted as customer")
             entities = self._post_process_fix_sds_customer(entities, email_text)
 
             # Derive intent from extraction (order_inquiry is default)
@@ -467,6 +476,7 @@ class EntityExtractor:
 
             # If we want explicit intent classification, use the classifier
             if subject:
+                logger.info("[DSPY EXTRACTION] Classifying intent using subject line")
                 intent_result = self.intent_classifier(subject=subject, body=email_text[:1000])
                 intent = {
                     'type': intent_result.intent_type,
@@ -476,7 +486,11 @@ class EntityExtractor:
                     'reasoning': intent_result.reasoning
                 }
 
-            logger.info(f"Complete extraction: intent={intent['type']}, {len(entities.get('product_names', []))} products")
+            product_count = len(entities.get('product_names', []))
+            customer_company = entities.get('company_name', 'Not found')
+
+            logger.info(f"[DSPY EXTRACTION] Extraction complete: Intent={intent['type']}, Customer={customer_company}, Products={product_count}")
+            logger.info("[DSPY EXTRACTION] Complete extraction finished successfully")
 
             return {
                 'intent': intent,

@@ -48,7 +48,8 @@ class OdooMatcher:
         Returns:
             Odoo matching results with IDs
         """
-        logger.info("   Matching results in Odoo database...")
+        logger.info("[ODOO MATCHING] Starting Odoo database verification")
+        logger.info("[ODOO MATCHING] Verifying customer and products exist in live Odoo system")
 
         odoo_matches = {
             'customer': None,
@@ -72,7 +73,7 @@ class OdooMatcher:
             is_sds_company = any(excl.upper() in extracted_company.upper() for excl in excluded_companies) if extracted_company else False
 
             if is_sds_company:
-                logger.info(f"   [1/2] Skipping SDS company (our own company): {extracted_company}")
+                logger.info(f"[ODOO MATCHING] Customer Check: Skipping SDS company (our own company): {extracted_company}")
                 odoo_matches['customer'] = {'found': False, 'reason': 'SDS company excluded'}
             elif json_customer and json_customer.get('id'):
                 # JSON match has Odoo ID - but check confidence before accepting
@@ -80,7 +81,10 @@ class OdooMatcher:
                 json_customer_name = json_customer.get('name')
                 json_confidence = json_customer.get('match_score', 1.0)  # VectorStore match score
 
-                logger.info(f"   [1/2] Verifying customer from JSON match (ID: {json_odoo_id}, Name: {json_customer_name}, Confidence: {json_confidence:.0%})...")
+                logger.info(f"[ODOO MATCHING] Customer Check: Verifying JSON match in Odoo")
+                logger.info(f"[ODOO MATCHING]   JSON Database ID: {json_odoo_id}")
+                logger.info(f"[ODOO MATCHING]   Customer Name: {json_customer_name}")
+                logger.info(f"[ODOO MATCHING]   Match Confidence: {json_confidence*100:.1f}%")
 
                 # If JSON confidence is low (<80%), use DSPy AI to verify the match
                 if json_confidence < 0.80 and self.use_dspy_customer_matching and self.customer_matcher:

@@ -110,14 +110,20 @@ class EmailProcessor:
         Returns:
             Processing result with intent, entities, context, and response
         """
-        logger.info("Processing email...")
+        logger.info("=" * 80)
+        logger.info("STARTING EMAIL PROCESSING WORKFLOW")
+        logger.info("=" * 80)
 
         # Initialize step logging for this email
         email_id = email.get('message_id', email.get('id', 'unknown'))
         self.step_logger.start_email_log(email_id)
+        logger.info(f"Email ID: {email_id}")
+        logger.info(f"Subject: {email.get('subject', 'No Subject')}")
 
         # Clean email content (remove noise, detect T&C files)
+        logger.info("Step: Cleaning email content (removing noise, detecting T&C files)")
         email = clean_email_data(email)
+        logger.info(f"Email cleaned successfully - Body length: {len(email.get('body', ''))} chars")
 
         # Log step 1: Email parsing
         self.step_logger.log_step_1_email_parsing(email)
@@ -135,13 +141,25 @@ class EmailProcessor:
 
         try:
             # STEP 1: Complete extraction (intent + entities in ONE AI call)
+            logger.info("-" * 80)
+            logger.info("STEP 1: AI EXTRACTION (Intent + Entities)")
+            logger.info("-" * 80)
+            logger.info("Calling AI to extract intent, customer info, products, and order details")
             extraction = self._extract_complete(email)
             result['intent'] = extraction['intent']
             result['entities'] = extraction['entities']
 
             product_count = len(result['entities'].get('product_names', []))
-            logger.info(f"   Intent: {result['intent'].get('type')} ({result['intent'].get('confidence', 0):.0%} confidence)")
-            logger.info(f"   Extracted: {product_count} products, customer info, etc.")
+            customer_name = result['entities'].get('company_name', 'Not found')
+            intent_type = result['intent'].get('type')
+            intent_confidence = result['intent'].get('confidence', 0) * 100
+
+            logger.info(f"AI Extraction Results:")
+            logger.info(f"  Intent Type: {intent_type} (Confidence: {intent_confidence:.1f}%)")
+            logger.info(f"  Customer: {customer_name}")
+            logger.info(f"  Products Extracted: {product_count}")
+            logger.info(f"  Order Reference: {result['entities'].get('order_number', 'N/A')}")
+            logger.info("STEP 1 COMPLETE - Extraction successful")
 
             # Log step 2: Complete Extraction
             self.step_logger.log_step_2_entity_extraction(
@@ -150,14 +168,29 @@ class EmailProcessor:
             )
 
             # STEP 2: Get top 10 candidates per product (no AI)
+            logger.info("-" * 80)
+            logger.info("STEP 2: DATABASE SEARCH (Retrieving Product Candidates)")
+            logger.info("-" * 80)
+            logger.info(f"Searching database for top 10 candidates for each of {product_count} products")
+
             products = extraction['raw_result'].get('products', [])
             candidates_dict = self.context_retriever.retrieve_product_candidates(products, top_n=10)
+
+            total_candidates = sum(len(v) for v in candidates_dict.values())
+            logger.info(f"Database search complete - Found {total_candidates} total candidates")
 
             # Also get customer
             customer_search = result['entities'].get('company_name') or result['entities'].get('customer_name')
             customer_info = None
             if customer_search:
+                logger.info(f"Searching for customer: '{customer_search}'")
                 customer_info = self.vector_store.search_customer(customer_search, threshold=0.6)
+                if customer_info:
+                    logger.info(f"Customer found in database: {customer_info.get('name')} (Match score: {customer_info.get('match_score', 0)*100:.1f}%)")
+                else:
+                    logger.info("Customer not found in database")
+
+            logger.info("STEP 2 COMPLETE - Candidate retrieval successful")
 
             # Log candidates
             self.step_logger.log_step_3_rag_input(result['intent'], result['entities'], {
@@ -167,7 +200,22 @@ class EmailProcessor:
             })
 
             # STEP 3: Smart product confirmation (AI verifies matches < 95%)
+            logger.info("-" * 80)
+            logger.info("STEP 3: SMART PRODUCT MATCHING (AI Confirmation)")
+            logger.info("-" * 80)
+            logger.info("Using hybrid approach: Auto-match high confidence (>=95%), AI confirms uncertain matches")
+
             confirmed = self._smart_confirm_products(email.get('body', ''), products, candidates_dict)
+
+            auto_matched = confirmed['stats']['auto_matched']
+            ai_confirmed = confirmed['stats']['ai_confirmed']
+            failed = confirmed['stats']['failed']
+
+            logger.info("Product Matching Results:")
+            logger.info(f"  Auto-matched (>=95% confidence): {auto_matched}")
+            logger.info(f"  AI-confirmed (<95% confidence): {ai_confirmed}")
+            logger.info(f"  Failed to match: {failed}")
+            logger.info("STEP 3 COMPLETE - Product matching successful")
 
             # Build context from confirmed products
             result['context'] = {
@@ -186,36 +234,69 @@ class EmailProcessor:
             })
 
             # STEP 4: Match in Odoo database (verification)
+            logger.info("-" * 80)
+            logger.info("STEP 4: ODOO VERIFICATION (Database Validation)")
+            logger.info("-" * 80)
+            logger.info("Verifying matched products and customer exist in Odoo ERP system")
+
             result['odoo_matches'] = self.odoo_matcher.match_in_odoo(
                 result['context'],
                 result['entities']
             )
+
+            odoo_customer_found = result['odoo_matches'].get('match_summary', {}).get('customer_matched', False)
+            odoo_products_matched = result['odoo_matches'].get('match_summary', {}).get('products_matched', 0)
+            odoo_products_total = result['odoo_matches'].get('match_summary', {}).get('products_total', 0)
+
+            logger.info("Odoo Verification Results:")
+            logger.info(f"  Customer verified in Odoo: {'Yes' if odoo_customer_found else 'No'}")
+            logger.info(f"  Products verified in Odoo: {odoo_products_matched}/{odoo_products_total}")
+            logger.info("STEP 4 COMPLETE - Odoo verification successful")
 
             # Log step 5: Odoo matching
             self.step_logger.log_step_5_odoo_matching(result['odoo_matches'])
 
             # STEP 5: Create order if it's an order inquiry (OPTIONAL)
             if result['intent'].get('type') == 'order_inquiry':
+                logger.info("-" * 80)
+                logger.info("STEP 5: ORDER CREATION (Odoo Sales Order)")
+                logger.info("-" * 80)
                 if self.ENABLE_ORDER_CREATION:
+                    logger.info("Order creation is ENABLED - Creating sales order in Odoo")
                     result['order_created'] = self.order_creator.create_order_in_odoo(
                         result['odoo_matches'],
                         result['entities'],
                         email
                     )
+                    if result['order_created'].get('created'):
+                        order_id = result['order_created'].get('order_id')
+                        order_name = result['order_created'].get('order_name')
+                        logger.info(f"Order successfully created in Odoo: {order_name} (ID: {order_id})")
+                        logger.info("STEP 5 COMPLETE - Order creation successful")
+                    else:
+                        logger.warning(f"Order creation failed: {result['order_created'].get('message')}")
+                        logger.info("STEP 5 COMPLETE - Order creation failed")
                 else:
-                    logger.info("   [INFO] Order creation disabled (set ENABLE_ORDER_CREATION=True to enable)")
+                    logger.info("Order creation is DISABLED (ENABLE_ORDER_CREATION=False)")
+                    logger.info("Skipping order creation - processing results will be sent for review")
+                    logger.info("STEP 5 SKIPPED - Order creation disabled")
                     result['order_created'] = {
                         'created': False,
                         'message': 'Order creation disabled (ENABLE_ORDER_CREATION=False)'
                     }
 
             # STEP 6: Generate response (placeholder - can be implemented)
+            logger.info("-" * 80)
+            logger.info("STEP 6: RESPONSE GENERATION")
+            logger.info("-" * 80)
             result['response'] = self._generate_response(
                 email,
                 result['intent'],
                 result['entities'],
                 result['context']
             )
+            logger.info("Response generated successfully")
+            logger.info("STEP 6 COMPLETE - Response generation successful")
 
             # Track token usage
             # Always use MistralAgent stats as it tracks all Mistral API calls
@@ -226,7 +307,9 @@ class EmailProcessor:
                 logger.debug("Token usage tracked via MistralAgent (DSPy mode)")
 
             result['success'] = True
-            logger.info("   [OK] Email processing complete")
+            logger.info("=" * 80)
+            logger.info("EMAIL PROCESSING WORKFLOW COMPLETED SUCCESSFULLY")
+            logger.info("=" * 80)
 
         except Exception as e:
             logger.error(f"   [ERROR] Email processing failed: {e}", exc_info=True)
