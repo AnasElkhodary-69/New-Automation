@@ -401,6 +401,52 @@ class SemanticProductSearch(dspy.Signature):
 
 
 # ============================================================
+# Customer Matching Signatures
+# ============================================================
+
+class MatchCustomerToDatabase(dspy.Signature):
+    """
+    Match an extracted customer/company name to database customers.
+
+    This signature helps the LM reason about which database customer
+    best matches an extracted company name from the email.
+
+    CRITICAL RULES:
+    1. Primary company name must match (e.g., "COVERIS", "Amcor", "3M")
+    2. DO NOT match completely different companies:
+       - "COVERIS Flexibles Deutschland GmbH" ≠ "Amcor Flexibles Kreuzlingen GmbH" (DIFFERENT parent companies!)
+    3. Subsidiaries and divisions:
+       - If only ONE match for parent company name, accept it even if subsidiary/location differs
+       - Example: "COVERIS Flexibles Deutschland GmbH" can match "Coveris Pirtű" if it's the ONLY Coveris
+       - If multiple subsidiaries exist, prefer the one with matching location/division
+    4. Confidence levels:
+       - 1.0: Exact match on full name
+       - 0.85-0.95: Parent company matches, subsidiary/location is close
+       - 0.70-0.84: Parent company matches, but wrong subsidiary (use if only option)
+       - <0.70: Different company entirely, REJECT
+    5. Legal entity suffixes (GmbH, AG, Ltd, Inc) are less important
+    6. If no candidates match the parent company name, return empty best_match_name
+    """
+
+    extracted_company: str = dspy.InputField(
+        desc="Company name extracted from email (e.g., 'COVERIS Flexibles Deutschland GmbH')"
+    )
+    candidate_customers: str = dspy.InputField(
+        desc="JSON array of candidate customers from database with their names and IDs, may include city/country fields"
+    )
+
+    best_match_name: str = dspy.OutputField(
+        desc="Company name of the best matching candidate (empty string if no good match found)"
+    )
+    match_confidence: float = dspy.OutputField(
+        desc="Confidence from 0.0-1.0. Use 1.0 for exact, 0.85-0.95 for same parent company (different subsidiary), 0.70-0.84 if only option, <0.70 for wrong company"
+    )
+    reasoning: str = dspy.OutputField(
+        desc="Explain: 1) Does parent company match? 2) Is subsidiary/location correct? 3) Other options available? 4) Why this confidence level?"
+    )
+
+
+# ============================================================
 # Validation Signatures
 # ============================================================
 

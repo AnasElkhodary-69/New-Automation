@@ -53,6 +53,17 @@ class EmailProcessor:
             'total_tokens': 0
         }
 
+        # Initialize DSPy FIRST (needed for customer matching even if USE_DSPY=False)
+        # DSPy is used for customer matching regardless of USE_DSPY flag
+        try:
+            from orchestrator.dspy_config import setup_dspy
+            logger.info("Setting up DSPy for customer matching...")
+            setup_dspy()  # Configure DSPy with Mistral
+            logger.info("[OK] DSPy configured")
+        except Exception as e:
+            logger.warning(f"[!] DSPy setup failed: {e}")
+            logger.warning("[!] Customer matching will use direct Odoo fuzzy search")
+
         # Initialize Token Matcher for product matching
         token_matcher = None
         try:
@@ -69,23 +80,21 @@ class EmailProcessor:
         self.odoo_matcher = OdooMatcher(odoo_connector)
         self.order_creator = OrderCreator(odoo_connector)
 
-        # Initialize DSPy components if enabled
+        # Initialize DSPy components for entity extraction if enabled
         self.dspy_intent_classifier = None
         self.dspy_entity_extractor = None
         if self.USE_DSPY:
             try:
-                from orchestrator.dspy_config import setup_dspy
                 from orchestrator.dspy_intent_classifier import IntentClassifier
                 from orchestrator.dspy_entity_extractor import EntityExtractor
 
-                logger.info("Initializing DSPy components...")
-                setup_dspy()  # Configure DSPy with Mistral
+                logger.info("Initializing DSPy entity extraction components...")
                 self.dspy_intent_classifier = IntentClassifier(use_chain_of_thought=True)
                 self.dspy_entity_extractor = EntityExtractor(use_chain_of_thought=True)
                 logger.info("[OK] DSPy intent classifier ready")
                 logger.info("[OK] DSPy entity extractor ready")
             except Exception as e:
-                logger.error(f"[!] DSPy initialization failed: {e}")
+                logger.error(f"[!] DSPy entity extraction initialization failed: {e}")
                 logger.warning("[!] Falling back to standard Mistral agent")
                 self.USE_DSPY = False
 
@@ -157,7 +166,7 @@ class EmailProcessor:
                 'candidates_per_product': {k: len(v) for k, v in candidates_dict.items()}
             })
 
-            # STEP 3: Smart product confirmation (AI only for low confidence < 80%)
+            # STEP 3: Smart product confirmation (AI verifies matches < 95%)
             confirmed = self._smart_confirm_products(email.get('body', ''), products, candidates_dict)
 
             # Build context from confirmed products
@@ -259,7 +268,7 @@ class EmailProcessor:
 
     def _smart_confirm_products(self, email_body: str, products: List[Dict], candidates_dict: Dict) -> Dict:
         """
-        Smart product confirmation: AI only for low-confidence matches (< 80%)
+        Smart product confirmation: AI only for uncertain matches (< 95%)
 
         Args:
             email_body: Email text
@@ -293,27 +302,27 @@ class EmailProcessor:
                 })
                 continue
 
-            # Check top candidate confidence (similarity_score)
+            # Check top candidate confidence (use 'confidence' field, not 'similarity_score')
             top_candidate = candidates[0]
-            confidence = top_candidate.get('similarity_score', 0.0)
+            confidence = top_candidate.get('confidence', 0.0)
 
-            if confidence >= 0.80:  # High confidence (>=80%)
-                # Auto-match without AI
+            if confidence >= 0.95:  # Very high confidence (>=95%) - near-exact match
+                # Auto-match without AI (only for near-perfect matches)
                 high_confidence_products.append(product_name)
                 matched_products.append({
                     'requested': product_name,
                     'matched_odoo_id': top_candidate.get('id', 0),
                     'confidence': confidence,
-                    'reasoning': f'Auto-matched (high confidence: {confidence:.0%})'
+                    'reasoning': f'Auto-matched (very high confidence: {confidence:.0%})'
                 })
                 logger.info(f"   [AUTO] {product_name} -> {top_candidate.get('default_code')} ({confidence:.0%})")
             else:
-                # Low confidence - needs AI review
+                # Uncertain match - needs AI verification
                 low_confidence_products.append(product)
                 low_confidence_dict[product_name] = candidates
 
         # Log statistics
-        logger.info(f"   Product matching: {len(high_confidence_products)} auto-matched (>=80%), {len(low_confidence_products)} need AI review")
+        logger.info(f"   Product matching: {len(high_confidence_products)} auto-matched (>=95%), {len(low_confidence_products)} need AI verification")
 
         # STEP 3b: AI confirmation ONLY for low-confidence products
         if low_confidence_products:

@@ -1,1 +1,6 @@
-[]
+{
+  "feedback_received": 10,
+  "training_examples_generated": 8,
+  "training_examples_used": 0,
+  "last_updated": "2025-10-11T23:25:35.102044"
+}

@@ -24,6 +24,9 @@ from orchestrator.dspy_config import setup_dspy
 
 load_dotenv()
 
+# Create logs directory if it doesn't exist
+os.makedirs('logs', exist_ok=True)
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,

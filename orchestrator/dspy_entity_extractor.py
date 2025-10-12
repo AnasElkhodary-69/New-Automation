@@ -32,12 +32,46 @@ class EntityExtractor:
         Args:
             use_chain_of_thought: If True, use ChainOfThought for better reasoning
         """
+        from pathlib import Path
+
+        # Check for trained models
+        extractor_trained_path = Path('trained_models/extractorderentities_trained.json')
+        product_matcher_trained_path = Path('trained_models/confirmallproducts_trained.json')
+
+        # Load trained models if available, otherwise use default
         if use_chain_of_thought:
-            self.extractor = dspy.ChainOfThought(ExtractOrderEntities)
+            # Try to load trained ExtractOrderEntities model
+            if extractor_trained_path.exists():
+                try:
+                    self.extractor = dspy.ChainOfThought(ExtractOrderEntities)
+                    self.extractor.load(str(extractor_trained_path))
+                    logger.info("✓ Loaded TRAINED entity extractor model (ExtractOrderEntities)")
+                except Exception as e:
+                    logger.warning(f"Failed to load trained extractor, using default: {e}")
+                    self.extractor = dspy.ChainOfThought(ExtractOrderEntities)
+                    logger.info("Entity extractor initialized with ChainOfThought (default)")
+            else:
+                self.extractor = dspy.ChainOfThought(ExtractOrderEntities)
+                logger.info("Entity extractor initialized with ChainOfThought (default)")
+
+            # Always use default for intent classifier (no training data yet)
             self.intent_classifier = dspy.ChainOfThought(ClassifyEmailIntent)
-            self.product_matcher = dspy.ChainOfThought(ConfirmAllProducts)
-            logger.info("Entity extractor initialized with ChainOfThought")
+
+            # Try to load trained ConfirmAllProducts model
+            if product_matcher_trained_path.exists():
+                try:
+                    self.product_matcher = dspy.ChainOfThought(ConfirmAllProducts)
+                    self.product_matcher.load(str(product_matcher_trained_path))
+                    logger.info("✓ Loaded TRAINED product matcher model (ConfirmAllProducts)")
+                except Exception as e:
+                    logger.warning(f"Failed to load trained product matcher, using default: {e}")
+                    self.product_matcher = dspy.ChainOfThought(ConfirmAllProducts)
+                    logger.info("Product matcher initialized with ChainOfThought (default)")
+            else:
+                self.product_matcher = dspy.ChainOfThought(ConfirmAllProducts)
+                logger.info("Product matcher initialized with ChainOfThought (default)")
         else:
+            # Basic Predict mode (no trained models)
             self.extractor = dspy.Predict(ExtractOrderEntities)
             self.intent_classifier = dspy.Predict(ClassifyEmailIntent)
             self.product_matcher = dspy.Predict(ConfirmAllProducts)
@@ -283,6 +317,81 @@ class EntityExtractor:
         entities['product_names'] = product_names
         return entities
 
+    def _post_process_fix_sds_customer(self, entities: Dict, email_text: str) -> Dict:
+        """
+        Post-process to fix SDS being extracted as customer.
+
+        When the AI extracts "SDS" as the customer, it's actually the supplier (recipient).
+        The real customer is the sender, which should be extracted from email header/signature.
+
+        Args:
+            entities: Extracted entities dict
+            email_text: Full email text
+
+        Returns:
+            Updated entities with corrected customer
+        """
+        import re
+
+        company_name = entities.get('company_name', '')
+        excluded_companies = ['SDS', 'SDS GmbH', 'SDS Print Services', 'SDS Print Services GmbH']
+
+        # Check if extracted company is SDS (our company - should NOT be customer)
+        is_sds_company = any(excl.upper() in company_name.upper() for excl in excluded_companies) if company_name else False
+
+        if is_sds_company:
+            logger.info(f"   [POST-PROCESS] Detected SDS as customer (wrong!), searching for actual sender...")
+
+            # Try to find the actual customer from email sender/signature
+            # Pattern 1: "From:" line in forwarded email
+            from_match = re.search(r'From:\s*(?:"?([^"<\n]+)"?\s*)?<([^>\n]+)>', email_text, re.IGNORECASE)
+
+            # Pattern 2: Signature block with company name
+            # Look for common patterns like "CompanyName GmbH" or "CompanyName AG"
+            signature_patterns = [
+                r'([A-Z][A-Za-z\s&\.]+(?:GmbH|AG|KG|SE|Ltd|Inc|Corp|LLC)(?:\s+&\s+Co\.\s+KG)?)',
+                r'Best regards,\s*[\w\s]+\s*\n\s*([A-Z][A-Za-z\s&\.]+(?:GmbH|AG|KG|SE))',
+            ]
+
+            sender_company = None
+            sender_email = None
+
+            # Try email domain first
+            if from_match:
+                sender_email = from_match.group(2) if from_match.lastindex >= 2 else from_match.group(1)
+                logger.debug(f"   Found sender email: {sender_email}")
+
+                # Extract domain company hints
+                if sender_email and '@' in sender_email:
+                    domain = sender_email.split('@')[1].split('.')[0]
+                    # Common company name patterns from domain
+                    if domain.lower() not in ['gmail', 'outlook', 'hotmail', 'yahoo', 'web', 'mail']:
+                        logger.debug(f"   Email domain hint: {domain}")
+
+            # Search for company name in signature
+            for pattern in signature_patterns:
+                matches = re.findall(pattern, email_text, re.MULTILINE)
+                for match in matches:
+                    # Filter out SDS matches
+                    if not any(excl.upper() in match.upper() for excl in excluded_companies):
+                        sender_company = match.strip()
+                        logger.info(f"   [POST-PROCESS] Found sender company in signature: {sender_company}")
+                        break
+                if sender_company:
+                    break
+
+            # Update entities if we found the sender
+            if sender_company:
+                entities['company_name'] = sender_company
+                entities['customer_name'] = sender_company  # Update customer name too
+                logger.info(f"   [POST-PROCESS] ✓ Corrected customer: {company_name} → {sender_company}")
+            else:
+                logger.warning(f"   [POST-PROCESS] Could not find sender company, keeping extraction blank")
+                entities['company_name'] = ''
+                entities['customer_name'] = ''
+
+        return entities
+
     def _get_empty_entities(self) -> Dict:
         """
         Return empty entities structure as fallback
@@ -343,6 +452,9 @@ class EntityExtractor:
             # Convert to legacy format
             entities = self._convert_to_legacy_format(customer_info, products, order_info)
             entities = self._post_process_add_dimensions(entities, email_text)
+
+            # POST-PROCESSING: Fix SDS being extracted as customer (should be sender instead)
+            entities = self._post_process_fix_sds_customer(entities, email_text)
 
             # Derive intent from extraction (order_inquiry is default)
             intent = {

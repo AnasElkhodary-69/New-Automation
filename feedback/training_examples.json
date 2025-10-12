@@ -1,1 +1,841 @@
-[]
+[
+  {
+    "training_id": "train_20251011_165151",
+    "feedback_id": "fb_20251011_165109_ORDER_1_20251011_164722",
+    "timestamp": "2025-10-11T16:51:51.247851",
+    "signature_type": "ProductConfirmer",
+    "training_data": {
+      "input": {
+        "email_body": "Original Email Details: \n------------------------\nFrom: Karim Elouahabi <k.elouahabi@sicherheitsdruck-service.com>\nDate: Wed, 6 Jan 2021 04:29:03 +0800\nSubject: Fwd: B140515\n\n------------------------\nOriginal Message:\n------------------------\n\nVon meinem iPhone gesendet\n\nAnfang der weitergeleiteten Nachricht:\n\n=== ATTACHMENT: B140515.pdf ===\n--- Page 1 ---\nCOVERIS Flexibles Deutschland GmbH - Anton-Böhlen-Str.5 - 34414 Warburg\nSDS GmbH 14747\nKruppstr. 122 Amine Znaidi\n60388 Frankfurt am Main\nDeutschland 06940/8029-70\nBestellung\nB140515\nBestellnummer bitte immer angeben\nDatum 05.01.21 Seite 1 / 2\nPos Produktbeschreibung Menge ME Preis/ME Liefertermin PositionEUR\n1 H2000070000 15 ST 255,000 12.01.2021 3.825,00EUR\n3M Cushion Mount plus E1720 685mmx23m\nLieferform Rolle\n2 H2000080000 15 ST 170,000 12.01.2021 2.550,00EUR\n3M Cushion Mount plus E1720 457mmx23m\nLieferform Rolle\n3 H2000090000 15 ST 255,000 12.01.2021 3.825,00EUR\n3M Cushion Mount plus E1820 685mmx23m\nLieferform Rolle\n4 H2000990000 15 ST 170,000 12.01.2021 2.550,00EUR\n3M Cushion Mount plus E1820 457mmx23m\nLieferform Rolle\nSumme 12.750,00EUR\nCOVERIS FLEXIBLES DEUTSCHLAND GMBH www.coveris.com\nLocation: Anton-Böhlen-Str. 5 - 34414 Warburg - Germany - T. +49 (0) 5641 96-0 - F. +49 (0) 5641 5786\nProduction Site: Kreisstr.16 - 33790 Halle/Westf. - Germany - T. +49 (0) 5201 708-1 - F. +49 (0) 5201 708-205\nGeschäftsführer (Managing Director): Markus Weidlich, Thomas Otto, Jürgen Taut, Christian Kolarik\nHandelsregister (Commercial Register): Amtsgericht Paderborn HRB 8002 - UST - IdNr. DE812850904\nBank Details: Commerzbank AG Filiale Kassel - A/C No. 564204600 - Bank Code 52040021 - Swift Code COBADEFF520 - IBAN DE29520400210564204600\n--- Page 2 ---\nCOVERIS Flexibles Deutschland GmbH - Anton-Böhlen-Str.5 - 34414 Warburg\nSDS GmbH 14747\nKruppstr. 122 Amine Znaidi\n60388 Frankfurt am Main\nDeutschland 06940/8029-70\nBestellung\nB140515\nBestellnummer bitte immer angeben\nDatum 05.01.21 Seite 2 / 2\nVersandanschrift Rechnungsanschrift Zahlungsbedingung 30 Tg netto, 14 Tg 2 %\nCOVERIS Flexibles COVERIS Flexibles Anforderer Druckerei - M. Kuhl\nDeutschland GmbH Deutschland GmbH\nAnton-Böhlen-Str.5 Anton-Böhlen-Str. 5\n34414 Warburg 34414 Warburg\nDeutschland Deutschland\nWarburg.Rechnung@coveris.com\nMit freundlichem Gruß\nCOVERIS Flexibles Deutschland GmbH\nSophia Denecke\n+49 (0) 5641 96 348\nsophia.denecke@coveris.com\nEs gelten die Einkaufsbedingungen und die Fremdfirmenordnung auf unserer Internetseite www.tacwhr.com.\nDieses Dokument ist elektronisch erstellt, und daher ohne Unterschrift gültig.\nCOVERIS FLEXIBLES DEUTSCHLAND GMBH www.coveris.com\nLocation: Anton-Böhlen-Str. 5 - 34414 Warburg - Germany - T. +49 (0) 5641 96-0 - F. +49 (0) 5641 5786\nProduction Site: Kreisstr.16 - 33790 Halle/Westf. - Germany - T. +49 (0) 5201 708-1 - F. +49 (0) 5201 708-205\nGeschäftsführer (Managing Director): Markus Weidlich, Thomas Otto, Jürgen Taut, Christian Kolarik\nHandelsregister (Commercial Register): Amtsgericht Paderborn HRB 8002 - UST - IdNr. DE812850904\nBank Details: Commerzbank AG Filiale Kassel - A/C No. 564204600 - Bank Code 52040021 - Swift Code COBADEFF520 - IBAN DE29520400210564204600",
+        "product_candidates": [
+          {
+            "name": "3M Cushion Mount Plus E1720 685mm x 23m",
+            "code": "H2000070000"
+          },
+          {
+            "name": "3M Cushion Mount Plus E1720 457mm x 23m",
+            "code": "H2000080000"
+          },
+          {
+            "name": "3M Cushion Mount Plus E1820 685mm x 23m",
+            "code": "H2000090000"
+          },
+          {
+            "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+            "code": "H2000990000"
+          }
+        ]
+      },
+      "correct_output": {
+        "product_1": {
+          "name": "3M Cushion Mount Plus E1720 685mm x 23m",
+          "code": "H2000070000"
+        },
+        "product_3": {
+          "name": "3M Cushion Mount Plus E1820 685mm x 23m",
+          "code": "H2000090000"
+        }
+      },
+      "incorrect_output": {
+        "product_1": {
+          "name": "3MCushion Mount Plus E1015 685mm x 23M",
+          "code": "E1015-685"
+        },
+        "product_3": {
+          "name": "3MCushion Mount Plus E1015 685mm x 23M",
+          "code": "E1015-685"
+        }
+      }
+    },
+    "error_analysis": "The system failed to correctly match the product names to the correct product codes in the database. The user specified exact product names for product 1 and product 3, indicating that the initial matches were incorrect. The system should learn to better match product names to the correct product codes in the database.",
+    "training_weight": 8.0,
+    "used_in_training": true
+  },
+  {
+    "training_id": "train_20251011_170003",
+    "feedback_id": "fb_20251011_165929_ORDER_1_20251011_165857",
+    "timestamp": "2025-10-11T17:00:03.282318",
+    "signature_type": "ProductConfirmer",
+    "training_data": {
+      "input": {
+        "email_body": "Original Email Details: \n------------------------\nFrom: Karim Elouahabi <k.elouahabi@sicherheitsdruck-service.com>\nDate: Wed, 6 Jan 2021 04:29:03 +0800\nSubject: Fwd: B140515\n\n------------------------\nOriginal Message:\n------------------------\n\nVon meinem iPhone gesendet\n\nAnfang der weitergeleiteten Nachricht:\n\n=== ATTACHMENT: B140515.pdf ===\n\n--- Page 1 ---\nCOVERIS Flexibles Deutschland GmbH - Anton-Böhlen-Str.5 - 34414 Warburg\nSDS GmbH 14747\nKruppstr. 122 Amine Znaidi\n60388 Frankfurt am Main\nDeutschland 06940/8029-70\nBestellung\nB140515\nBestellnummer bitte immer angeben\nDatum 05.01.21 Seite 1 / 2\nPos Produktbeschreibung Menge ME Preis/ME Liefertermin PositionEUR\n1 H2000070000 15 ST 255,000 12.01.2021 3.825,00EUR\n3M Cushion Mount plus E1720 685mmx23m\nLieferform Rolle\n2 H2000080000 15 ST 170,000 12.01.2021 2.550,00EUR\n3M Cushion Mount plus E1720 457mmx23m\nLieferform Rolle\n3 H2000090000 15 ST 255,000 12.01.2021 3.825,00EUR\n3M Cushion Mount plus E1820 685mmx23m\nLieferform Rolle\n4 H2000990000 15 ST 170,000 12.01.2021 2.550,00EUR\n3M Cushion Mount plus E1820 457mmx23m\nLieferform Rolle\nSumme 12.750,00EUR\nCOVERIS FLEXIBLES DEUTSCHLAND GMBH www.coveris.com\nLocation: Anton-Böhlen-Str. 5 - 34414 Warburg - Germany - T. +49 (0) 5641 96-0 - F. +49 (0) 5641 5786\nProduction Site: Kreisstr.16 - 33790 Halle/Westf. - Germany - T. +49 (0) 5201 708-1 - F. +49 (0) 5201 708-205\nGeschäftsführer (Managing Director): Markus Weidlich, Thomas Otto, Jürgen Taut, Christian Kolarik\nHandelsregister (Commercial Register): Amtsgericht Paderborn HRB 8002 - UST - IdNr. DE812850904\nBank Details: Commerzbank AG Filiale Kassel - A/C No. 564204600 - Bank Code 52040021 - Swift Code COBADEFF520 - IBAN DE29520400210564204600\n\n--- Page 2 ---\nCOVERIS Flexibles Deutschland GmbH - Anton-Böhlen-Str.5 - 34414 Warburg\nSDS GmbH 14747\nKruppstr. 122 Amine Znaidi\n60388 Frankfurt am Main\nDeutschland 06940/8029-70\nBestellung\nB140515\nBestellnummer bitte immer angeben\nDatum 05.01.21 Seite 2 / 2\nVersandanschrift Rechnungsanschrift Zahlungsbedingung 30 Tg netto, 14 Tg 2 %\nCOVERIS Flexibles COVERIS Flexibles Anforderer Druckerei - M. Kuhl\nDeutschland GmbH Deutschland GmbH\nAnton-Böhlen-Str.5 Anton-Böhlen-Str. 5\n34414 Warburg 34414 Warburg\nDeutschland Deutschland\nWarburg.Rechnung@coveris.com\nMit freundlichem Gruß\nCOVERIS Flexibles Deutschland GmbH\nSophia Denecke\n+49 (0) 5641 96 348\nsophia.denecke@coveris.com\nEs gelten die Einkaufsbedingungen und die Fremdfirmenordnung auf unserer Internetseite www.tacwhr.com.\nDieses Dokument ist elektronisch erstellt, und daher ohne Unterschrift gültig.\nCOVERIS FLEXIBLES DEUTSCHLAND GMBH www.coveris.com\nLocation: Anton-Böhlen-Str. 5 - 34414 Warburg - Germany - T. +49 (0) 5641 96-0 - F. +49 (0) 5641 5786\nProduction Site: Kreisstr.16 - 33790 Halle/Westf. - Germany - T. +49 (0) 5201 708-1 - F. +49 (0) 5201 708-205\nGeschäftsführer (Managing Director): Markus Weidlich, Thomas Otto, Jürgen Taut, Christian Kolarik\nHandelsregister (Commercial Register): Amtsgericht Paderborn HRB 8002 - UST - IdNr. DE812850904\nBank Details: Commerzbank AG Filiale Kassel - A/C No. 564204600 - Bank Code 52040021 - Swift Code COBADEFF520 - IBAN DE29520400210564204600",
+        "product_candidates": [
+          {
+            "id": 8670,
+            "name": "3MCushion Mount Plus E1015 685mm x 23M",
+            "default_code": "E1015-685"
+          },
+          {
+            "id": 8652,
+            "name": "3M Cushion Mount Plus E1720 457mm x 23m",
+            "default_code": "E1720-457-23"
+          },
+          {
+            "id": 8653,
+            "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+            "default_code": "E1820-457-23"
+          }
+        ]
+      },
+      "correct_output": {
+        "matched_products": [
+          {
+            "requested": "3M Cushion Mount Plus E1720 685mm x 23m",
+            "matched_odoo_id": 8670,
+            "confidence": 1.2999999999999998,
+            "reasoning": "Auto-matched (high confidence: 130%)"
+          },
+          {
+            "requested": "3M Cushion Mount Plus E1720 457mm x 23m",
+            "matched_odoo_id": 8652,
+            "confidence": 1.6,
+            "reasoning": "Auto-matched (high confidence: 160%)"
+          },
+          {
+            "requested": "3M Cushion Mount Plus E1820 685mm x 23m",
+            "matched_odoo_id": 8670,
+            "confidence": 1.2999999999999998,
+            "reasoning": "Auto-matched (high confidence: 130%)"
+          },
+          {
+            "requested": "3M Cushion Mount Plus E1820 457mm x 23m",
+            "matched_odoo_id": 8653,
+            "confidence": 1.6,
+            "reasoning": "Auto-matched (high confidence: 160%)"
+          }
+        ]
+      },
+      "incorrect_output": {
+        "matched_products": [
+          {
+            "requested": "3M Cushion Mount Plus E1720 685mm x 23m",
+            "matched_odoo_id": 8670,
+            "confidence": 1.2999999999999998,
+            "reasoning": "Auto-matched (high confidence: 130%)"
+          },
+          {
+            "requested": "3M Cushion Mount Plus E1720 457mm x 23m",
+            "matched_odoo_id": 8652,
+            "confidence": 1.6,
+            "reasoning": "Auto-matched (high confidence: 160%)"
+          },
+          {
+            "requested": "3M Cushion Mount Plus E1820 685mm x 23m",
+            "matched_odoo_id": 8670,
+            "confidence": 1.2999999999999998,
+            "reasoning": "Auto-matched (high confidence: 130%)"
+          },
+          {
+            "requested": "3M Cushion Mount Plus E1820 457mm x 23m",
+            "matched_odoo_id": 8653,
+            "confidence": 1.6,
+            "reasoning": "Auto-matched (high confidence: 160%)"
+          }
+        ]
+      }
+    },
+    "error_analysis": "The system failed to correctly match the product names due to similarities in the product codes and names. The system needs to learn to better distinguish between similar product names and codes.",
+    "training_weight": 8.0,
+    "used_in_training": true
+  },
+  {
+    "training_id": "train_20251011_172022",
+    "feedback_id": "fb_20251011_172008_ORDER_2_20251011_170710",
+    "timestamp": "2025-10-11T17:20:22.425712",
+    "signature_type": "ProductConfirmer",
+    "training_data": {
+      "input": {
+        "email_body": "Sehr geehrte Damen und Herren,\n\nanbei sende ich Ihnen unsere Bestellung.\n\nBitte bermitteln Sie uns eine Auftragsbesttigung.\n\nFreundliche Gre\n\nDaniel Neumann\nDualer Student BWL-Industrie\n\ndaniel.neumann@faller-packaging.com\nwww.faller-packaging.com\n\nAugust Faller GmbH & Co. KG\nGndenhausen 22, DE-79650 Schopfheim\n\nAugust Faller GmbH & Co. KG\nSitz der Gesellschaft: Waldkirch\nAmtsgericht Freiburg HRA 280004\nPersnlich haftende Gesellschafterin:\nAugust Faller Verwaltungsgesellschaft mbH\nAmtsgericht Freiburg, HRB 714414\nFinanzamt Emmendingen 05050/01196\nUSt.-ID-Nr. DE141967708\nGeschftsfhrende Gesellschafter:\nDr. Michael Faller | Dr. Daniel Keesman\n\n=== ATTACHMENT: Druckdaten.PDF ===\n\n--- Page 1 ---\nAugust Faller | Gündenhausen 22 | 79650 Schopfheim Bestellnummer 4500137237\nDatum 05.01.2021\nFirma Lieferantennummer 602103\nSDS GmbH Sicherheitsdruck Service E-Mail -Adresse order@sds-print.com\nUnsere Kundennummer\nKruppstraße 122\nLieferdatum 11.01.2021\n60388 Frankfurt\nLieferbedingungen -\nZahlungsbedingungen 10 Tage 3% Skonto, 30 Tage\nnetto\nRechnungsanschrift Lieferanschrift\nAugust Faller GmbH & Co. KG August Faller GmbH & Co. KG\nHauptverwaltung Auf der Gänsmatt 5\nFreiburger Strasse 25 79650 Schopfheim\n79183 Waldkirch\nKontakt: Daniel Neumann | Telefon: +49 7622 666989-52 | Fax: +49 7622 666989-12\nE-Mail: daniel.neumann@faller-packaging.com\nBestellung 4500137237\nPosMaterial/Beschreibung Menge Preis/EUR Einheit Betrag\n10 500002389 9 ROL 169,50 1 ROL 1.525,50 EUR\nKlischeeklebeband weiß 430mmx23m E1015\nIhre Materialnummer: 3M CUSHION MOUNT E1015\n3M Cushion Mount, Rollenlänge 23m\nMutterrollenbreite 1372mm\nNettowert 1.525,50 EUR\nGesamtbetrag 1.525,50 EUR\nEs gelten die allg. Einkaufs- und Auftragsbedingungen der August Faller GmbH & Co. KG (Stand: April\n2018), die unter www.august-faller.com abrufbar sind.\nBitte geben Sie auf allen Auftragsunterlagen unsere Bestellnummer an.\nHinweis: Dieses Dokument wurde automatisch übermittelt und ist ohne Unterschrift gültig.\nAugust Faller GmbH & Co. KG Fon +49 7622 666989-0 Sitz: Waldkirch\nPSC Etiketten Fax +49 7622 666989-12 Amtsgericht Freiburg, HRA 280004\nGündenhausen 22 info@faller-packaging.com Persönlich haftende Gesellschafterin:\n79650 Schopfheim www.faller-packaging.com August Faller Verwaltungsges. mbH\nDeutschland Amtsgericht Freiburg, HRB 714414\nGeschäftsführer:\nDr. Michael Faller, Dr. Daniel Keesman\nV03 / 07.14",
+        "product_candidates": [
+          {
+            "id": 8648,
+            "name": "3M Cushion Mount Plus E1020 457mm x 23m",
+            "default_code": "E1020-457-23",
+            "list_price": 1.0,
+            "standard_price": 0.0,
+            "type": "consu",
+            "category": "Goods",
+            "description": "",
+            "create_date": "2025-10-09 14:21:40",
+            "write_date": "2025-10-09 14:37:36",
+            "similarity_score": 0.9,
+            "match_method": "token_matching",
+            "confidence": 0.7200000000000001,
+            "match_score": 0.9
+          }
+        ]
+      },
+      "correct_output": {
+        "matched_products": [
+          {
+            "requested": "3M Cushion Mount Plus E1015 1372mm x 23m",
+            "matched_odoo_id": 8648,
+            "confidence": 0.95,
+            "reasoning": "User specified the correct product name for product 1."
+          }
+        ],
+        "failed_products": [],
+        "stats": {
+          "auto_matched": 1,
+          "ai_confirmed": 0,
+          "failed": 0
+        }
+      },
+      "incorrect_output": {
+        "matched_products": [
+          {
+            "requested": "3M Cushion Mount E1015 White 430mm x 23m",
+            "matched_odoo_id": 8648,
+            "confidence": 0.9,
+            "reasoning": "Auto-matched (high confidence: 90%)"
+          }
+        ],
+        "failed_products": [],
+        "stats": {
+          "auto_matched": 1,
+          "ai_confirmed": 0,
+          "failed": 0
+        }
+      }
+    },
+    "error_analysis": "The system failed to correctly match the product \"3M Cushion Mount E1015 White 430mm x 23m\" to the correct product in the Odoo system. The system matched it to \"3M Cushion Mount Plus E1020 457mm x 23m\" instead of the correct product \"3M Cushion Mount Plus E1015 1372mm x 23m\". This indicates a need for better product matching based on specific product details such as dimensions and product codes.",
+    "training_weight": 8.0,
+    "used_in_training": true
+  },
+  {
+    "training_id": "train_20251011_172151",
+    "feedback_id": "fb_20251011_172113_ORDER_3_20251011_170725",
+    "timestamp": "2025-10-11T17:21:51.488666",
+    "signature_type": "CompleteExtractor",
+    "training_data": {
+      "input": {
+        "email_subject": "Unsere Bestellung 2021-100015 von Karl Verpackungen",
+        "email_body": "Hallo Herr Ahauari,... (full email content)",
+        "attachment": "Bestellung 2021-100015.pdf"
+      },
+      "correct_output": {
+        "intent": {
+          "type": "order_inquiry",
+          "sub_type": "order_confirmation",
+          "confidence": 0.9,
+          "urgency": "low"
+        },
+        "entities": {
+          "customer_name": "Petra Hentschke",
+          "company_name": "Karl Verpackungen GmbH",
+          "email": "p.hentschke@karl-verpackungen.de",
+          "phone": "+49 36606 886-0",
+          "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf",
+          "product_names": [
+            "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+            "Klischeeklebeband L1520 Violet 457.2mm x 22.85m"
+          ],
+          "product_codes": [
+            "15001168",
+            "15001105"
+          ],
+          "quantities": [
+            15,
+            15
+          ],
+          "prices": [
+            164.0,
+            164.0
+          ],
+          "order_number": "2021-100015",
+          "order_date": "05.01.2021",
+          "delivery_date": "2021/01",
+          "urgency": "",
+          "payment_terms": "30 Tage ohne Abzug",
+          "shipping_terms": "Frei Haus",
+          "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration)."
+        },
+        "context": {
+          "customer_info": {
+            "id": 3063,
+            "name": "Karl Verpackungen GmbH",
+            "ref": "1259",
+            "email": "",
+            "phone": "",
+            "address": {
+              "street": "Am Rüdersdorfer Wege 4",
+              "street2": "",
+              "city": "Kraftsdorf",
+              "zip": "07586",
+              "country": "Germany",
+              "state": ""
+            },
+            "vat": "DE273557995",
+            "website": "",
+            "create_date": "2025-10-09 13:49:43",
+            "write_date": "2025-10-09 13:49:43",
+            "match_score": 1.0
+          },
+          "json_data": {
+            "products": [
+              {
+                "id": 8836,
+                "name": "3MCushion Mount Plus L1320 457mm x 23m",
+                "default_code": "L1320-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "type": "consu",
+                "category": "3MKlischeeklebeband",
+                "description": "",
+                "create_date": "2025-10-09 14:21:40",
+                "write_date": "2025-10-09 14:37:36",
+                "similarity_score": 1.4,
+                "match_method": "token_matching",
+                "confidence": 0.7200000000000001,
+                "match_score": 1.4
+              },
+              {
+                "id": 8844,
+                "name": "3MCushion Mount Plus L1520 457mm x 23m",
+                "default_code": "L1520-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "type": "consu",
+                "category": "3MKlischeeklebeband",
+                "description": "",
+                "create_date": "2025-10-09 14:21:40",
+                "write_date": "2025-10-09 14:37:36",
+                "similarity_score": 1.4,
+                "match_method": "token_matching",
+                "confidence": 0.7200000000000001,
+                "match_score": 1.4
+              }
+            ]
+          },
+          "confirmed_matches": {
+            "matched_products": [
+              {
+                "requested": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+                "matched_odoo_id": 8836,
+                "confidence": 1.4,
+                "reasoning": "Auto-matched (high confidence: 140%)"
+              },
+              {
+                "requested": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+                "matched_odoo_id": 8844,
+                "confidence": 1.4,
+                "reasoning": "Auto-matched (high confidence: 140%)"
+              }
+            ],
+            "failed_products": [],
+            "stats": {
+              "auto_matched": 2,
+              "ai_confirmed": 0,
+              "failed": 0
+            }
+          }
+        },
+        "odoo_matches": {
+          "customer": {
+            "found": true,
+            "id": 3063,
+            "name": "Karl Verpackungen GmbH",
+            "ref": "",
+            "email": "k.el@sds-print.com",
+            "phone": false
+          },
+          "products": [
+            {
+              "json_product": {
+                "id": 8836,
+                "name": "3MCushion Mount Plus L1320 457mm x 23m",
+                "default_code": "L1320-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "type": "consu",
+                "category": "3MKlischeeklebeband",
+                "description": "",
+                "create_date": "2025-10-09 14:21:40",
+                "write_date": "2025-10-09 14:37:36",
+                "similarity_score": 1.4,
+                "match_method": "token_matching",
+                "confidence": 0.7200000000000001,
+                "match_score": 1.4
+              },
+              "odoo_product": {
+                "id": 8836,
+                "name": "3MCushion Mount Plus L1320 457mm x 23m",
+                "default_code": "L1320-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "product_variant_id": [
+                  8836,
+                  "[L1320-457] 3MCushion Mount Plus L1320 457mm x 23m"
+                ]
+              },
+              "match_method": "json_id_verified",
+              "extracted_name": "3MCushion Mount Plus L1320 457mm x 23m"
+            },
+            {
+              "json_product": {
+                "id": 8844,
+                "name": "3MCushion Mount Plus L1520 457mm x 23m",
+                "default_code": "L1520-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "type": "consu",
+                "category": "3MKlischeeklebeband",
+                "description": "",
+                "create_date": "2025-10-09 14:21:40",
+                "write_date": "2025-10-09 14:37:36",
+                "similarity_score": 1.4,
+                "match_method": "token_matching",
+                "confidence": 0.7200000000000001,
+                "match_score": 1.4
+              },
+              "odoo_product": {
+                "id": 8844,
+                "name": "3MCushion Mount Plus L1520 457mm x 23m",
+                "default_code": "L1520-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "product_variant_id": [
+                  8844,
+                  "[L1520-457] 3MCushion Mount Plus L1520 457mm x 23m"
+                ]
+              },
+              "match_method": "json_id_verified",
+              "extracted_name": "3MCushion Mount Plus L1520 457mm x 23m"
+            }
+          ],
+          "match_summary": {
+            "customer_matched": true,
+            "products_matched": 2,
+            "products_total": 2
+          }
+        },
+        "order_created": {
+          "created": false,
+          "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+        }
+      },
+      "incorrect_output": {}
+    },
+    "error_analysis": "No errors were identified in the system's output. The system correctly identified the customer, products, and all relevant details from the email and attachment.",
+    "training_weight": 10.0,
+    "used_in_training": true
+  },
+  {
+    "training_id": "train_20251011_172157",
+    "feedback_id": "fb_20251011_172156_ORDER_3_20251011_170725",
+    "timestamp": "2025-10-11T17:21:57.479452",
+    "signature_type": "CompleteExtractor",
+    "training_data": {
+      "input": {
+        "email_subject": "Unsere Bestellung 2021-100015 von Karl Verpackungen",
+        "email_body": "Hallo Herr Ahauari,... (full email content)",
+        "attachment": "Bestellung 2021-100015.pdf"
+      },
+      "correct_output": {
+        "intent": {
+          "type": "order_inquiry",
+          "sub_type": "order_confirmation",
+          "confidence": 0.9,
+          "urgency": "low"
+        },
+        "entities": {
+          "customer_name": "Petra Hentschke",
+          "company_name": "Karl Verpackungen GmbH",
+          "email": "p.hentschke@karl-verpackungen.de",
+          "phone": "+49 36606 886-0",
+          "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf",
+          "product_names": [
+            "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+            "Klischeeklebeband L1520 Violet 457.2mm x 22.85m"
+          ],
+          "product_codes": [
+            "15001168",
+            "15001105"
+          ],
+          "quantities": [
+            15,
+            15
+          ],
+          "prices": [
+            164.0,
+            164.0
+          ],
+          "order_number": "2021-100015",
+          "order_date": "05.01.2021",
+          "delivery_date": "2021/01",
+          "urgency": "",
+          "payment_terms": "30 Tage ohne Abzug",
+          "shipping_terms": "Frei Haus",
+          "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration)."
+        },
+        "context": {
+          "customer_info": {
+            "id": 3063,
+            "name": "Karl Verpackungen GmbH",
+            "ref": "1259",
+            "email": "",
+            "phone": "",
+            "address": {
+              "street": "Am Rüdersdorfer Wege 4",
+              "street2": "",
+              "city": "Kraftsdorf",
+              "zip": "07586",
+              "country": "Germany",
+              "state": ""
+            },
+            "vat": "DE273557995",
+            "website": "",
+            "create_date": "2025-10-09 13:49:43",
+            "write_date": "2025-10-09 13:49:43",
+            "match_score": 1.0
+          },
+          "json_data": {
+            "products": [
+              {
+                "id": 8836,
+                "name": "3MCushion Mount Plus L1320 457mm x 23m",
+                "default_code": "L1320-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "type": "consu",
+                "category": "3MKlischeeklebeband",
+                "description": "",
+                "create_date": "2025-10-09 14:21:40",
+                "write_date": "2025-10-09 14:37:36",
+                "similarity_score": 1.4,
+                "match_method": "token_matching",
+                "confidence": 0.7200000000000001,
+                "match_score": 1.4
+              },
+              {
+                "id": 8844,
+                "name": "3MCushion Mount Plus L1520 457mm x 23m",
+                "default_code": "L1520-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "type": "consu",
+                "category": "3MKlischeeklebeband",
+                "description": "",
+                "create_date": "2025-10-09 14:21:40",
+                "write_date": "2025-10-09 14:37:36",
+                "similarity_score": 1.4,
+                "match_method": "token_matching",
+                "confidence": 0.7200000000000001,
+                "match_score": 1.4
+              }
+            ]
+          },
+          "confirmed_matches": {
+            "matched_products": [
+              {
+                "requested": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+                "matched_odoo_id": 8836,
+                "confidence": 1.4,
+                "reasoning": "Auto-matched (high confidence: 140%)"
+              },
+              {
+                "requested": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+                "matched_odoo_id": 8844,
+                "confidence": 1.4,
+                "reasoning": "Auto-matched (high confidence: 140%)"
+              }
+            ],
+            "failed_products": [],
+            "stats": {
+              "auto_matched": 2,
+              "ai_confirmed": 0,
+              "failed": 0
+            }
+          }
+        },
+        "odoo_matches": {
+          "customer": {
+            "found": true,
+            "id": 3063,
+            "name": "Karl Verpackungen GmbH",
+            "ref": "",
+            "email": "k.el@sds-print.com",
+            "phone": false
+          },
+          "products": [
+            {
+              "json_product": {
+                "id": 8836,
+                "name": "3MCushion Mount Plus L1320 457mm x 23m",
+                "default_code": "L1320-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "type": "consu",
+                "category": "3MKlischeeklebeband",
+                "description": "",
+                "create_date": "2025-10-09 14:21:40",
+                "write_date": "2025-10-09 14:37:36",
+                "similarity_score": 1.4,
+                "match_method": "token_matching",
+                "confidence": 0.7200000000000001,
+                "match_score": 1.4
+              },
+              "odoo_product": {
+                "id": 8836,
+                "name": "3MCushion Mount Plus L1320 457mm x 23m",
+                "default_code": "L1320-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "product_variant_id": [
+                  8836,
+                  "[L1320-457] 3MCushion Mount Plus L1320 457mm x 23m"
+                ]
+              },
+              "match_method": "json_id_verified",
+              "extracted_name": "3MCushion Mount Plus L1320 457mm x 23m"
+            },
+            {
+              "json_product": {
+                "id": 8844,
+                "name": "3MCushion Mount Plus L1520 457mm x 23m",
+                "default_code": "L1520-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "type": "consu",
+                "category": "3MKlischeeklebeband",
+                "description": "",
+                "create_date": "2025-10-09 14:21:40",
+                "write_date": "2025-10-09 14:37:36",
+                "similarity_score": 1.4,
+                "match_method": "token_matching",
+                "confidence": 0.7200000000000001,
+                "match_score": 1.4
+              },
+              "odoo_product": {
+                "id": 8844,
+                "name": "3MCushion Mount Plus L1520 457mm x 23m",
+                "default_code": "L1520-457",
+                "list_price": 1.0,
+                "standard_price": 173.5,
+                "product_variant_id": [
+                  8844,
+                  "[L1520-457] 3MCushion Mount Plus L1520 457mm x 23m"
+                ]
+              },
+              "match_method": "json_id_verified",
+              "extracted_name": "3MCushion Mount Plus L1520 457mm x 23m"
+            }
+          ],
+          "match_summary": {
+            "customer_matched": true,
+            "products_matched": 2,
+            "products_total": 2
+          }
+        },
+        "order_created": {
+          "created": false,
+          "message": "Order creation disabled (ENABLE_ORDER_CREATION=False)"
+        }
+      },
+      "incorrect_output": {}
+    },
+    "error_analysis": "No errors were identified in the system's output. The system correctly identified the customer, products, and all relevant details from the email and attachment.",
+    "training_weight": 10.0,
+    "used_in_training": true
+  },
+  {
+    "training_id": "train_20251011_180305",
+    "feedback_id": "fb_20251011_180249_ORDER_2_20251011_175455",
+    "timestamp": "2025-10-11T18:03:05.018020",
+    "signature_type": "ProductConfirmer",
+    "training_data": {
+      "input": {
+        "email_body": "Sehr geehrte Damen und Herren,\n\nanbei sende ich Ihnen unsere Bestellung.\n\nBitte bermitteln Sie uns eine Auftragsbesttigung.\n\nFreundliche Gre\n\nDaniel Neumann\nDualer Student BWL-Industrie\n\ndaniel.neumann@faller-packaging.com\nwww.faller-packaging.com\n\nAugust Faller GmbH & Co. KG\nGndenhausen 22, DE-79650 Schopfheim\n\nAugust Faller GmbH & Co. KG\nSitz der Gesellschaft: Waldkirch\nAmtsgericht Freiburg HRA 280004\nPersnlich haftende Gesellschafterin:\nAugust Faller Verwaltungsgesellschaft mbH\nAmtsgericht Freiburg, HRB 714414\nFinanzamt Emmendingen 05050/01196\nUSt.-ID-Nr. DE141967708\nGeschftsfhrende Gesellschafter:\nDr. Michael Faller | Dr. Daniel Keesman\n\n=== ATTACHMENT: Druckdaten.PDF ===\n\n--- Page 1 ---\nAugust Faller | Gündenhausen 22 | 79650 Schopfheim Bestellnummer 4500137237\nDatum 05.01.2021\nFirma Lieferantennummer 602103\nSDS GmbH Sicherheitsdruck Service E-Mail -Adresse order@sds-print.com\nUnsere Kundennummer\nKruppstraße 122\n60388 Frankfurt\nLieferdatum 11.01.2021\nLieferbedingungen -\nZahlungsbedingungen 10 Tage 3% Skonto, 30 Tage\nnetto\nRechnungsanschrift Lieferanschrift\nAugust Faller GmbH & Co. KG August Faller GmbH & Co. KG\nHauptverwaltung Auf der Gänsmatt 5\nFreiburger Strasse 25 79650 Schopfheim\n79183 Waldkirch\nKontakt: Daniel Neumann | Telefon: +49 7622 666989-52 | Fax: +49 7622 666989-12\nE-Mail: daniel.neumann@faller-packaging.com\nBestellung 4500137237\nPosMaterial/Beschreibung Menge Preis/EUR Einheit Betrag\n10 500002389 9 ROL 169,50 1 ROL 1.525,50 EUR\nKlischeeklebeband weiß 430mmx23m E1015\nIhre Materialnummer: 3M CUSHION MOUNT E1015\n3M Cushion Mount, Rollenlänge 23m\nMutterrollenbreite 1372mm\nNettowert 1.525,50 EUR\nGesamtbetrag 1.525,50 EUR\nEs gelten die allg. Einkaufs- und Auftragsbedingungen der August Faller GmbH & Co. KG (Stand: April\n2018), die unter www.august-faller.com abrufbar sind.\nBitte geben Sie auf allen Auftragsunterlagen unsere Bestellnummer an.\nHinweis: Dieses Dokument wurde automatisch übermittelt und ist ohne Unterschrift gültig.\nAugust Faller GmbH & Co. KG Fon +49 7622 666989-0 Sitz: Waldkirch\nPSC Etiketten Fax +49 7622 666989-12 Amtsgericht Freiburg, HRA 280004\nGündenhausen 22 info@faller-packaging.com Persönlich haftende Gesellschafterin:\n79650 Schopfheim www.faller-packaging.com August Faller Verwaltungsges. mbH\nDeutschland Amtsgericht Freiburg, HRB 714414\nGeschäftsführer:\nDr. Michael Faller, Dr. Daniel Keesman\nV03 / 07.14",
+        "product_candidates": [
+          {
+            "id": 8648,
+            "name": "3M Cushion Mount Plus E1020 457mm x 23m",
+            "default_code": "E1020-457-23",
+            "list_price": 1.0,
+            "standard_price": 0.0,
+            "type": "consu",
+            "category": "Goods",
+            "description": "",
+            "create_date": "2025-10-09 14:21:40",
+            "write_date": "2025-10-09 14:37:36",
+            "similarity_score": 0.9,
+            "match_method": "token_matching",
+            "confidence": 0.7200000000000001,
+            "match_score": 0.9
+          }
+        ]
+      },
+      "correct_output": {
+        "product_index": 1,
+        "correct_product_code": "E1015-1372",
+        "confidence": 0.95,
+        "reasoning": "User specified the correct product code for product 1"
+      },
+      "incorrect_output": {
+        "product_index": 1,
+        "correct_product_code": "E1020-457-23",
+        "confidence": 0.9,
+        "reasoning": "Auto-matched (high confidence: 90%)"
+      }
+    },
+    "error_analysis": "The system failed to correctly match the product \"3M Cushion Mount E1015 White 430mm x 23m\" to the correct product code \"E1015-1372\". The system matched it to a similar but incorrect product code \"E1020-457-23\". This indicates a need for improved product matching logic, especially when dealing with similar product names and codes. The system should be trained to better distinguish between similar product variants.",
+    "training_weight": 8.0,
+    "used_in_training": true
+  },
+  {
+    "training_id": "train_20251011_193424",
+    "feedback_id": "fb_20251011_193408_ORDER_2_20251011_175455",
+    "timestamp": "2025-10-11T19:34:24.456092",
+    "signature_type": "ProductConfirmer",
+    "training_data": {
+      "input": {
+        "email_body": "Sehr geehrte Damen und Herren,\n\nanbei sende ich Ihnen unsere Bestellung.\n\nBitte bermitteln Sie uns eine Auftragsbesttigung.\n\nFreundliche Gre\n\nDaniel Neumann\nDualer Student BWL-Industrie\n\ndaniel.neumann@faller-packaging.com<mailto:daniel.neumann@faller-packaging.com>\nwww.faller-packaging.com<http://www.faller-packaging.com/>\n\nAugust Faller GmbH & Co. KG\nGndenhausen 22, DE-79650 Schopfheim\n\nAugust Faller GmbH & Co. KG\nSitz der Gesellschaft: Waldkirch\nAmtsgericht Freiburg HRA 280004\nPersnlich haftende Gesellschafterin:\nAugust Faller Verwaltungsgesellschaft mbH\nAmtsgericht Freiburg, HRB 714414\nFinanzamt Emmendingen 05050/01196\nUSt.-ID-Nr. DE141967708\nGeschftsfhrende Gesellschafter:\nDr. Michael Faller | Dr. Daniel Keesman\n\n=== ATTACHMENT: Druckdaten.PDF ===\n\n--- Page 1 ---\nAugust Faller | Gündenhausen 22 | 79650 Schopfheim Bestellnummer 4500137237\nDatum 05.01.2021\nFirma Lieferantennummer 602103\nSDS GmbH Sicherheitsdruck Service E-Mail -Adresse order@sds-print.com\nUnsere Kundennummer\nKruppstraße 122\nLieferdatum 11.01.2021\n60388 Frankfurt\nLieferbedingungen -\nZahlungsbedingungen 10 Tage 3% Skonto, 30 Tage\nnetto\nRechnungsanschrift Lieferanschrift\nAugust Faller GmbH & Co. KG August Faller GmbH & Co. KG\nHauptverwaltung Auf der Gänsmatt 5\nFreiburger Strasse 25 79650 Schopfheim\n79183 Waldkirch\nKontakt: Daniel Neumann | Telefon: +49 7622 666989-52 | Fax: +49 7622 666989-12\nE-Mail: daniel.neumann@faller-packaging.com\nBestellung 4500137237\nPosMaterial/Beschreibung Menge Preis/EUR Einheit Betrag\n10 500002389 9 ROL 169,50 1 ROL 1.525,50 EUR\nKlischeeklebeband weiß 430mmx23m E1015\nIhre Materialnummer: 3M CUSHION MOUNT E1015\n3M Cushion Mount, Rollenlänge 23m\nMutterrollenbreite 1372mm\nNettowert 1.525,50 EUR\nGesamtbetrag 1.525,50 EUR\nEs gelten die allg. Einkaufs- und Auftragsbedingungen der August Faller GmbH & Co. KG (Stand: April\n2018), die unter www.august-faller.com abrufbar sind.\nBitte geben Sie auf allen Auftragsunterlagen unsere Bestellnummer an.\nHinweis: Dieses Dokument wurde automatisch übermittelt und ist ohne Unterschrift gültig.\nAugust Faller GmbH & Co. KG Fon +49 7622 666989-0 Sitz: Waldkirch\nPSC Etiketten Fax +49 7622 666989-12 Amtsgericht Freiburg, HRA 280004\nGündenhausen 22 info@faller-packaging.com Persönlich haftende Gesellschafterin:\n79650 Schopfheim www.faller-packaging.com August Faller Verwaltungsges. mbH\nDeutschland Amtsgericht Freiburg, HRB 714414\nGeschäftsführer:\nDr. Michael Faller, Dr. Daniel Keesman\nV03 / 07.14",
+        "product_candidates": [
+          {
+            "id": 8648,
+            "name": "3M Cushion Mount Plus E1020 457mm x 23m",
+            "default_code": "E1020-457-23",
+            "list_price": 1.0,
+            "standard_price": 0.0,
+            "type": "consu",
+            "category": "Goods",
+            "description": "",
+            "create_date": "2025-10-09 14:21:40",
+            "write_date": "2025-10-09 14:37:36",
+            "similarity_score": 0.9,
+            "match_method": "token_matching",
+            "confidence": 0.7200000000000001,
+            "match_score": 0.9
+          }
+        ]
+      },
+      "correct_output": {
+        "corrections_list": [
+          {
+            "correction_type": "product_match",
+            "corrections": {
+              "product_index": 1,
+              "correct_product_name": "3MCushion Mount Plus E1020 1372mm x 23m",
+              "correct_product_code": "E1020-1372"
+            },
+            "affected_items": [
+              "product_1"
+            ],
+            "confidence": 0.95,
+            "reasoning": "User specified exact product name and code for product 1"
+          }
+        ],
+        "overall_confidence": 0.95,
+        "needs_clarification": false,
+        "clarification_question": null,
+        "total_corrections": 1
+      },
+      "incorrect_output": {
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount E1015 White 430mm x 23m",
+              "matched_odoo_id": 8648,
+              "confidence": 0.9,
+              "reasoning": "Auto-matched (high confidence: 90%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 1,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "error_analysis": "The system failed to correctly match the product due to a mismatch in the product specifications. The system matched the product based on partial similarities in the product name and did not account for the specific dimensions and codes provided in the email. The system should learn to pay closer attention to the exact product specifications, including dimensions and codes, to avoid such mismatches.",
+    "training_weight": 8.5,
+    "used_in_training": true
+  },
+  {
+    "training_id": "train_20251011_232535",
+    "feedback_id": "fb_20251011_232522_ORDER_1_20251011_232404",
+    "timestamp": "2025-10-11T23:25:35.070629",
+    "signature_type": "ProductConfirmer",
+    "training_data": {
+      "input": {
+        "email_body": "Guten Morgen,\n\nanbei eine Bestellung, wir bitten um eine Auftragsbesttigung.\n\nMit freundlichen Gren\n\ni.A. Sabine Scharfenorth\n\nPAPIERSACKFABRIK TENAX GmbH & Co. KG\nAm Westbahnhof 43 - 55\nD - 40878 Ratingen\n\nTel.:      +49  (0)2102   489-133\nFax:      +49  (0)2102   489-167\n\nPapiersackfabrik TENAX GmbH & Co. KG\nKommanditgesellschaft mit Sitz in Ratingen\nHandelsregister Dsseldorf - HRA 15339\n\nPersnlich haftende Gesellschafterin:\nPapiersackfabrik Tenax GmbH, Sitz Dsseldorf\nHandelsregister Dsseldorf - HRB 36488\nGeschftsfhrer:\nDr. Stefan Ziesemer\nReinhard Schulze-Edinghausen\n\n\n=== ATTACHMENT: SDS OPP Klischeeklebeband 310 x 25.pdf ===\n\n--- Page 1 ---\nPAPIERSACKFABRIK TENAX GMBH & CO. KG\nAm Westbahnhof 43 – 55 40878 Ratingen\nPostfach 10 17 14 40837 Ratingen\nEinkauf Frau Scharfenorth\nTelefon: 02102 / 489 – 133, 8.00-13.00 Uhr\nTelefax: 02102 / 489 – 167\nE-Mail: sabine.scharfenorth@tenax.de\nRatingen, den 09.12.20\nB E S T E L L U N G\nFirma: SDS GmbH\nBestellung Nr. 12/1057 Produktion\nHiermit bestellen wir:\n10 x OPP Klischeeklebeband 310 x 25\nLiefertermin: schnellstens!!!\nBitte um Bestätigung, Danke.\nMit freundlichen Grüßen\nPAPIERSACKFABRIK TENAX GMBH & CO KG",
+        "product_candidates": [
+          {
+            "id": 8035,
+            "name": "05476-UB-SX-BLU / Foam Seal OTTURATORE 120 x 31 x 15 MM ALLSTEIN  SX - BLU",
+            "default_code": "SDS2601",
+            "list_price": 0.0,
+            "standard_price": 0.24,
+            "type": "consu",
+            "category": "Rakeldichtungen",
+            "description": "",
+            "create_date": "2025-10-09 14:21:40",
+            "write_date": "2025-10-09 14:37:36",
+            "similarity_score": 1.4285714285714286,
+            "match_method": "token_matching",
+            "confidence": 0.7200000000000001,
+            "match_score": 1.4285714285714286
+          }
+        ]
+      },
+      "correct_output": {
+        "product_index": 1,
+        "correct_product_name": "OPP 200 Klischeeklebeband 310mmx25m",
+        "confidence": 0.95
+      },
+      "incorrect_output": {
+        "product_index": 1,
+        "correct_product_name": "05476-UB-SX-BLU / Foam Seal OTTURATORE 120 x 31 x 15 MM ALLSTEIN  SX - BLU",
+        "confidence": 0.72
+      }
+    },
+    "error_analysis": "The system failed to correctly match the product \"OPP Klischeeklebeband 310 x 25\" to the correct product in the database. The system matched it to an unrelated product with a high confidence score, which indicates a potential issue with the product matching algorithm or the product database. The system should learn to better distinguish between similar product names and descriptions to avoid such mismatches in the future.",
+    "training_weight": 8.0,
+    "used_in_training": false
+  },
+  {
+    "training_id": "train_sds_fix_20251011_235447",
+    "created_at": "2025-10-11T23:54:47.250705",
+    "signature_type": "EntityExtractor",
+    "description": "Fix SDS being extracted as customer when it's actually the supplier/recipient",
+    "training_data": {
+      "input": {
+        "email_subject": "524557410",
+        "email_body": "From: Anja Wicknig <anw@schur.com>\nDate: Wed, 9 Dec 2020 13:58:02 +0000\nSubject: 524557410\n\nThis information is automatically generated from the ERP system.\n\nBest regards,\nAnja Wicknig\nSchur Star Systems GmbH\nDirect: +49 461 9975 231\nMail: anw@schur.com\nWeb: www.schur.com\n\n=== ATTACHMENT: 526848-524557410.pdf ===\n\nSchur Star Systems GmbH\nLiebigstraße 7\nD-24941 Flensburg\n\nLieferadresse\nSDS GmbH\nKarim Elouahabi\nBachtelstrasse 51\n8810 Horgen\nSwitzerland\n\nBestellung 524557410                      Datum 09.12.20\nIhre Referenz Karim Elouahabi\nIhre Lieferantennummer bei uns 526848    Währung EUR\nKontaktperson Anja Wicknig ANW\nZahlungsbedingungen 30 Tage netto\n\nMat.-Nr.    Beschreibung                        Menge    Preis\nRPR-123965  Cushion Mount Plus E1320 gelb       3 Stück  165,00 / Stück\n            457x23 mm\n"
+      },
+      "correct_output": {
+        "entities": {
+          "customer_name": "Anja Wicknig",
+          "company_name": "Schur Star Systems GmbH",
+          "email": "anw@schur.com",
+          "phone": "+49 461 9975 231",
+          "address": "Liebigstraße 7, D-24941 Flensburg",
+          "product_names": [
+            "Cushion Mount Plus E1320 gelb 457x23 mm"
+          ],
+          "product_codes": [
+            "RPR-123965"
+          ],
+          "quantities": [
+            3
+          ],
+          "prices": [
+            165.0
+          ],
+          "order_number": "524557410",
+          "order_date": "09.12.20",
+          "delivery_date": "",
+          "urgency": "medium",
+          "payment_terms": "30 Tage netto",
+          "shipping_terms": "",
+          "notes": "Lieferadresse: SDS GmbH (this is the delivery address/supplier, NOT the customer)"
+        }
+      },
+      "reasoning": "\nThe email shows:\n- Sender: Schur Star Systems GmbH (Anja Wicknig) ← This is the CUSTOMER\n- Lieferadresse (Delivery Address): SDS GmbH ← This is the SUPPLIER/RECIPIENT (NOT the customer!)\n\nCommon mistake: Extracting \"SDS GmbH\" as the customer because it appears prominently in the purchase order.\nCorrect approach: Extract the sender company (Schur Star Systems) from the email header/signature.\n\nKey indicators:\n1. Email from: anw@schur.com → Domain = Schur\n2. Signature: \"Schur Star Systems GmbH\" with contact details\n3. \"Lieferadresse\" (Delivery Address) shows SDS → This is where the order is being SENT TO, not FROM\n\nPurchase orders are sent FROM customer TO supplier, so:\n- Schur Star Systems = Customer (sender)\n- SDS = Supplier (recipient)\n"
+    },
+    "used_in_training": false,
+    "applied_to_model": false
+  }
+]

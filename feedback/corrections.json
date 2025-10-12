@@ -1,1 +1,1826 @@
-[]
+[
+  {
+    "feedback_id": "fb_20251011_165109_ORDER_1_20251011_164722",
+    "order_id": "ORDER_1_20251011_164722",
+    "timestamp": "2025-10-11T16:51:09.966677",
+    "user_message": "Company is not in the database it shouldn't be matched randomly to another company\nProduct 1 should be 3M Cushion Mount Plus E1720 685mm x 23m\nProduct 3 should be 3M Cushion Mount Plus E1820 685mm x 23m",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "correction_type": "product_match",
+      "corrections": {
+        "product_index": 0,
+        "correct_product_name": "3M Cushion Mount Plus E1720 685mm x 23m",
+        "correct_product_code": "H2000070000"
+      },
+      "affected_items": [
+        "product_1",
+        "product_3"
+      ],
+      "user_reasoning": "The user specified exact product names for product 1 and product 3, indicating that the initial matches were incorrect. They also mentioned that the company should not be matched randomly.",
+      "confidence": 0.9,
+      "needs_clarification": false,
+      "clarification_question": null
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email contains a forwarded order confirmation with details of products, quantities, prices, and delivery dates. The subject line and body indicate that this is related to an existing order, specifically an inquiry or confirmation about it."
+      },
+      "entities": {
+        "customer_name": "COVERIS Flexibles Deutschland GmbH",
+        "company_name": "COVERIS Flexibles Deutschland GmbH",
+        "email": "Warburg.Rechnung@coveris.com",
+        "phone": "+49 (0) 5641 96-0",
+        "address": "Anton-Böhlen-Str. 5, 34414 Warburg, Germany",
+        "product_names": [
+          "3M Cushion Mount Plus E1720 685mm x 23m",
+          "3M Cushion Mount Plus E1720 457mm x 23m",
+          "3M Cushion Mount Plus E1820 685mm x 23m",
+          "3M Cushion Mount Plus E1820 457mm x 23m"
+        ],
+        "product_codes": [
+          "H2000070000",
+          "H2000080000",
+          "H2000090000",
+          "H2000990000"
+        ],
+        "quantities": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "prices": [
+          255.0,
+          170.0,
+          255.0,
+          170.0
+        ],
+        "order_number": "B140515",
+        "order_date": "05.01.21",
+        "delivery_date": "12.01.2021",
+        "urgency": "",
+        "payment_terms": "30 Tage netto, 14 Tage 2%",
+        "shipping_terms": "",
+        "notes": "Bestellnummer bitte immer angeben",
+        "structured": {
+          "customer": {
+            "name": "COVERIS Flexibles Deutschland GmbH",
+            "company": "COVERIS Flexibles Deutschland GmbH",
+            "email": "Warburg.Rechnung@coveris.com",
+            "phone": "+49 (0) 5641 96-0",
+            "address": "Anton-Böhlen-Str. 5, 34414 Warburg, Germany"
+          },
+          "products": [
+            {
+              "code": "H2000070000",
+              "name": "3M Cushion Mount Plus E1720 685mm x 23m",
+              "quantity": 15,
+              "unit_price": 255.0,
+              "specifications": "Rolle"
+            },
+            {
+              "code": "H2000080000",
+              "name": "3M Cushion Mount Plus E1720 457mm x 23m",
+              "quantity": 15,
+              "unit_price": 170.0,
+              "specifications": "Rolle"
+            },
+            {
+              "code": "H2000090000",
+              "name": "3M Cushion Mount Plus E1820 685mm x 23m",
+              "quantity": 15,
+              "unit_price": 255.0,
+              "specifications": "Rolle"
+            },
+            {
+              "code": "H2000990000",
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "quantity": 15,
+              "unit_price": 170.0,
+              "specifications": "Rolle"
+            }
+          ],
+          "order": {
+            "order_number": "B140515",
+            "date": "05.01.21",
+            "delivery_date": "12.01.2021",
+            "urgency": "",
+            "payment_terms": "30 Tage netto, 14 Tage 2%",
+            "shipping_terms": "",
+            "notes": "Bestellnummer bitte immer angeben"
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 2973,
+          "name": "Amcor Flexibles Kreuzlingen GmbH",
+          "ref": "10274",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Finkernstrasse 34",
+            "street2": "",
+            "city": "Kreuzlingen",
+            "zip": "8280",
+            "country": "Switzerland",
+            "state": ""
+          },
+          "vat": "",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.696969696969697
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8670,
+              "name": "3MCushion Mount Plus E1015 685mm x 23M",
+              "default_code": "E1015-685",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.2999999999999998,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.2999999999999998
+            },
+            {
+              "id": 8652,
+              "name": "3M Cushion Mount Plus E1720 457mm x 23m",
+              "default_code": "E1720-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.6,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.6
+            },
+            {
+              "id": 8670,
+              "name": "3MCushion Mount Plus E1015 685mm x 23M",
+              "default_code": "E1015-685",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.2999999999999998,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.2999999999999998
+            },
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.6,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.6
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount Plus E1720 685mm x 23m",
+              "matched_odoo_id": 8670,
+              "confidence": 1.2999999999999998,
+              "reasoning": "Auto-matched (high confidence: 130%)"
+            },
+            {
+              "requested": "3M Cushion Mount Plus E1720 457mm x 23m",
+              "matched_odoo_id": 8652,
+              "confidence": 1.6,
+              "reasoning": "Auto-matched (high confidence: 160%)"
+            },
+            {
+              "requested": "3M Cushion Mount Plus E1820 685mm x 23m",
+              "matched_odoo_id": 8670,
+              "confidence": 1.2999999999999998,
+              "reasoning": "Auto-matched (high confidence: 130%)"
+            },
+            {
+              "requested": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.6,
+              "reasoning": "Auto-matched (high confidence: 160%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 4,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": true,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_165929_ORDER_1_20251011_165857",
+    "order_id": "ORDER_1_20251011_165857",
+    "timestamp": "2025-10-11T16:59:29.836305",
+    "user_message": "Company is not in the database it shouldn't be matched randomly to another company\nProduct 1 should be 3M Cushion Mount Plus E1720 685mm x 23m\nProduct 3 should be 3M Cushion Mount Plus E1820 685mm x 23m",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [
+        {
+          "correction_type": "company_match",
+          "corrections": {
+            "correct_company_name": "COVERIS Flexibles Deutschland GmbH"
+          },
+          "affected_items": [
+            "company"
+          ],
+          "confidence": 0.95,
+          "reasoning": "User specified that the company should not be matched to another company in the database and provided the correct company name."
+        },
+        {
+          "correction_type": "product_match",
+          "corrections": {
+            "product_index": 1,
+            "correct_product_name": "3M Cushion Mount Plus E1720 685mm x 23m"
+          },
+          "affected_items": [
+            "product_1"
+          ],
+          "confidence": 0.95,
+          "reasoning": "User specified the correct product name for Product 1."
+        },
+        {
+          "correction_type": "product_match",
+          "corrections": {
+            "product_index": 3,
+            "correct_product_name": "3M Cushion Mount Plus E1820 685mm x 23m"
+          },
+          "affected_items": [
+            "product_3"
+          ],
+          "confidence": 0.95,
+          "reasoning": "User specified the correct product name for Product 3."
+        }
+      ],
+      "overall_confidence": 0.95,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 3
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email contains a forwarded order confirmation with details of products, quantities, prices, and delivery dates. The subject line and body indicate that this is related to an existing order, specifically an inquiry or confirmation about it."
+      },
+      "entities": {
+        "customer_name": "COVERIS Flexibles Deutschland GmbH",
+        "company_name": "COVERIS Flexibles Deutschland GmbH",
+        "email": "Warburg.Rechnung@coveris.com",
+        "phone": "+49 (0) 5641 96-0",
+        "address": "Anton-Böhlen-Str. 5, 34414 Warburg, Germany",
+        "product_names": [
+          "3M Cushion Mount Plus E1720 685mm x 23m",
+          "3M Cushion Mount Plus E1720 457mm x 23m",
+          "3M Cushion Mount Plus E1820 685mm x 23m",
+          "3M Cushion Mount Plus E1820 457mm x 23m"
+        ],
+        "product_codes": [
+          "H2000070000",
+          "H2000080000",
+          "H2000090000",
+          "H2000990000"
+        ],
+        "quantities": [
+          15,
+          15,
+          15,
+          15
+        ],
+        "prices": [
+          255.0,
+          170.0,
+          255.0,
+          170.0
+        ],
+        "order_number": "B140515",
+        "order_date": "05.01.21",
+        "delivery_date": "12.01.2021",
+        "urgency": "",
+        "payment_terms": "30 Tage netto, 14 Tage 2%",
+        "shipping_terms": "",
+        "notes": "Bestellnummer bitte immer angeben",
+        "structured": {
+          "customer": {
+            "name": "COVERIS Flexibles Deutschland GmbH",
+            "company": "COVERIS Flexibles Deutschland GmbH",
+            "email": "Warburg.Rechnung@coveris.com",
+            "phone": "+49 (0) 5641 96-0",
+            "address": "Anton-Böhlen-Str. 5, 34414 Warburg, Germany"
+          },
+          "products": [
+            {
+              "code": "H2000070000",
+              "name": "3M Cushion Mount Plus E1720 685mm x 23m",
+              "quantity": 15,
+              "unit_price": 255.0,
+              "specifications": "Rolle"
+            },
+            {
+              "code": "H2000080000",
+              "name": "3M Cushion Mount Plus E1720 457mm x 23m",
+              "quantity": 15,
+              "unit_price": 170.0,
+              "specifications": "Rolle"
+            },
+            {
+              "code": "H2000090000",
+              "name": "3M Cushion Mount Plus E1820 685mm x 23m",
+              "quantity": 15,
+              "unit_price": 255.0,
+              "specifications": "Rolle"
+            },
+            {
+              "code": "H2000990000",
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "quantity": 15,
+              "unit_price": 170.0,
+              "specifications": "Rolle"
+            }
+          ],
+          "order": {
+            "order_number": "B140515",
+            "date": "05.01.21",
+            "delivery_date": "12.01.2021",
+            "urgency": "",
+            "payment_terms": "30 Tage netto, 14 Tage 2%",
+            "shipping_terms": "",
+            "notes": "Bestellnummer bitte immer angeben"
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 2973,
+          "name": "Amcor Flexibles Kreuzlingen GmbH",
+          "ref": "10274",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Finkernstrasse 34",
+            "street2": "",
+            "city": "Kreuzlingen",
+            "zip": "8280",
+            "country": "Switzerland",
+            "state": ""
+          },
+          "vat": "",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.696969696969697
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8670,
+              "name": "3MCushion Mount Plus E1015 685mm x 23M",
+              "default_code": "E1015-685",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.2999999999999998,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.2999999999999998
+            },
+            {
+              "id": 8652,
+              "name": "3M Cushion Mount Plus E1720 457mm x 23m",
+              "default_code": "E1720-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.6,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.6
+            },
+            {
+              "id": 8670,
+              "name": "3MCushion Mount Plus E1015 685mm x 23M",
+              "default_code": "E1015-685",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.2999999999999998,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.2999999999999998
+            },
+            {
+              "id": 8653,
+              "name": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "default_code": "E1820-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.6,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.6
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount Plus E1720 685mm x 23m",
+              "matched_odoo_id": 8670,
+              "confidence": 1.2999999999999998,
+              "reasoning": "Auto-matched (high confidence: 130%)"
+            },
+            {
+              "requested": "3M Cushion Mount Plus E1720 457mm x 23m",
+              "matched_odoo_id": 8652,
+              "confidence": 1.6,
+              "reasoning": "Auto-matched (high confidence: 160%)"
+            },
+            {
+              "requested": "3M Cushion Mount Plus E1820 685mm x 23m",
+              "matched_odoo_id": 8670,
+              "confidence": 1.2999999999999998,
+              "reasoning": "Auto-matched (high confidence: 130%)"
+            },
+            {
+              "requested": "3M Cushion Mount Plus E1820 457mm x 23m",
+              "matched_odoo_id": 8653,
+              "confidence": 1.6,
+              "reasoning": "Auto-matched (high confidence: 160%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 4,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": true,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_172008_ORDER_2_20251011_170710",
+    "order_id": "ORDER_2_20251011_170710",
+    "timestamp": "2025-10-11T17:20:08.254732",
+    "user_message": "Product 1 should be 3MCushion Mount Plus E1015 1372mm x 23m",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [
+        {
+          "correction_type": "product_match",
+          "corrections": {
+            "product_index": 1,
+            "correct_product_name": "3MCushion Mount Plus E1015 1372mm x 23m"
+          },
+          "affected_items": [
+            "product_1"
+          ],
+          "confidence": 0.95,
+          "reasoning": "User specified the correct product name for product 1."
+        }
+      ],
+      "overall_confidence": 0.95,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 1
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email is from a customer who has sent an order and is requesting an order confirmation. The subject line mentions an order number, and the body explicitly asks for an order confirmation, indicating a clear intent related to an order inquiry."
+      },
+      "entities": {
+        "customer_name": "Daniel Neumann",
+        "company_name": "August Faller GmbH & Co. KG",
+        "email": "daniel.neumann@faller-packaging.com",
+        "phone": "+49 7622 666989-52",
+        "address": "Freiburger Strasse 25, 79183 Waldkirch, Germany",
+        "product_names": [
+          "3M Cushion Mount E1015 White 430mm x 23m"
+        ],
+        "product_codes": [
+          "500002389"
+        ],
+        "quantities": [
+          10
+        ],
+        "prices": [
+          169.5
+        ],
+        "order_number": "4500137237",
+        "order_date": "05.01.2021",
+        "delivery_date": "11.01.2021",
+        "urgency": "",
+        "payment_terms": "10 days 3% discount, 30 days net",
+        "shipping_terms": "",
+        "notes": "Please refer to our purchase and order terms and conditions of August Faller GmbH & Co. KG (as of April 2018), available at www.august-faller.com.",
+        "structured": {
+          "customer": {
+            "name": "Daniel Neumann",
+            "company": "August Faller GmbH & Co. KG",
+            "email": "daniel.neumann@faller-packaging.com",
+            "phone": "+49 7622 666989-52",
+            "address": "Freiburger Strasse 25, 79183 Waldkirch, Germany"
+          },
+          "products": [
+            {
+              "code": "500002389",
+              "name": "3M Cushion Mount E1015 White 430mm x 23m",
+              "quantity": 10,
+              "unit_price": 169.5,
+              "specifications": "Roll length 23m, Master roll width 1372mm"
+            }
+          ],
+          "order": {
+            "order_number": "4500137237",
+            "date": "05.01.2021",
+            "delivery_date": "11.01.2021",
+            "urgency": "",
+            "payment_terms": "10 days 3% discount, 30 days net",
+            "shipping_terms": "",
+            "notes": "Please refer to our purchase and order terms and conditions of August Faller GmbH & Co. KG (as of April 2018), available at www.august-faller.com."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 2979,
+          "name": "August Faller GmbH & Co. KG",
+          "ref": "1361",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Freiburger Strasse 25",
+            "street2": "",
+            "city": "Waldkirch",
+            "zip": "79183",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE141967708",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8648,
+              "name": "3M Cushion Mount Plus E1020 457mm x 23m",
+              "default_code": "E1020-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.9,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 0.9
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount E1015 White 430mm x 23m",
+              "matched_odoo_id": 8648,
+              "confidence": 0.9,
+              "reasoning": "Auto-matched (high confidence: 90%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 1,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": true,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_172113_ORDER_3_20251011_170725",
+    "order_id": "ORDER_3_20251011_170725",
+    "timestamp": "2025-10-11T17:21:13.347715",
+    "user_message": "Approve",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [],
+      "overall_confidence": 1.0,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 0
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.9,
+        "urgency": "low",
+        "reasoning": "The email contains a reference to a specific order number (2021-100015) and mentions that an attachment with the order details is included. The sender also offers to answer any questions, indicating that this is likely an order inquiry or confirmation."
+      },
+      "entities": {
+        "customer_name": "Petra Hentschke",
+        "company_name": "Karl Verpackungen GmbH",
+        "email": "p.hentschke@karl-verpackungen.de",
+        "phone": "+49 36606 886-0",
+        "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf",
+        "product_names": [
+          "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+          "Klischeeklebeband L1520 Violet 457.2mm x 22.85m"
+        ],
+        "product_codes": [
+          "15001168",
+          "15001105"
+        ],
+        "quantities": [
+          15,
+          15
+        ],
+        "prices": [
+          164.0,
+          164.0
+        ],
+        "order_number": "2021-100015",
+        "order_date": "05.01.2021",
+        "delivery_date": "2021/01",
+        "urgency": "",
+        "payment_terms": "30 Tage ohne Abzug",
+        "shipping_terms": "Frei Haus",
+        "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration).",
+        "structured": {
+          "customer": {
+            "name": "Petra Hentschke",
+            "company": "Karl Verpackungen GmbH",
+            "email": "p.hentschke@karl-verpackungen.de",
+            "phone": "+49 36606 886-0",
+            "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf"
+          },
+          "products": [
+            {
+              "code": "15001168",
+              "name": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+              "quantity": 15,
+              "unit_price": 164.0,
+              "specifications": "457.2mm x 22.85m, 2mm thickness"
+            },
+            {
+              "code": "15001105",
+              "name": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+              "quantity": 15,
+              "unit_price": 164.0,
+              "specifications": "457.2mm x 22.85m, 2mm thickness"
+            }
+          ],
+          "order": {
+            "order_number": "2021-100015",
+            "date": "05.01.2021",
+            "delivery_date": "2021/01",
+            "urgency": "",
+            "payment_terms": "30 Tage ohne Abzug",
+            "shipping_terms": "Frei Haus",
+            "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration)."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3063,
+          "name": "Karl Verpackungen GmbH",
+          "ref": "1259",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Rüdersdorfer Wege 4",
+            "street2": "",
+            "city": "Kraftsdorf",
+            "zip": "07586",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE273557995",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8836,
+              "name": "3MCushion Mount Plus L1320 457mm x 23m",
+              "default_code": "L1320-457",
+              "list_price": 1.0,
+              "standard_price": 173.5,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4
+            },
+            {
+              "id": 8844,
+              "name": "3MCushion Mount Plus L1520 457mm x 23m",
+              "default_code": "L1520-457",
+              "list_price": 1.0,
+              "standard_price": 173.5,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+              "matched_odoo_id": 8836,
+              "confidence": 1.4,
+              "reasoning": "Auto-matched (high confidence: 140%)"
+            },
+            {
+              "requested": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+              "matched_odoo_id": 8844,
+              "confidence": 1.4,
+              "reasoning": "Auto-matched (high confidence: 140%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 2,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": true,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_172156_ORDER_3_20251011_170725",
+    "order_id": "ORDER_3_20251011_170725",
+    "timestamp": "2025-10-11T17:21:56.302249",
+    "user_message": "Everything looks good, approve",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [],
+      "overall_confidence": 1.0,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 0
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.9,
+        "urgency": "low",
+        "reasoning": "The email contains a reference to a specific order number (2021-100015) and mentions that an attachment with the order details is included. The sender also offers to answer any questions, indicating that this is likely an order inquiry or confirmation."
+      },
+      "entities": {
+        "customer_name": "Petra Hentschke",
+        "company_name": "Karl Verpackungen GmbH",
+        "email": "p.hentschke@karl-verpackungen.de",
+        "phone": "+49 36606 886-0",
+        "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf",
+        "product_names": [
+          "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+          "Klischeeklebeband L1520 Violet 457.2mm x 22.85m"
+        ],
+        "product_codes": [
+          "15001168",
+          "15001105"
+        ],
+        "quantities": [
+          15,
+          15
+        ],
+        "prices": [
+          164.0,
+          164.0
+        ],
+        "order_number": "2021-100015",
+        "order_date": "05.01.2021",
+        "delivery_date": "2021/01",
+        "urgency": "",
+        "payment_terms": "30 Tage ohne Abzug",
+        "shipping_terms": "Frei Haus",
+        "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration).",
+        "structured": {
+          "customer": {
+            "name": "Petra Hentschke",
+            "company": "Karl Verpackungen GmbH",
+            "email": "p.hentschke@karl-verpackungen.de",
+            "phone": "+49 36606 886-0",
+            "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf"
+          },
+          "products": [
+            {
+              "code": "15001168",
+              "name": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+              "quantity": 15,
+              "unit_price": 164.0,
+              "specifications": "457.2mm x 22.85m, 2mm thickness"
+            },
+            {
+              "code": "15001105",
+              "name": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+              "quantity": 15,
+              "unit_price": 164.0,
+              "specifications": "457.2mm x 22.85m, 2mm thickness"
+            }
+          ],
+          "order": {
+            "order_number": "2021-100015",
+            "date": "05.01.2021",
+            "delivery_date": "2021/01",
+            "urgency": "",
+            "payment_terms": "30 Tage ohne Abzug",
+            "shipping_terms": "Frei Haus",
+            "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration)."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3063,
+          "name": "Karl Verpackungen GmbH",
+          "ref": "1259",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Rüdersdorfer Wege 4",
+            "street2": "",
+            "city": "Kraftsdorf",
+            "zip": "07586",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE273557995",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8836,
+              "name": "3MCushion Mount Plus L1320 457mm x 23m",
+              "default_code": "L1320-457",
+              "list_price": 1.0,
+              "standard_price": 173.5,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4
+            },
+            {
+              "id": 8844,
+              "name": "3MCushion Mount Plus L1520 457mm x 23m",
+              "default_code": "L1520-457",
+              "list_price": 1.0,
+              "standard_price": 173.5,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+              "matched_odoo_id": 8836,
+              "confidence": 1.4,
+              "reasoning": "Auto-matched (high confidence: 140%)"
+            },
+            {
+              "requested": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+              "matched_odoo_id": 8844,
+              "confidence": 1.4,
+              "reasoning": "Auto-matched (high confidence: 140%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 2,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": true,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_173430_ORDER_3_20251011_170725",
+    "order_id": "ORDER_3_20251011_170725",
+    "timestamp": "2025-10-11T17:34:30.402003",
+    "user_message": "approved",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [
+        {
+          "correction_type": "confirm",
+          "corrections": {
+            "confirmed": true,
+            "create_order": true
+          },
+          "affected_items": [
+            "all"
+          ],
+          "confidence": 1.0,
+          "reasoning": "User confirmed all details are correct and approved order creation"
+        }
+      ],
+      "overall_confidence": 1.0,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 1
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.9,
+        "urgency": "low",
+        "reasoning": "The email contains a reference to a specific order number (2021-100015) and mentions that an attachment with the order details is included. The sender also offers to answer any questions, indicating that this is likely an order inquiry or confirmation."
+      },
+      "entities": {
+        "customer_name": "Petra Hentschke",
+        "company_name": "Karl Verpackungen GmbH",
+        "email": "p.hentschke@karl-verpackungen.de",
+        "phone": "+49 36606 886-0",
+        "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf",
+        "product_names": [
+          "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+          "Klischeeklebeband L1520 Violet 457.2mm x 22.85m"
+        ],
+        "product_codes": [
+          "15001168",
+          "15001105"
+        ],
+        "quantities": [
+          15,
+          15
+        ],
+        "prices": [
+          164.0,
+          164.0
+        ],
+        "order_number": "2021-100015",
+        "order_date": "05.01.2021",
+        "delivery_date": "2021/01",
+        "urgency": "",
+        "payment_terms": "30 Tage ohne Abzug",
+        "shipping_terms": "Frei Haus",
+        "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration).",
+        "structured": {
+          "customer": {
+            "name": "Petra Hentschke",
+            "company": "Karl Verpackungen GmbH",
+            "email": "p.hentschke@karl-verpackungen.de",
+            "phone": "+49 36606 886-0",
+            "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf"
+          },
+          "products": [
+            {
+              "code": "15001168",
+              "name": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+              "quantity": 15,
+              "unit_price": 164.0,
+              "specifications": "457.2mm x 22.85m, 2mm thickness"
+            },
+            {
+              "code": "15001105",
+              "name": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+              "quantity": 15,
+              "unit_price": 164.0,
+              "specifications": "457.2mm x 22.85m, 2mm thickness"
+            }
+          ],
+          "order": {
+            "order_number": "2021-100015",
+            "date": "05.01.2021",
+            "delivery_date": "2021/01",
+            "urgency": "",
+            "payment_terms": "30 Tage ohne Abzug",
+            "shipping_terms": "Frei Haus",
+            "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration)."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3063,
+          "name": "Karl Verpackungen GmbH",
+          "ref": "1259",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Rüdersdorfer Wege 4",
+            "street2": "",
+            "city": "Kraftsdorf",
+            "zip": "07586",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE273557995",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8836,
+              "name": "3MCushion Mount Plus L1320 457mm x 23m",
+              "default_code": "L1320-457",
+              "list_price": 1.0,
+              "standard_price": 173.5,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4
+            },
+            {
+              "id": 8844,
+              "name": "3MCushion Mount Plus L1520 457mm x 23m",
+              "default_code": "L1520-457",
+              "list_price": 1.0,
+              "standard_price": 173.5,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+              "matched_odoo_id": 8836,
+              "confidence": 1.4,
+              "reasoning": "Auto-matched (high confidence: 140%)"
+            },
+            {
+              "requested": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+              "matched_odoo_id": 8844,
+              "confidence": 1.4,
+              "reasoning": "Auto-matched (high confidence: 140%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 2,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": false,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_180206_ORDER_3_20251011_170725",
+    "order_id": "ORDER_3_20251011_170725",
+    "timestamp": "2025-10-11T18:02:06.666786",
+    "user_message": "approved",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [
+        {
+          "correction_type": "confirm",
+          "corrections": {
+            "confirmed": true,
+            "create_order": true
+          },
+          "affected_items": [
+            "all"
+          ],
+          "confidence": 1.0,
+          "reasoning": "User confirmed all details are correct and approved order creation"
+        }
+      ],
+      "overall_confidence": 1.0,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 1
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.9,
+        "urgency": "low",
+        "reasoning": "The email contains a reference to a specific order number (2021-100015) and mentions that an attachment with the order details is included. The sender also offers to answer any questions, indicating that this is likely an order inquiry or confirmation."
+      },
+      "entities": {
+        "customer_name": "Petra Hentschke",
+        "company_name": "Karl Verpackungen GmbH",
+        "email": "p.hentschke@karl-verpackungen.de",
+        "phone": "+49 36606 886-0",
+        "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf",
+        "product_names": [
+          "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+          "Klischeeklebeband L1520 Violet 457.2mm x 22.85m"
+        ],
+        "product_codes": [
+          "15001168",
+          "15001105"
+        ],
+        "quantities": [
+          15,
+          15
+        ],
+        "prices": [
+          164.0,
+          164.0
+        ],
+        "order_number": "2021-100015",
+        "order_date": "05.01.2021",
+        "delivery_date": "2021/01",
+        "urgency": "",
+        "payment_terms": "30 Tage ohne Abzug",
+        "shipping_terms": "Frei Haus",
+        "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration).",
+        "structured": {
+          "customer": {
+            "name": "Petra Hentschke",
+            "company": "Karl Verpackungen GmbH",
+            "email": "p.hentschke@karl-verpackungen.de",
+            "phone": "+49 36606 886-0",
+            "address": "Rüdersdorf 177 b, 07586 Kraftsdorf OT Rüdersdorf"
+          },
+          "products": [
+            {
+              "code": "15001168",
+              "name": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+              "quantity": 15,
+              "unit_price": 164.0,
+              "specifications": "457.2mm x 22.85m, 2mm thickness"
+            },
+            {
+              "code": "15001105",
+              "name": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+              "quantity": 15,
+              "unit_price": 164.0,
+              "specifications": "457.2mm x 22.85m, 2mm thickness"
+            }
+          ],
+          "order": {
+            "order_number": "2021-100015",
+            "date": "05.01.2021",
+            "delivery_date": "2021/01",
+            "urgency": "",
+            "payment_terms": "30 Tage ohne Abzug",
+            "shipping_terms": "Frei Haus",
+            "notes": "Die Grundlage ist die Einhaltung der gesetzlichen Bestimmungen VO (EG) 1935/2004, VO (EG) 10/2011 und VO (EG) 2023/2006. Bitte senden Sie uns nach erfolgter Lieferung folgende Unterlagen zu: Produktspezifikation/ Datenblatt und Konformitätserklärung (incl. Globalmigration und spezifischer Migration)."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3063,
+          "name": "Karl Verpackungen GmbH",
+          "ref": "1259",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Rüdersdorfer Wege 4",
+            "street2": "",
+            "city": "Kraftsdorf",
+            "zip": "07586",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE273557995",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8836,
+              "name": "3MCushion Mount Plus L1320 457mm x 23m",
+              "default_code": "L1320-457",
+              "list_price": 1.0,
+              "standard_price": 173.5,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4
+            },
+            {
+              "id": 8844,
+              "name": "3MCushion Mount Plus L1520 457mm x 23m",
+              "default_code": "L1520-457",
+              "list_price": 1.0,
+              "standard_price": 173.5,
+              "type": "consu",
+              "category": "3MKlischeeklebeband",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "Klischeeklebeband L1320 Yellow 457.2mm x 22.85m",
+              "matched_odoo_id": 8836,
+              "confidence": 1.4,
+              "reasoning": "Auto-matched (high confidence: 140%)"
+            },
+            {
+              "requested": "Klischeeklebeband L1520 Violet 457.2mm x 22.85m",
+              "matched_odoo_id": 8844,
+              "confidence": 1.4,
+              "reasoning": "Auto-matched (high confidence: 140%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 2,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": false,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_180249_ORDER_2_20251011_175455",
+    "order_id": "ORDER_2_20251011_175455",
+    "timestamp": "2025-10-11T18:02:49.110053",
+    "user_message": "Product 1 should be E1015-1372",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [
+        {
+          "correction_type": "product_match",
+          "corrections": {
+            "product_index": 1,
+            "correct_product_code": "E1015-1372"
+          },
+          "affected_items": [
+            "product_1"
+          ],
+          "confidence": 0.95,
+          "reasoning": "User specified the correct product code for product 1"
+        }
+      ],
+      "overall_confidence": 0.95,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 1
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email is from a customer who has sent an order and is requesting an order confirmation. The subject line mentions an order number, and the body explicitly asks for an order confirmation, indicating a clear intent related to an order inquiry."
+      },
+      "entities": {
+        "customer_name": "Daniel Neumann",
+        "company_name": "August Faller GmbH & Co. KG",
+        "email": "daniel.neumann@faller-packaging.com",
+        "phone": "+49 7622 666989-52",
+        "address": "Freiburger Strasse 25, 79183 Waldkirch, Germany",
+        "product_names": [
+          "3M Cushion Mount E1015 White 430mm x 23m"
+        ],
+        "product_codes": [
+          "500002389"
+        ],
+        "quantities": [
+          10
+        ],
+        "prices": [
+          169.5
+        ],
+        "order_number": "4500137237",
+        "order_date": "05.01.2021",
+        "delivery_date": "11.01.2021",
+        "urgency": "",
+        "payment_terms": "10 days 3% discount, 30 days net",
+        "shipping_terms": "",
+        "notes": "Please refer to our purchase and order terms and conditions of August Faller GmbH & Co. KG (as of April 2018), available at www.august-faller.com.",
+        "structured": {
+          "customer": {
+            "name": "Daniel Neumann",
+            "company": "August Faller GmbH & Co. KG",
+            "email": "daniel.neumann@faller-packaging.com",
+            "phone": "+49 7622 666989-52",
+            "address": "Freiburger Strasse 25, 79183 Waldkirch, Germany"
+          },
+          "products": [
+            {
+              "code": "500002389",
+              "name": "3M Cushion Mount E1015 White 430mm x 23m",
+              "quantity": 10,
+              "unit_price": 169.5,
+              "specifications": "Roll length 23m, Master roll width 1372mm"
+            }
+          ],
+          "order": {
+            "order_number": "4500137237",
+            "date": "05.01.2021",
+            "delivery_date": "11.01.2021",
+            "urgency": "",
+            "payment_terms": "10 days 3% discount, 30 days net",
+            "shipping_terms": "",
+            "notes": "Please refer to our purchase and order terms and conditions of August Faller GmbH & Co. KG (as of April 2018), available at www.august-faller.com."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 2979,
+          "name": "August Faller GmbH & Co. KG",
+          "ref": "1361",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Freiburger Strasse 25",
+            "street2": "",
+            "city": "Waldkirch",
+            "zip": "79183",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE141967708",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8648,
+              "name": "3M Cushion Mount Plus E1020 457mm x 23m",
+              "default_code": "E1020-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.9,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 0.9
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount E1015 White 430mm x 23m",
+              "matched_odoo_id": 8648,
+              "confidence": 0.9,
+              "reasoning": "Auto-matched (high confidence: 90%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 1,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": true,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_193408_ORDER_2_20251011_175455",
+    "order_id": "ORDER_2_20251011_175455",
+    "timestamp": "2025-10-11T19:34:08.487085",
+    "user_message": "Product 1 should match \"name\": \"3MCushion Mount Plus E1020 1372mm x 23m\",\n\"default_code\": \"E1020-1372\",",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [
+        {
+          "correction_type": "product_match",
+          "corrections": {
+            "product_index": 1,
+            "correct_product_name": "3MCushion Mount Plus E1020 1372mm x 23m",
+            "correct_product_code": "E1020-1372"
+          },
+          "affected_items": [
+            "product_1"
+          ],
+          "confidence": 0.95,
+          "reasoning": "User specified exact product name and code for product 1"
+        }
+      ],
+      "overall_confidence": 0.95,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 1
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email is from a customer who has sent an order and is requesting an order confirmation. The subject line mentions an order number, and the body explicitly asks for an order confirmation, indicating a clear intent related to an order inquiry."
+      },
+      "entities": {
+        "customer_name": "Daniel Neumann",
+        "company_name": "August Faller GmbH & Co. KG",
+        "email": "daniel.neumann@faller-packaging.com",
+        "phone": "+49 7622 666989-52",
+        "address": "Freiburger Strasse 25, 79183 Waldkirch, Germany",
+        "product_names": [
+          "3M Cushion Mount E1015 White 430mm x 23m"
+        ],
+        "product_codes": [
+          "500002389"
+        ],
+        "quantities": [
+          10
+        ],
+        "prices": [
+          169.5
+        ],
+        "order_number": "4500137237",
+        "order_date": "05.01.2021",
+        "delivery_date": "11.01.2021",
+        "urgency": "",
+        "payment_terms": "10 days 3% discount, 30 days net",
+        "shipping_terms": "",
+        "notes": "Please refer to our purchase and order terms and conditions of August Faller GmbH & Co. KG (as of April 2018), available at www.august-faller.com.",
+        "structured": {
+          "customer": {
+            "name": "Daniel Neumann",
+            "company": "August Faller GmbH & Co. KG",
+            "email": "daniel.neumann@faller-packaging.com",
+            "phone": "+49 7622 666989-52",
+            "address": "Freiburger Strasse 25, 79183 Waldkirch, Germany"
+          },
+          "products": [
+            {
+              "code": "500002389",
+              "name": "3M Cushion Mount E1015 White 430mm x 23m",
+              "quantity": 10,
+              "unit_price": 169.5,
+              "specifications": "Roll length 23m, Master roll width 1372mm"
+            }
+          ],
+          "order": {
+            "order_number": "4500137237",
+            "date": "05.01.2021",
+            "delivery_date": "11.01.2021",
+            "urgency": "",
+            "payment_terms": "10 days 3% discount, 30 days net",
+            "shipping_terms": "",
+            "notes": "Please refer to our purchase and order terms and conditions of August Faller GmbH & Co. KG (as of April 2018), available at www.august-faller.com."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 2979,
+          "name": "August Faller GmbH & Co. KG",
+          "ref": "1361",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Freiburger Strasse 25",
+            "street2": "",
+            "city": "Waldkirch",
+            "zip": "79183",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE141967708",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 1.0
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8648,
+              "name": "3M Cushion Mount Plus E1020 457mm x 23m",
+              "default_code": "E1020-457-23",
+              "list_price": 1.0,
+              "standard_price": 0.0,
+              "type": "consu",
+              "category": "Goods",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 0.9,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 0.9
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "3M Cushion Mount E1015 White 430mm x 23m",
+              "matched_odoo_id": 8648,
+              "confidence": 0.9,
+              "reasoning": "Auto-matched (high confidence: 90%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 1,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": true,
+    "applied_to_model": true
+  },
+  {
+    "feedback_id": "fb_20251011_232522_ORDER_1_20251011_232404",
+    "order_id": "ORDER_1_20251011_232404",
+    "timestamp": "2025-10-11T23:25:22.942889",
+    "user_message": "Product 1 should be OPP 200 Klischeeklebeband 310mmx25m",
+    "telegram_user_id": 7906662832,
+    "mistral_parsing": {
+      "corrections_list": [
+        {
+          "correction_type": "product_match",
+          "corrections": {
+            "product_index": 1,
+            "correct_product_name": "OPP 200 Klischeeklebeband 310mmx25m"
+          },
+          "affected_items": [
+            "product_1"
+          ],
+          "confidence": 0.95,
+          "reasoning": "User specified the correct product name for Product 1"
+        }
+      ],
+      "overall_confidence": 0.95,
+      "needs_clarification": false,
+      "clarification_question": null,
+      "total_corrections": 1
+    },
+    "original_extraction": {
+      "intent": {
+        "type": "order_inquiry",
+        "sub_type": "order_confirmation",
+        "confidence": 0.95,
+        "urgency": "medium",
+        "reasoning": "The email is requesting an order confirmation for a specific order (12/1057 Produktion). The subject line and body both clearly indicate that the sender is asking for a confirmation of their order, which aligns with the intent of an order inquiry. The mention of an attachment (SDS OPP Klischeeklebeband 310 x 25.pdf) further supports this as it is likely related to the order details."
+      },
+      "entities": {
+        "customer_name": "Sabine Scharfenorth",
+        "company_name": "PAPIERSACKFABRIK TENAX GmbH & Co. KG",
+        "email": "sabine.scharfenorth@tenax.de",
+        "phone": "+49  (0)2102   489-133",
+        "address": "Am Westbahnhof 43 - 55, D - 40878 Ratingen",
+        "product_names": [
+          "OPP Klischeeklebeband 310 x 25"
+        ],
+        "product_codes": [
+          ""
+        ],
+        "quantities": [
+          10
+        ],
+        "prices": [
+          0.0
+        ],
+        "order_number": "12/1057 Produktion",
+        "order_date": "09.12.20",
+        "delivery_date": "schnellstens!!!",
+        "urgency": "High",
+        "payment_terms": "",
+        "shipping_terms": "",
+        "notes": "Bitte um Bestätigung, Danke.",
+        "structured": {
+          "customer": {
+            "name": "Sabine Scharfenorth",
+            "company": "PAPIERSACKFABRIK TENAX GmbH & Co. KG",
+            "email": "sabine.scharfenorth@tenax.de",
+            "phone": "+49  (0)2102   489-133",
+            "address": "Am Westbahnhof 43 - 55, D - 40878 Ratingen"
+          },
+          "products": [
+            {
+              "code": "",
+              "name": "OPP Klischeeklebeband 310 x 25",
+              "quantity": 10,
+              "unit_price": 0.0,
+              "specifications": ""
+            }
+          ],
+          "order": {
+            "order_number": "12/1057 Produktion",
+            "date": "09.12.20",
+            "delivery_date": "schnellstens!!!",
+            "urgency": "High",
+            "payment_terms": "",
+            "shipping_terms": "",
+            "notes": "Bitte um Bestätigung, Danke."
+          }
+        }
+      },
+      "context": {
+        "customer_info": {
+          "id": 3109,
+          "name": "Papiersackfabrik Tenax GmbH & Co. K",
+          "ref": "1270",
+          "email": "",
+          "phone": "",
+          "address": {
+            "street": "Am Westbahnhof 43-55",
+            "street2": "",
+            "city": "Ratingen",
+            "zip": "40878",
+            "country": "Germany",
+            "state": ""
+          },
+          "vat": "DE812658123",
+          "website": "",
+          "create_date": "2025-10-09 13:49:43",
+          "write_date": "2025-10-09 13:49:43",
+          "match_score": 0.9859154929577465
+        },
+        "json_data": {
+          "products": [
+            {
+              "id": 8035,
+              "name": "05476-UB-SX-BLU / Foam Seal OTTURATORE 120 x 31 x 15 MM ALLSTEIN  SX - BLU",
+              "default_code": "SDS2601",
+              "list_price": 0.0,
+              "standard_price": 0.24,
+              "type": "consu",
+              "category": "Rakeldichtungen",
+              "description": "",
+              "create_date": "2025-10-09 14:21:40",
+              "write_date": "2025-10-09 14:37:36",
+              "similarity_score": 1.4285714285714286,
+              "match_method": "token_matching",
+              "confidence": 0.7200000000000001,
+              "match_score": 1.4285714285714286
+            }
+          ]
+        },
+        "confirmed_matches": {
+          "matched_products": [
+            {
+              "requested": "OPP Klischeeklebeband 310 x 25",
+              "matched_odoo_id": 8035,
+              "confidence": 1.4285714285714286,
+              "reasoning": "Auto-matched (high confidence: 143%)"
+            }
+          ],
+          "failed_products": [],
+          "stats": {
+            "auto_matched": 1,
+            "ai_confirmed": 0,
+            "failed": 0
+          }
+        }
+      }
+    },
+    "status": "pending_review",
+    "dspy_training_ready": true,
+    "applied_to_model": false
+  }
+]

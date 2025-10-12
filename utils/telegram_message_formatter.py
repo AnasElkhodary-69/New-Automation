@@ -232,54 +232,75 @@ Order ID: {order_id}"""
 
     def format_confirmation_message(self, order_id: str, correction_summary: Dict) -> str:
         """
-        Format confirmation message after parsing user feedback
+        Format confirmation message after parsing user feedback (supports MULTIPLE corrections)
 
         Args:
             order_id: Order identifier
-            correction_summary: Parsed corrections from Mistral
+            correction_summary: Parsed corrections from Mistral with corrections_list
 
         Returns:
             Confirmation message
         """
-        correction_type = correction_summary.get('correction_type', 'unknown')
-        corrections = correction_summary.get('corrections', {})
-        confidence = correction_summary.get('confidence', 0)
+        corrections_list = correction_summary.get('corrections_list', [])
+        overall_confidence = correction_summary.get('overall_confidence', 0)
+        total_corrections = len(corrections_list)
 
-        message = f"✅ **UNDERSTOOD** (Order #{order_id})\n\n"
+        if total_corrections == 0:
+            return f"❓ I didn't understand any corrections in your message. Could you please rephrase?"
 
-        if correction_type == 'company_match':
-            correct_name = corrections.get('correct_company_name', 'Unknown')
-            message += f"📝 **Company Correction:**\n"
-            message += f"  New company: {correct_name}\n"
+        # Header
+        message = f"✅ **UNDERSTOOD {total_corrections} CORRECTION(S)** (Order #{order_id})\n\n"
 
-        elif correction_type == 'product_match':
-            product_idx = corrections.get('product_index', 0)
-            correct_code = corrections.get('correct_product_code')
-            correct_name = corrections.get('correct_product_name')
+        # Format each correction
+        for idx, correction in enumerate(corrections_list, 1):
+            correction_type = correction.get('correction_type', 'unknown')
+            corrections_data = correction.get('corrections', {})
+            confidence = correction.get('confidence', 0)
 
-            message += f"📝 **Product #{product_idx} Correction:**\n"
-            if correct_name:
-                message += f"  Name: {correct_name}\n"
-            if correct_code:
-                message += f"  Code: {correct_code}\n"
+            if correction_type == 'company_match':
+                correct_name = corrections_data.get('correct_company_name', 'Unknown')
+                message += f"📝 **[{idx}] Company Correction:**\n"
+                message += f"  New company: {correct_name}\n"
+                message += f"  Confidence: {confidence:.0%}\n\n"
 
-        elif correction_type == 'quantity':
-            product_idx = corrections.get('product_index', 0)
-            new_qty = corrections.get('correct_quantity', 0)
-            message += f"📝 **Quantity Correction:**\n"
-            message += f"  Product #{product_idx}: {new_qty} units\n"
+            elif correction_type == 'product_match':
+                product_idx = corrections_data.get('product_index', 0)
+                correct_code = corrections_data.get('correct_product_code')
+                correct_name = corrections_data.get('correct_product_name')
 
-        elif correction_type == 'confirm':
-            message += f"✅ All matches confirmed!\n"
-            message += f"  Order approved for creation.\n"
+                message += f"📝 **[{idx}] Product #{product_idx} Correction:**\n"
+                if correct_name:
+                    message += f"  Name: {correct_name}\n"
+                if correct_code:
+                    message += f"  Code: {correct_code}\n"
+                message += f"  Confidence: {confidence:.0%}\n\n"
 
-        elif correction_type == 'reject':
-            reason = corrections.get('reason', 'User rejected')
-            message += f"❌ Order rejected\n"
-            message += f"  Reason: {reason}\n"
+            elif correction_type == 'quantity':
+                product_idx = corrections_data.get('product_index', 0)
+                new_qty = corrections_data.get('correct_quantity', 0)
+                message += f"📝 **[{idx}] Quantity Correction:**\n"
+                message += f"  Product #{product_idx}: {new_qty} units\n"
+                message += f"  Confidence: {confidence:.0%}\n\n"
 
-        message += f"\n📊 Confidence: {confidence:.0%}\n"
-        message += f"\n💾 This feedback will improve future processing."
+            elif correction_type == 'price':
+                product_idx = corrections_data.get('product_index', 0)
+                new_price = corrections_data.get('correct_price', 0)
+                message += f"📝 **[{idx}] Price Correction:**\n"
+                message += f"  Product #{product_idx}: €{new_price:.2f}\n"
+                message += f"  Confidence: {confidence:.0%}\n\n"
+
+            elif correction_type == 'confirm':
+                message += f"✅ **[{idx}] Confirmation:**\n"
+                message += f"  All matches confirmed!\n"
+                message += f"  Order approved for creation.\n\n"
+
+            elif correction_type == 'reject':
+                reason = corrections_data.get('reason', 'User rejected')
+                message += f"❌ **[{idx}] Rejection:**\n"
+                message += f"  Reason: {reason}\n\n"
+
+        message += f"📊 Overall Confidence: {overall_confidence:.0%}\n"
+        message += f"💾 All {total_corrections} correction(s) will improve future processing."
 
         return message
 

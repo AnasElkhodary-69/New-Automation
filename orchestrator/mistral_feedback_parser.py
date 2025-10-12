@@ -6,14 +6,14 @@ Uses DSPy and Mistral to parse natural language feedback from Telegram users
 import json
 import logging
 import dspy
-from typing import Dict, Optional
-from orchestrator.dspy_feedback_signatures import FeedbackParser
+from typing import Dict, Optional, List
+from orchestrator.dspy_feedback_signatures import MultiFeedbackParser
 
 logger = logging.getLogger(__name__)
 
 
 class MistralFeedbackParser:
-    """Parse user feedback using Mistral AI via DSPy"""
+    """Parse user feedback using Mistral AI via DSPy - supports MULTIPLE corrections per message"""
 
     def __init__(self, use_chain_of_thought: bool = True):
         """
@@ -24,13 +24,13 @@ class MistralFeedbackParser:
         """
         self.use_chain_of_thought = use_chain_of_thought
 
-        # Initialize DSPy predictor
+        # Initialize DSPy predictor with MultiFeedbackParser
         if use_chain_of_thought:
-            self.parser = dspy.ChainOfThought(FeedbackParser)
-            logger.info("Feedback parser initialized with Chain-of-Thought")
+            self.parser = dspy.ChainOfThought(MultiFeedbackParser)
+            logger.info("Multi-correction feedback parser initialized with Chain-of-Thought")
         else:
-            self.parser = dspy.Predict(FeedbackParser)
-            logger.info("Feedback parser initialized (basic mode)")
+            self.parser = dspy.Predict(MultiFeedbackParser)
+            logger.info("Multi-correction feedback parser initialized (basic mode)")
 
     def parse_feedback(
         self,
@@ -39,7 +39,7 @@ class MistralFeedbackParser:
         original_result: Dict
     ) -> Dict:
         """
-        Parse user feedback into structured corrections
+        Parse user feedback into structured corrections (supports MULTIPLE corrections)
 
         Args:
             order_id: Order identifier
@@ -47,7 +47,16 @@ class MistralFeedbackParser:
             original_result: Original processing result
 
         Returns:
-            Parsed feedback with corrections
+            Parsed feedback with list of corrections:
+            {
+                'corrections_list': [
+                    {'correction_type': '...', 'corrections': {...}, 'confidence': 0.9, ...},
+                    ...
+                ],
+                'overall_confidence': 0.92,
+                'needs_clarification': False,
+                'clarification_question': None
+            }
         """
         try:
             logger.info(f"Parsing feedback for order {order_id}: '{user_message[:50]}...'")
@@ -62,33 +71,35 @@ class MistralFeedbackParser:
                 order_id=order_id
             )
 
-            # Parse outputs
-            correction_type = prediction.correction_type.strip()
-            affected_items = self._parse_list_output(prediction.affected_items)
-            confidence = self._parse_float_output(prediction.confidence)
-            needs_clarification = self._parse_bool_output(prediction.needs_clarification)
-
-            # Parse corrections JSON
+            # Parse corrections_list (array of corrections)
             try:
-                corrections = json.loads(prediction.corrections)
+                corrections_list = json.loads(prediction.corrections_list)
+                if not isinstance(corrections_list, list):
+                    corrections_list = [corrections_list]  # Wrap if single object
             except json.JSONDecodeError:
-                logger.warning(f"Failed to parse corrections JSON, using raw: {prediction.corrections}")
-                corrections = {'raw': prediction.corrections}
+                logger.warning(f"Failed to parse corrections_list JSON: {prediction.corrections_list}")
+                corrections_list = []
+
+            # Parse other outputs
+            overall_confidence = self._parse_float_output(prediction.overall_confidence)
+            needs_clarification = self._parse_bool_output(prediction.needs_clarification)
 
             # Build result
             result = {
-                'correction_type': correction_type,
-                'corrections': corrections,
-                'affected_items': affected_items,
-                'user_reasoning': prediction.user_reasoning,
-                'confidence': confidence,
+                'corrections_list': corrections_list,
+                'overall_confidence': overall_confidence,
                 'needs_clarification': needs_clarification,
-                'clarification_question': prediction.clarification_question if needs_clarification else None
+                'clarification_question': prediction.clarification_question if needs_clarification else None,
+                'total_corrections': len(corrections_list)
             }
 
             # Log result
-            logger.info(f"Feedback parsed: type={correction_type}, confidence={confidence:.2f}, "
-                       f"needs_clarification={needs_clarification}")
+            logger.info(f"Feedback parsed: {len(corrections_list)} correction(s), "
+                       f"confidence={overall_confidence:.2f}, needs_clarification={needs_clarification}")
+
+            for idx, correction in enumerate(corrections_list, 1):
+                logger.info(f"  [{idx}] type={correction.get('correction_type')}, "
+                           f"confidence={correction.get('confidence', 0):.2f}")
 
             if needs_clarification:
                 logger.info(f"Clarification needed: {prediction.clarification_question}")
@@ -99,13 +110,11 @@ class MistralFeedbackParser:
             logger.error(f"Error parsing feedback: {e}", exc_info=True)
             # Return fallback result
             return {
-                'correction_type': 'clarify',
-                'corrections': {},
-                'affected_items': [],
-                'user_reasoning': 'Error parsing feedback',
-                'confidence': 0.0,
+                'corrections_list': [],
+                'overall_confidence': 0.0,
                 'needs_clarification': True,
-                'clarification_question': 'I had trouble understanding your message. Could you please rephrase?'
+                'clarification_question': 'I had trouble understanding your message. Could you please rephrase?',
+                'total_corrections': 0
             }
 
     def parse_batch_feedback(
@@ -144,10 +153,10 @@ class MistralFeedbackParser:
 
     def validate_correction(self, parsed_feedback: Dict) -> Dict:
         """
-        Validate parsed feedback before applying
+        Validate parsed feedback before applying (supports multiple corrections)
 
         Args:
-            parsed_feedback: Parsed feedback from parse_feedback()
+            parsed_feedback: Parsed feedback from parse_feedback() with corrections_list
 
         Returns:
             Validation result with warnings/errors
@@ -158,41 +167,50 @@ class MistralFeedbackParser:
             'errors': []
         }
 
-        correction_type = parsed_feedback.get('correction_type')
-        corrections = parsed_feedback.get('corrections', {})
-        confidence = parsed_feedback.get('confidence', 0)
+        corrections_list = parsed_feedback.get('corrections_list', [])
+        overall_confidence = parsed_feedback.get('overall_confidence', 0)
 
-        # Check confidence threshold
-        if confidence < 0.5:
-            validation['warnings'].append(f"Low confidence ({confidence:.0%}), suggest clarification")
+        # Check overall confidence threshold
+        if overall_confidence < 0.5:
+            validation['warnings'].append(f"Low overall confidence ({overall_confidence:.0%}), suggest clarification")
 
-        # Validate correction structure based on type
-        if correction_type == 'product_match':
-            if 'product_index' not in corrections:
-                validation['errors'].append("Missing product_index in product correction")
-                validation['valid'] = False
+        # Validate each correction
+        for idx, correction in enumerate(corrections_list, 1):
+            correction_type = correction.get('correction_type')
+            corrections_data = correction.get('corrections', {})
+            confidence = correction.get('confidence', 0)
 
-            if not corrections.get('correct_product_code') and not corrections.get('correct_product_name'):
-                validation['errors'].append("Must specify product code or name")
-                validation['valid'] = False
+            # Check individual confidence
+            if confidence < 0.5:
+                validation['warnings'].append(f"Correction {idx} has low confidence ({confidence:.0%})")
 
-        elif correction_type == 'company_match':
-            if not corrections.get('correct_company_name'):
-                validation['errors'].append("Missing company name in company correction")
-                validation['valid'] = False
+            # Validate correction structure based on type
+            if correction_type == 'product_match':
+                if 'product_index' not in corrections_data:
+                    validation['errors'].append(f"Correction {idx}: Missing product_index in product correction")
+                    validation['valid'] = False
 
-        elif correction_type == 'quantity':
-            if 'product_index' not in corrections:
-                validation['errors'].append("Missing product_index in quantity correction")
-                validation['valid'] = False
+                if not corrections_data.get('correct_product_code') and not corrections_data.get('correct_product_name'):
+                    validation['errors'].append(f"Correction {idx}: Must specify product code or name")
+                    validation['valid'] = False
 
-            if 'correct_quantity' not in corrections:
-                validation['errors'].append("Missing correct_quantity value")
-                validation['valid'] = False
+            elif correction_type == 'company_match':
+                if not corrections_data.get('correct_company_name'):
+                    validation['errors'].append(f"Correction {idx}: Missing company name in company correction")
+                    validation['valid'] = False
 
-        elif correction_type == 'clarify':
-            if not parsed_feedback.get('needs_clarification'):
-                validation['warnings'].append("Correction type is 'clarify' but needs_clarification is False")
+            elif correction_type == 'quantity':
+                if 'product_index' not in corrections_data:
+                    validation['errors'].append(f"Correction {idx}: Missing product_index in quantity correction")
+                    validation['valid'] = False
+
+                if 'correct_quantity' not in corrections_data:
+                    validation['errors'].append(f"Correction {idx}: Missing correct_quantity value")
+                    validation['valid'] = False
+
+        # Check if no corrections found
+        if not corrections_list:
+            validation['warnings'].append("No corrections found in message")
 
         return validation
 
